@@ -77,6 +77,12 @@
 }
 
 @layer components {
+  /* Mobile-first touch target minimum */
+  .touch-target {
+    min-height: 48px;
+    min-width: 48px;
+  }
+
   .btn-order {
     @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold text-base transition-all duration-300;
     background: hsl(var(--red-cta));
@@ -90,10 +96,42 @@
     box-shadow: 0 8px 30px hsl(0 80% 55% / 0.5);
   }
 
+  /* Mobile sticky order button */
+  .btn-order-mobile {
+    @apply px-4 py-2 rounded-lg font-bold text-sm whitespace-nowrap;
+    background: hsl(var(--red-cta));
+    color: white;
+    box-shadow: var(--shadow-cta);
+    min-height: 40px;
+  }
+
+  .btn-order-mobile:active {
+    transform: scale(0.98);
+  }
+
+  /* Full-width mobile platform button */
+  .mobile-platform-btn {
+    @apply flex items-center gap-3 w-full px-4 py-4 rounded-xl font-medium transition-all duration-200 text-foreground;
+    min-height: 56px;
+  }
+
+  .mobile-platform-btn:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+
   .btn-platform {
-    @apply inline-flex items-center justify-center gap-3 px-5 py-3 rounded-lg font-medium transition-all duration-300 border;
+    @apply inline-flex items-center justify-center gap-3 px-4 py-4 rounded-lg font-medium transition-all duration-300 border w-full;
     border-color: hsl(var(--gold) / 0.3);
     background: hsl(var(--secondary));
+    min-height: 56px;
+  }
+
+  @media (min-width: 768px) {
+    .btn-platform {
+      @apply w-auto px-5 py-3;
+      min-height: auto;
+    }
   }
 
   .btn-platform:hover {
@@ -102,16 +140,25 @@
     transform: translateY(-2px);
   }
 
+  .btn-platform:active {
+    transform: scale(0.98);
+  }
+
   .btn-gold {
     @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-300;
     background: var(--gradient-gold);
     color: hsl(var(--background));
     box-shadow: var(--shadow-gold);
+    min-height: 48px;
   }
 
   .btn-gold:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 35px hsl(45 90% 50% / 0.3);
+  }
+
+  .btn-gold:active {
+    transform: scale(0.98);
   }
 
   .text-gradient-gold {
@@ -128,13 +175,15 @@
     box-shadow: var(--shadow-card);
   }
 
-  .card-restaurant:hover {
-    border-color: hsl(var(--gold) / 0.5);
-    transform: translateY(-5px);
+  @media (min-width: 768px) {
+    .card-restaurant:hover {
+      border-color: hsl(var(--gold) / 0.5);
+      transform: translateY(-5px);
+    }
   }
 
   .section-title {
-    @apply text-4xl md:text-5xl lg:text-6xl font-bold tracking-wide;
+    @apply text-3xl md:text-4xl lg:text-5xl font-bold tracking-wide;
   }
 
   .gold-underline {
@@ -145,6 +194,11 @@
     content: '';
     @apply absolute bottom-0 left-0 w-full h-1 rounded-full;
     background: var(--gradient-gold);
+  }
+
+  /* Mobile order reminder banner */
+  .mobile-order-reminder {
+    @apply py-4 px-4 text-center bg-card border-t border-border;
   }
 }
 
@@ -165,5 +219,13 @@
   @keyframes pulse {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.7; }
+  }
+
+  /* Disable heavy animations on mobile */
+  @media (max-width: 767px) {
+    .animate-float,
+    .animate-pulse-slow {
+      animation: none;
+    }
   }
 }

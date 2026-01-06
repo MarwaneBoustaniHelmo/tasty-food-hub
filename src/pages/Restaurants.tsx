@@ -60,36 +60,35 @@ const Restaurants = () => {
   ];
 
   return (
-    <main className="pt-28 pb-20">
-      <div className="container">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <h1 className="section-title mb-4">
+    <main className="pt-24 md:pt-28 pb-10 md:pb-20">
+      <div className="container px-4">
+        {/* Header - Compact on mobile */}
+        <div className="text-center mb-8 md:mb-16">
+          <h1 className="section-title mb-2 md:mb-4">
             NOS <span className="text-gradient-gold">RESTAURANTS</span>
           </h1>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Retrouvez Tasty Food dans la région liégeoise. Chaque restaurant propose 
-            la même qualité et les mêmes saveurs que vous adorez.
+          <p className="text-muted-foreground text-sm md:text-lg max-w-2xl mx-auto">
+            Retrouvez Tasty Food dans la région liégeoise
           </p>
         </div>
 
-        {/* Restaurant Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Restaurant Grid - Stack on mobile */}
+        <div className="space-y-4 md:space-y-0 md:grid md:grid-cols-3 md:gap-8">
           {restaurants.map((restaurant) => (
             <RestaurantCard key={restaurant.name} {...restaurant} />
           ))}
         </div>
 
-        {/* Bottom CTA */}
-        <div className="mt-16 text-center">
-          <div className="inline-block p-6 rounded-2xl bg-card border border-border">
-            <p className="text-muted-foreground mb-4">
-              👉 Toutes les commandes se font via nos plateformes partenaires officielles
+        {/* Bottom CTA - Simplified on mobile */}
+        <div className="mt-8 md:mt-16 text-center">
+          <div className="p-4 md:p-6 rounded-2xl bg-card border border-border">
+            <p className="text-muted-foreground text-sm mb-3">
+              👉 Commandes via plateformes officielles
             </p>
-            <div className="flex flex-wrap justify-center gap-4 text-sm">
-              <span className="px-3 py-1 rounded-full bg-secondary text-primary">Takeaway</span>
-              <span className="px-3 py-1 rounded-full bg-secondary text-primary">Uber Eats</span>
-              <span className="px-3 py-1 rounded-full bg-secondary text-primary">Deliveroo</span>
+            <div className="flex flex-wrap justify-center gap-2 text-xs md:text-sm">
+              <span className="px-3 py-1.5 rounded-full bg-secondary text-primary">Takeaway</span>
+              <span className="px-3 py-1.5 rounded-full bg-secondary text-primary">Uber Eats</span>
+              <span className="px-3 py-1.5 rounded-full bg-secondary text-primary">Deliveroo</span>
             </div>
           </div>
         </div>

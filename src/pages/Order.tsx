@@ -1,37 +1,46 @@
-import { ExternalLink, MapPin } from "lucide-react";
+import { ExternalLink, MapPin, Info } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Order = () => {
-  const orderLocations = [
-    {
-      name: "Angleur",
-      description: "Site officiel ou Deliveroo",
-      platforms: [
-        { name: "Site Officiel", icon: "🌐", href: "https://www.tastyfoodangleur.be", color: "bg-primary" },
-        { name: "Deliveroo", icon: "🚴", href: "https://deliveroo.be/fr/menu/liege/liege-angleur/tasty-food-angleur", color: "bg-[#00CCBC]" },
-      ],
+  // Seraing - Featured restaurant with all platforms
+  const seraingData = {
+    name: "Seraing",
+    address: "15 Rue Gustave Baivy, 4101 Seraing",
+    description: "Smash burgers, sandwiches, tex-mex & tenders",
+    direct: {
+      name: "Commander sur notre site",
+      icon: "🌐",
+      href: "https://www.tastyfoodseraing-seraing.be",
+      color: "bg-primary border-2 border-primary/50",
     },
-    {
-      name: "Wandre",
-      description: "Uber Eats ou Takeaway",
-      platforms: [
-        { name: "Uber Eats", icon: "🛵", href: "https://www.ubereats.com/be/store/tasty-food-wandre/9BB6rSrVVKS9UR_2fyAYoQ", color: "bg-[#06C167]" },
-        { name: "Takeaway", icon: "🍔", href: "https://www.takeaway.com/be-fr/menu/tasty-food-1", color: "bg-[#FF8000]" },
-      ],
-    },
-  ];
-
-  const seraingDirect = {
-    name: "Commander sur notre site",
-    icon: "🌐",
-    href: "https://www.tastyfoodseraing-seraing.be",
-    color: "bg-primary",
+    delivery: [
+      { name: "Commander sur Uber Eats", icon: "🛵", href: "https://www.ubereats.com/be/store/tasty-food-seraing/NpA7eB6mS6mam_TwsTcigg", color: "bg-[#06C167]" },
+      { name: "Commander sur Deliveroo", icon: "🚴", href: "https://deliveroo.be/fr/menu/Liege/jemeppe-sur-meuse/tasty-food-seraing", color: "bg-[#00CCBC]" },
+      { name: "Crousty by Tasty (Tenders)", icon: "🍗", href: "https://www.ubereats.com/be/store/crousty-by-tasty-seraing/33RMV2JdXTm0Q5b64r7-Hw", color: "bg-[#F4A261]" },
+    ],
   };
 
-  const seraingDelivery = [
-    { name: "Commander sur Uber Eats", icon: "🛵", href: "https://www.ubereats.com/be/store/tasty-food-seraing/NpA7eB6mS6mam_TwsTcigg", color: "bg-[#06C167]" },
-    { name: "Commander sur Deliveroo", icon: "🚴", href: "https://deliveroo.be/fr/menu/Liege/jemeppe-sur-meuse/tasty-food-seraing", color: "bg-[#00CCBC]" },
-    { name: "Crousty by Tasty (Tenders)", icon: "🍗", href: "https://www.ubereats.com/be/store/crousty-by-tasty-seraing/33RMV2JdXTm0Q5b64r7-Hw", color: "bg-[#FF8000]" },
-  ];
+  // Angleur - 3 platforms
+  const angleurData = {
+    name: "Angleur",
+    address: "100 Rue Vaudrée, 4031 Angleur",
+    description: "Site officiel, Deliveroo & Uber Eats",
+    platforms: [
+      { name: "Site Officiel", icon: "🌐", href: "https://www.tastyfoodangleur.be", color: "bg-primary" },
+      { name: "Deliveroo", icon: "🚴", href: "https://deliveroo.be/fr/menu/liege/liege-angleur/tasty-food-angleur", color: "bg-[#00CCBC]" },
+      { name: "Uber Eats", icon: "🛵", href: "https://www.ubereats.com/be/store/tasty-food-angleur/rKHPNdPrTSKmLpKR3qQ2dw", color: "bg-[#06C167]" },
+    ],
+  };
+
+  // Wandre - Uber Eats only
+  const wandreData = {
+    name: "Wandre",
+    address: "Rue du Pont de Wandre 75, 4020 Liège",
+    description: "Uber Eats uniquement",
+    platforms: [
+      { name: "Uber Eats", icon: "🛵", href: "https://www.ubereats.com/be/store/tasty-food-wandre/9BB6rSrVVKS9UR_2fyAYoQ", color: "bg-[#06C167]" },
+    ],
+  };
 
   return (
     <main className="pt-24 md:pt-28 pb-10 md:pb-20 min-h-screen">
@@ -55,9 +64,9 @@ const Order = () => {
               </div>
               <div>
                 <h2 className="font-display text-2xl md:text-3xl text-gradient-gold">
-                  Seraing
+                  {seraingData.name}
                 </h2>
-                <p className="text-xs md:text-sm text-muted-foreground">Smash burgers, sandwiches, tex-mex & tenders</p>
+                <p className="text-xs md:text-sm text-muted-foreground">{seraingData.description}</p>
               </div>
             </div>
 
@@ -67,13 +76,13 @@ const Order = () => {
                 🍔 Commander en direct
               </h3>
               <a
-                href={seraingDirect.href}
+                href={seraingData.direct.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`mobile-platform-btn ${seraingDirect.color} border-2 border-primary/50`}
+                className={`mobile-platform-btn ${seraingData.direct.color}`}
               >
-                <span className="text-2xl">{seraingDirect.icon}</span>
-                <span className="flex-1 font-semibold text-base">{seraingDirect.name}</span>
+                <span className="text-2xl">{seraingData.direct.icon}</span>
+                <span className="flex-1 font-semibold text-base">{seraingData.direct.name}</span>
                 <ExternalLink size={20} className="opacity-70" />
               </a>
             </div>
@@ -84,7 +93,7 @@ const Order = () => {
                 🚴 Commander en livraison
               </h3>
               <div className="space-y-3">
-                {seraingDelivery.map((platform) => (
+                {seraingData.delivery.map((platform) => (
                   <a
                     key={platform.name}
                     href={platform.href}
@@ -103,66 +112,110 @@ const Order = () => {
             {/* Adresse */}
             <div className="pt-4 border-t border-border/50 text-center">
               <p className="text-foreground font-medium text-sm md:text-base">
-                📍 Tasty Food Seraing
+                📍 Tasty Food {seraingData.name}
               </p>
               <p className="text-muted-foreground text-xs md:text-sm">
-                15 Rue Gustave Baivy, 4101 Seraing
+                {seraingData.address}
               </p>
             </div>
           </div>
         </div>
 
-        {/* OTHER LOCATIONS */}
-        <div className="space-y-4 md:space-y-6 max-w-3xl mx-auto">
-          <h3 className="text-center text-muted-foreground text-sm font-medium uppercase tracking-wide">
-            Autres restaurants
-          </h3>
-          {orderLocations.map((location) => (
-            <div
-              key={location.name}
-              className="rounded-2xl bg-card border border-border p-4 md:p-6"
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 rounded-xl bg-primary/20">
-                  <MapPin className="text-primary" size={18} />
-                </div>
-                <div>
-                  <h2 className="font-display text-xl md:text-2xl text-gradient-gold">
-                    {location.name}
-                  </h2>
-                  <p className="text-xs text-muted-foreground">{location.description}</p>
-                </div>
+        {/* ANGLEUR SECTION */}
+        <div className="max-w-3xl mx-auto mb-4 md:mb-6">
+          <div className="rounded-2xl bg-card border border-border p-4 md:p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 rounded-xl bg-primary/20">
+                <MapPin className="text-primary" size={18} />
               </div>
-
-              <div className="space-y-2">
-                {location.platforms.map((platform) => (
-                  <a
-                    key={platform.name}
-                    href={platform.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`mobile-platform-btn ${platform.color}`}
-                  >
-                    <span className="text-xl">{platform.icon}</span>
-                    <span className="flex-1 font-semibold text-sm">{platform.name}</span>
-                    <ExternalLink size={18} className="opacity-70" />
-                  </a>
-                ))}
+              <div>
+                <h2 className="font-display text-xl md:text-2xl text-gradient-gold">
+                  {angleurData.name}
+                </h2>
+                <p className="text-xs text-muted-foreground">{angleurData.description}</p>
               </div>
             </div>
-          ))}
+
+            <div className="space-y-2 mb-4">
+              {angleurData.platforms.map((platform) => (
+                <a
+                  key={platform.name}
+                  href={platform.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`mobile-platform-btn ${platform.color}`}
+                >
+                  <span className="text-xl">{platform.icon}</span>
+                  <span className="flex-1 font-semibold text-sm">{platform.name}</span>
+                  <ExternalLink size={18} className="opacity-70" />
+                </a>
+              ))}
+            </div>
+
+            <p className="text-center text-xs text-muted-foreground">
+              📍 {angleurData.address}
+            </p>
+          </div>
+        </div>
+
+        {/* WANDRE SECTION */}
+        <div className="max-w-3xl mx-auto mb-8 md:mb-12">
+          <div className="rounded-2xl bg-card border border-border p-4 md:p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 rounded-xl bg-primary/20">
+                <MapPin className="text-primary" size={18} />
+              </div>
+              <div>
+                <h2 className="font-display text-xl md:text-2xl text-gradient-gold">
+                  {wandreData.name}
+                </h2>
+                <p className="text-xs text-muted-foreground">{wandreData.description}</p>
+              </div>
+            </div>
+
+            <div className="space-y-2 mb-4">
+              {wandreData.platforms.map((platform) => (
+                <a
+                  key={platform.name}
+                  href={platform.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`mobile-platform-btn ${platform.color}`}
+                >
+                  <span className="text-xl">{platform.icon}</span>
+                  <span className="flex-1 font-semibold text-sm">{platform.name}</span>
+                  <ExternalLink size={18} className="opacity-70" />
+                </a>
+              ))}
+            </div>
+
+            <p className="text-center text-xs text-muted-foreground">
+              📍 {wandreData.address}
+            </p>
+          </div>
         </div>
 
         {/* Info Banner */}
-        <div className="mt-8 md:mt-12 max-w-3xl mx-auto">
+        <div className="max-w-3xl mx-auto mb-6">
           <div className="p-4 md:p-6 rounded-2xl bg-accent/10 border border-accent/20 text-center">
-            <p className="text-foreground font-medium text-sm md:text-base mb-1">
-              ⚠️ Commande en ligne uniquement
-            </p>
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <Info size={18} className="text-accent" />
+              <p className="text-foreground font-medium text-sm md:text-base">
+                Commande en ligne uniquement
+              </p>
+            </div>
             <p className="text-muted-foreground text-xs md:text-sm">
-              Utilisez nos plateformes partenaires officielles
+              Utilisez nos plateformes partenaires officielles pour commander.
             </p>
           </div>
+        </div>
+
+        {/* CTA to restaurants */}
+        <div className="max-w-3xl mx-auto text-center">
+          <Link to="/restaurants" className="btn-gold inline-flex items-center gap-2">
+            Découvrir nos restaurants
+            <ExternalLink size={16} />
+          </Link>
         </div>
       </div>
     </main>

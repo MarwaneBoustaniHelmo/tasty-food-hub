@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, MapPin, ExternalLink } from "lucide-react";
+import { X, MapPin, ExternalLink, ChevronDown } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
 interface OrderBottomSheetProps {
@@ -8,29 +8,43 @@ interface OrderBottomSheetProps {
 
 const orderLocations = [
   {
+    name: "Seraing",
+    address: "15 Rue Gustave Baivy, 4101 Seraing",
+    featured: true,
+    platforms: [
+      { name: "Site Officiel", icon: "🌐", href: "https://www.tastyfoodseraing-seraing.be", color: "bg-primary" },
+      { name: "Uber Eats", icon: "🛵", href: "https://www.ubereats.com/be/store/tasty-food-seraing/NpA7eB6mS6mam_TwsTcigg", color: "bg-[#06C167]" },
+      { name: "Deliveroo", icon: "🚴", href: "https://deliveroo.be/fr/menu/Liege/jemeppe-sur-meuse/tasty-food-seraing", color: "bg-[#00CCBC]" },
+      { name: "Crousty by Tasty", icon: "🍗", href: "https://www.ubereats.com/be/store/crousty-by-tasty-seraing/33RMV2JdXTm0Q5b64r7-Hw", color: "bg-[#F4A261]" },
+    ],
+  },
+  {
     name: "Angleur",
+    address: "100 Rue Vaudrée, 4031 Angleur",
+    featured: false,
     platforms: [
       { name: "Site Officiel", icon: "🌐", href: "https://www.tastyfoodangleur.be", color: "bg-primary" },
       { name: "Deliveroo", icon: "🚴", href: "https://deliveroo.be/fr/menu/liege/liege-angleur/tasty-food-angleur", color: "bg-[#00CCBC]" },
+      { name: "Uber Eats", icon: "🛵", href: "https://www.ubereats.com/be/store/tasty-food-angleur/rKHPNdPrTSKmLpKR3qQ2dw", color: "bg-[#06C167]" },
     ],
   },
   {
     name: "Wandre",
+    address: "Rue du Pont de Wandre 75, 4020 Liège",
+    featured: false,
     platforms: [
       { name: "Uber Eats", icon: "🛵", href: "https://www.ubereats.com/be/store/tasty-food-wandre/9BB6rSrVVKS9UR_2fyAYoQ", color: "bg-[#06C167]" },
-      { name: "Takeaway", icon: "🍔", href: "https://www.takeaway.com/be-fr/menu/tasty-food-1", color: "bg-[#FF8000]" },
-    ],
-  },
-  {
-    name: "Seraing",
-    platforms: [
-      { name: "Informations", icon: "ℹ️", href: "https://www.findhalalfoodie.com/fr/halal-restaurant/tasty-food-r4606667", color: "bg-secondary" },
     ],
   },
 ];
 
 const OrderBottomSheet = ({ children }: OrderBottomSheetProps) => {
   const [open, setOpen] = useState(false);
+  const [expandedLocation, setExpandedLocation] = useState<string | null>("Seraing");
+
+  const toggleLocation = (name: string) => {
+    setExpandedLocation(expandedLocation === name ? null : name);
+  };
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -46,37 +60,66 @@ const OrderBottomSheet = ({ children }: OrderBottomSheetProps) => {
           
           <SheetHeader className="px-6 pb-4 border-b border-border">
             <SheetTitle className="font-display text-2xl text-gradient-gold text-center">
-              COMMANDER TASTY FOOD
+              OÙ COMMANDER ?
             </SheetTitle>
             <p className="text-sm text-muted-foreground text-center">
-              Choisissez votre restaurant
+              Choisissez votre restaurant Tasty Food
             </p>
           </SheetHeader>
 
           {/* Scrollable content */}
-          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
+          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
             {orderLocations.map((location) => (
-              <div key={location.name} className="rounded-2xl bg-secondary/50 border border-border p-4">
-                <div className="flex items-center gap-2 mb-3">
-                  <MapPin size={18} className="text-primary" />
-                  <h3 className="font-display text-xl text-primary">{location.name}</h3>
-                </div>
+              <div 
+                key={location.name} 
+                className={`rounded-2xl border overflow-hidden transition-all duration-300 ${
+                  location.featured 
+                    ? "bg-gradient-to-br from-primary/20 to-accent/10 border-primary/40" 
+                    : "bg-secondary/50 border-border"
+                }`}
+              >
+                {/* Location Header - Clickable */}
+                <button
+                  onClick={() => toggleLocation(location.name)}
+                  className="w-full flex items-center justify-between gap-3 p-4 text-left touch-target"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className={`p-2 rounded-xl ${location.featured ? "bg-primary/30" : "bg-primary/20"}`}>
+                      <MapPin size={18} className="text-primary" />
+                    </div>
+                    <div>
+                      <h3 className={`font-display text-xl ${location.featured ? "text-gradient-gold" : "text-primary"}`}>
+                        {location.name}
+                      </h3>
+                      <p className="text-xs text-muted-foreground">{location.address}</p>
+                    </div>
+                  </div>
+                  <ChevronDown 
+                    size={20} 
+                    className={`text-muted-foreground transition-transform duration-300 ${
+                      expandedLocation === location.name ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
                 
-                <div className="space-y-2">
-                  {location.platforms.map((platform) => (
-                    <a
-                      key={platform.name}
-                      href={platform.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`mobile-platform-btn ${platform.color}`}
-                    >
-                      <span className="text-xl">{platform.icon}</span>
-                      <span className="flex-1 font-semibold">{platform.name}</span>
-                      <ExternalLink size={18} className="opacity-70" />
-                    </a>
-                  ))}
-                </div>
+                {/* Platforms - Expandable */}
+                {expandedLocation === location.name && (
+                  <div className="px-4 pb-4 space-y-2 animate-fade-in">
+                    {location.platforms.map((platform) => (
+                      <a
+                        key={platform.name}
+                        href={platform.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`mobile-platform-btn ${platform.color}`}
+                      >
+                        <span className="text-xl">{platform.icon}</span>
+                        <span className="flex-1 font-semibold">{platform.name}</span>
+                        <ExternalLink size={18} className="opacity-70" />
+                      </a>
+                    ))}
+                  </div>
+                )}
               </div>
             ))}
           </div>

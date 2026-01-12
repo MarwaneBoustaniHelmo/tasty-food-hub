@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, ExternalLink, Check } from "lucide-react";
+import heroMain from "@/assets/hero-main.jpg";
 import heroBurger from "@/assets/hero-burger.jpg";
 import loadedFries from "@/assets/loaded-fries.jpg";
 import tacos from "@/assets/tacos.jpg";
@@ -49,8 +50,8 @@ const Home = () => {
         {/* Background Image */}
         <div className="absolute inset-0">
           <img
-            src={heroBurger}
-            alt="Smash Burger Tasty Food"
+            src={heroMain}
+            alt="Smash Burger Tasty Food Liège - Menu complet avec tacos et frites"
             className="w-full h-full object-cover"
             loading="eager"
           />

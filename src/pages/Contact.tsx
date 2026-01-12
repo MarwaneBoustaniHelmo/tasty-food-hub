@@ -14,9 +14,9 @@ const Contact = () => {
       maps: "https://maps.google.com/?q=100+Rue+Vaudree+4031+Angleur+Belgium",
     },
     {
-      name: "Tasty Food Wandre",
-      address: "Rue du Pont de Wandre 75, 4020 Liège",
-      maps: "https://maps.google.com/?q=Rue+du+Pont+de+Wandre+75+4020+Liege+Belgium",
+      name: "Tasty Food Wandre / Saint-Gilles",
+      address: "Liège (centre / Wandre)",
+      maps: "https://maps.google.com/?q=Liege+Belgium",
     },
   ];
 

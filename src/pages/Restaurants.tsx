@@ -10,14 +10,13 @@ const Restaurants = () => {
       name: "Tasty Food Seraing",
       location: "Seraing",
       address: "15 Rue Gustave Baivy, 4101 Seraing",
-      description: "Notre restaurant phare avec smash burgers, sandwiches, tex-mex et la marque Crousty by Tasty pour des tenders croustillants.",
+      description: "Notre restaurant phare avec smash burgers, sandwiches et tex-mex.",
       image: restaurantInterior,
       featured: true,
       platforms: [
         { name: "Site Officiel", icon: "🌐", href: "https://www.tastyfoodseraing-seraing.be", color: "bg-primary" },
         { name: "Uber Eats", icon: "🛵", href: "https://www.ubereats.com/be/store/tasty-food-seraing/NpA7eB6mS6mam_TwsTcigg", color: "bg-[#06C167]" },
         { name: "Deliveroo", icon: "🚴", href: "https://deliveroo.be/fr/menu/Liege/jemeppe-sur-meuse/tasty-food-seraing", color: "bg-[#00CCBC]" },
-        { name: "Crousty by Tasty", icon: "🍗", href: "https://www.ubereats.com/be/store/crousty-by-tasty-seraing/33RMV2JdXTm0Q5b64r7-Hw", color: "bg-[#F4A261]" },
       ],
     },
     {
@@ -29,19 +28,19 @@ const Restaurants = () => {
       featured: false,
       platforms: [
         { name: "Site Officiel", icon: "🌐", href: "https://www.tastyfoodangleur.be", color: "bg-primary" },
+        { name: "Uber Eats", icon: "🛵", href: "https://www.ubereats.com/be/store/tasty-food-angleur/uObTfxymWn2x53kZNuo8NQ", color: "bg-[#06C167]" },
         { name: "Deliveroo", icon: "🚴", href: "https://deliveroo.be/fr/menu/liege/liege-angleur/tasty-food-angleur", color: "bg-[#00CCBC]" },
-        { name: "Uber Eats", icon: "🛵", href: "https://www.ubereats.com/be/store/tasty-food-angleur/rKHPNdPrTSKmLpKR3qQ2dw", color: "bg-[#06C167]" },
       ],
     },
     {
-      name: "Tasty Food Wandre",
-      location: "Wandre",
-      address: "Rue du Pont de Wandre 75, 4020 Liège",
-      description: "Votre Tasty Food à Wandre, disponible sur Uber Eats.",
+      name: "Tasty Food Wandre / Saint-Gilles",
+      location: "Wandre / Saint-Gilles",
+      address: "Liège (centre / Wandre)",
+      description: "Votre Tasty Food à Liège centre, disponible sur Uber Eats uniquement.",
       image: loadedFries,
       featured: false,
       platforms: [
-        { name: "Uber Eats", icon: "🛵", href: "https://www.ubereats.com/be/store/tasty-food-wandre/9BB6rSrVVKS9UR_2fyAYoQ", color: "bg-[#06C167]" },
+        { name: "Uber Eats", icon: "🛵", href: "https://www.ubereats.com/be/store/tasty-food-saint-gilles/zWuPWDrJX1WeeHcEdno3FQ", color: "bg-[#06C167]" },
       ],
     },
   ];

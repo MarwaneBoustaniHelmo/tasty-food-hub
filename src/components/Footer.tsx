@@ -49,7 +49,7 @@ const Footer = () => {
   const locations = [
     { name: "Seraing", address: "15 Rue Gustave Baivy, 4101 Seraing", maps: "https://maps.google.com/?q=15+Rue+Gustave+Baivy+4101+Seraing+Belgium" },
     { name: "Angleur", address: "100 Rue Vaudrée, 4031 Angleur", maps: "https://maps.google.com/?q=100+Rue+Vaudree+4031+Angleur+Belgium" },
-    { name: "Wandre", address: "Rue du Pont de Wandre 75, 4020 Liège", maps: "https://maps.google.com/?q=Rue+du+Pont+de+Wandre+75+4020+Liege+Belgium" },
+    { name: "Wandre / Saint-Gilles", address: "Liège (centre / Wandre)", maps: "https://maps.google.com/?q=Liege+Belgium" },
   ];
 
   return (
@@ -57,7 +57,7 @@ const Footer = () => {
       {/* Mobile order reminder */}
       <div className="md:hidden py-3 px-4 bg-accent/10 border-b border-border text-center">
         <p className="text-xs text-muted-foreground">
-          👉 Commandes via Takeaway, Uber Eats, Deliveroo ou sites officiels
+          👉 Commandes via Uber Eats, Deliveroo ou sites officiels
         </p>
       </div>
 
@@ -174,7 +174,7 @@ const Footer = () => {
               Snapchat: <span className="text-primary font-medium">@tastyfoodlg</span>
             </p>
             <p className="text-sm text-muted-foreground">
-              Commandes disponibles via Takeaway, Uber Eats, Deliveroo ou sites officiels.
+              Commandes disponibles via Uber Eats, Deliveroo ou sites officiels.
             </p>
           </div>
         </div>

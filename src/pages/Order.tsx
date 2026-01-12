@@ -16,7 +16,6 @@ const Order = () => {
     delivery: [
       { name: "Commander sur Uber Eats", icon: "🛵", href: "https://www.ubereats.com/be/store/tasty-food-seraing/NpA7eB6mS6mam_TwsTcigg", color: "bg-[#06C167]" },
       { name: "Commander sur Deliveroo", icon: "🚴", href: "https://deliveroo.be/fr/menu/Liege/jemeppe-sur-meuse/tasty-food-seraing", color: "bg-[#00CCBC]" },
-      { name: "Crousty by Tasty (Tenders)", icon: "🍗", href: "https://www.ubereats.com/be/store/crousty-by-tasty-seraing/33RMV2JdXTm0Q5b64r7-Hw", color: "bg-[#F4A261]" },
     ],
   };
 
@@ -27,18 +26,18 @@ const Order = () => {
     description: "Site officiel, Deliveroo & Uber Eats",
     platforms: [
       { name: "Site Officiel", icon: "🌐", href: "https://www.tastyfoodangleur.be", color: "bg-primary" },
+      { name: "Uber Eats", icon: "🛵", href: "https://www.ubereats.com/be/store/tasty-food-angleur/uObTfxymWn2x53kZNuo8NQ", color: "bg-[#06C167]" },
       { name: "Deliveroo", icon: "🚴", href: "https://deliveroo.be/fr/menu/liege/liege-angleur/tasty-food-angleur", color: "bg-[#00CCBC]" },
-      { name: "Uber Eats", icon: "🛵", href: "https://www.ubereats.com/be/store/tasty-food-angleur/rKHPNdPrTSKmLpKR3qQ2dw", color: "bg-[#06C167]" },
     ],
   };
 
-  // Wandre - Uber Eats only
+  // Wandre / Saint-Gilles - Uber Eats only
   const wandreData = {
-    name: "Wandre",
-    address: "Rue du Pont de Wandre 75, 4020 Liège",
+    name: "Wandre / Saint-Gilles",
+    address: "Liège (centre / Wandre)",
     description: "Uber Eats uniquement",
     platforms: [
-      { name: "Uber Eats", icon: "🛵", href: "https://www.ubereats.com/be/store/tasty-food-wandre/9BB6rSrVVKS9UR_2fyAYoQ", color: "bg-[#06C167]" },
+      { name: "Uber Eats", icon: "🛵", href: "https://www.ubereats.com/be/store/tasty-food-saint-gilles/zWuPWDrJX1WeeHcEdno3FQ", color: "bg-[#06C167]" },
     ],
   };
 

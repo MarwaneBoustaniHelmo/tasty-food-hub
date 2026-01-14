@@ -8,18 +8,23 @@ const ORDER_LINKS = {
   seraing: {
     site: "https://www.tastyfoodseraing-seraing.be",
     uber: "https://www.ubereats.com/be/store/tasty-food-seraing/NpA7eB6mS6mam_TwsTcigg",
+    crousty: "https://www.ubereats.com/be/store/crousty-by-tasty-seraing/33RMV2JdXTm0Q5b64r7-Hw",
     deliveroo: "https://deliveroo.be/fr/menu/Liege/jemeppe-sur-meuse/tasty-food-seraing",
   },
   angleur: {
     site: "https://www.tastyfoodangleur.be",
-    uber: "https://www.ubereats.com/be/store/tasty-food-angleur/uObTfxymWn2x53kZNuo8NQ",
-    deliveroo: "https://deliveroo.be/fr/menu/liege/liege-angleur/tasty-food-angleur",
+    uber: "https://www.ubereats.com/be-en/store/tasty-food-angleur/uObTfxymWn2x53kZNuo8NQ",
+    crousty: "https://www.ubereats.com/be-en/store/crousty-by-tasty-angleur/XXAamr3eU2mAD46r4vscdg",
+    deliveroo: "https://deliveroo.fr/fr/menu/Liege/liege-angleur/tasty-food-angleur",
   },
   saintGilles: {
     uber: "https://www.ubereats.com/be/store/tasty-food-saint-gilles/zWuPWDrJX1WeeHcEdno3FQ",
+    crousty: "https://www.ubereats.com/be/store/crousty-by-tasty-saint-gilles/fERWmj65UQCyUbmpsmDT1w",
+    deliveroo: "https://deliveroo.be/fr/menu/Liege/saint-paul/tasty-food-saint-gilles",
   },
   wandre: {
     uber: "https://www.ubereats.com/be/store/tasty-food-wandre/9BB6rSrVVKS9UR_2fyAYoQ",
+    takeaway: "https://www.takeaway.com/be-fr/menu/tasty-food-1",
   },
 };
 
@@ -89,14 +94,14 @@ const Footer = () => {
         maps: "https://maps.google.com/?q=100+Rue+Vaudree+4031+Angleur+Belgium",
       },
       {
+        name: "Saint-Gilles",
+        address: "Rue Saint-Gilles 58, 4000 Liège",
+        maps: "https://maps.google.com/?q=Rue+Saint-Gilles+58+4000+Liege+Belgium",
+      },
+      {
         name: "Wandre",
         address: "Rue du Pont de Wandre 75, 4020 Liège",
         maps: "https://maps.google.com/?q=Rue+du+Pont+de+Wandre+75+4020+Liege+Belgium",
-      },
-      {
-        name: "Saint-Gilles (Liège centre)",
-        address: "Liège (centre)",
-        maps: "https://maps.google.com/?q=Liege+Centre+Belgium",
       },
     ],
     []
@@ -117,7 +122,7 @@ const Footer = () => {
       {/* Mobile order reminder */}
       <div className="md:hidden py-3 px-4 bg-accent/10 border-b border-border text-center">
         <p className="text-xs text-muted-foreground">
-          👉 Commandes via Uber Eats, Deliveroo ou sites officiels
+          👉 Commandes via Uber Eats, Deliveroo, Takeaway ou sites officiels
         </p>
       </div>
 
@@ -127,7 +132,7 @@ const Footer = () => {
           <div className="text-center">
             <h3 className="font-display text-2xl text-gradient-gold mb-2">TASTY FOOD</h3>
             <p className="text-xs text-muted-foreground">
-              Smash Burgers Halal • Liège & environs
+              Smash Burgers Halal • 4 adresses à Liège
             </p>
           </div>
 
@@ -309,10 +314,15 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Site credit */}
-        <p className="text-center text-xs text-muted-foreground/50 mt-4">
-          Site officiel – Tasty Food Liège
-        </p>
+        {/* Final reminder + Site credit */}
+        <div className="mt-4 text-center space-y-2">
+          <p className="text-xs text-muted-foreground">
+            Commandes disponibles uniquement via Uber Eats, Deliveroo, Takeaway ou sites officiels.
+          </p>
+          <p className="text-xs text-muted-foreground/50">
+            Site officiel – Tasty Food Liège
+          </p>
+        </div>
       </div>
     </footer>
   );

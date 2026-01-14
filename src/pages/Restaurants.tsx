@@ -3,44 +3,65 @@ import { Link } from "react-router-dom";
 import heroBurger from "@/assets/hero-burger.jpg";
 import loadedFries from "@/assets/loaded-fries.jpg";
 import restaurantInterior from "@/assets/restaurant-interior.jpg";
+import tacos from "@/assets/tacos.jpg";
 
 const Restaurants = () => {
   const restaurants = [
     {
+      id: "seraing",
       name: "Tasty Food Seraing",
       location: "Seraing",
       address: "15 Rue Gustave Baivy, 4101 Seraing",
-      description: "Notre restaurant phare avec smash burgers, sandwiches et tex-mex.",
+      description: "Smash burgers halal et concepts croustillants. Notre restaurant phare.",
       image: restaurantInterior,
       featured: true,
       platforms: [
         { name: "Site Officiel", icon: "🌐", href: "https://www.tastyfoodseraing-seraing.be", color: "bg-primary" },
-        { name: "Uber Eats", icon: "🛵", href: "https://www.ubereats.com/be/store/tasty-food-seraing/NpA7eB6mS6mam_TwsTcigg", color: "bg-[#06C167]" },
+        { name: "Uber Eats – Tasty Food", icon: "🛵", href: "https://www.ubereats.com/be/store/tasty-food-seraing/NpA7eB6mS6mam_TwsTcigg", color: "bg-[#06C167]" },
+        { name: "Uber Eats – Crousty by Tasty", icon: "🍗", href: "https://www.ubereats.com/be/store/crousty-by-tasty-seraing/33RMV2JdXTm0Q5b64r7-Hw", color: "bg-[#06C167]" },
         { name: "Deliveroo", icon: "🚴", href: "https://deliveroo.be/fr/menu/Liege/jemeppe-sur-meuse/tasty-food-seraing", color: "bg-[#00CCBC]" },
       ],
     },
     {
+      id: "angleur",
       name: "Tasty Food Angleur",
       location: "Angleur",
       address: "100 Rue Vaudrée, 4031 Angleur",
-      description: "Smash burgers halal à Angleur. Produits frais, qualité street food.",
+      description: "Smash burgers halal et street food premium à Angleur.",
       image: heroBurger,
       featured: false,
       platforms: [
         { name: "Site Officiel", icon: "🌐", href: "https://www.tastyfoodangleur.be", color: "bg-primary" },
-        { name: "Uber Eats", icon: "🛵", href: "https://www.ubereats.com/be/store/tasty-food-angleur/uObTfxymWn2x53kZNuo8NQ", color: "bg-[#06C167]" },
-        { name: "Deliveroo", icon: "🚴", href: "https://deliveroo.be/fr/menu/liege/liege-angleur/tasty-food-angleur", color: "bg-[#00CCBC]" },
+        { name: "Uber Eats – Tasty Food", icon: "🛵", href: "https://www.ubereats.com/be-en/store/tasty-food-angleur/uObTfxymWn2x53kZNuo8NQ", color: "bg-[#06C167]" },
+        { name: "Uber Eats – Crousty by Tasty", icon: "🍗", href: "https://www.ubereats.com/be-en/store/crousty-by-tasty-angleur/XXAamr3eU2mAD46r4vscdg", color: "bg-[#06C167]" },
+        { name: "Deliveroo", icon: "🚴", href: "https://deliveroo.fr/fr/menu/Liege/liege-angleur/tasty-food-angleur", color: "bg-[#00CCBC]" },
       ],
     },
     {
-      name: "Tasty Food Wandre / Saint-Gilles",
-      location: "Wandre / Saint-Gilles",
-      address: "Liège (centre / Wandre)",
-      description: "Votre Tasty Food à Liège centre, disponible sur Uber Eats uniquement.",
+      id: "saint-gilles",
+      name: "Tasty Food Saint-Gilles",
+      location: "Saint-Gilles (Liège)",
+      address: "Rue Saint-Gilles 58, 4000 Liège",
+      description: "Smash burgers halal et concepts croustillants à Liège centre.",
       image: loadedFries,
       featured: false,
       platforms: [
-        { name: "Uber Eats", icon: "🛵", href: "https://www.ubereats.com/be/store/tasty-food-saint-gilles/zWuPWDrJX1WeeHcEdno3FQ", color: "bg-[#06C167]" },
+        { name: "Uber Eats – Tasty Food", icon: "🛵", href: "https://www.ubereats.com/be/store/tasty-food-saint-gilles/zWuPWDrJX1WeeHcEdno3FQ", color: "bg-[#06C167]" },
+        { name: "Uber Eats – Crousty by Tasty", icon: "🍗", href: "https://www.ubereats.com/be/store/crousty-by-tasty-saint-gilles/fERWmj65UQCyUbmpsmDT1w", color: "bg-[#06C167]" },
+        { name: "Deliveroo", icon: "🚴", href: "https://deliveroo.be/fr/menu/Liege/saint-paul/tasty-food-saint-gilles", color: "bg-[#00CCBC]" },
+      ],
+    },
+    {
+      id: "wandre",
+      name: "Tasty Food Wandre",
+      location: "Wandre",
+      address: "Rue du Pont de Wandre 75, 4020 Liège",
+      description: "Tasty Food à Wandre, disponible sur les principales plateformes de livraison.",
+      image: tacos,
+      featured: false,
+      platforms: [
+        { name: "Uber Eats", icon: "🛵", href: "https://www.ubereats.com/be/store/tasty-food-wandre/9BB6rSrVVKS9UR_2fyAYoQ", color: "bg-[#06C167]" },
+        { name: "Takeaway", icon: "📦", href: "https://www.takeaway.com/be-fr/menu/tasty-food-1", color: "bg-[#FF8000]" },
       ],
     },
   ];
@@ -54,7 +75,7 @@ const Restaurants = () => {
             NOS <span className="text-gradient-gold">RESTAURANTS</span>
           </h1>
           <p className="text-muted-foreground text-sm md:text-lg max-w-2xl mx-auto">
-            3 adresses à Liège et environs
+            4 adresses à Liège et environs – Seraing, Angleur, Saint-Gilles, Wandre
           </p>
         </div>
 
@@ -62,7 +83,7 @@ const Restaurants = () => {
         <div className="space-y-6 md:space-y-8 max-w-4xl mx-auto">
           {restaurants.map((restaurant) => (
             <div
-              key={restaurant.name}
+              key={restaurant.id}
               className={`rounded-2xl overflow-hidden border transition-all duration-300 ${
                 restaurant.featured 
                   ? "bg-gradient-to-br from-primary/10 to-accent/5 border-primary/40" 
@@ -147,12 +168,13 @@ const Restaurants = () => {
         <div className="mt-8 md:mt-12 text-center">
           <div className="p-4 md:p-6 rounded-2xl bg-card border border-border max-w-2xl mx-auto">
             <p className="text-muted-foreground text-sm mb-4">
-              👉 Commandes via plateformes officielles
+              👉 Commandes exclusivement via nos plateformes partenaires officielles
             </p>
             <div className="flex flex-wrap justify-center gap-2 mb-4">
               <span className="px-3 py-1.5 rounded-full bg-secondary text-primary text-xs font-medium">Sites officiels</span>
               <span className="px-3 py-1.5 rounded-full bg-secondary text-primary text-xs font-medium">Uber Eats</span>
               <span className="px-3 py-1.5 rounded-full bg-secondary text-primary text-xs font-medium">Deliveroo</span>
+              <span className="px-3 py-1.5 rounded-full bg-secondary text-primary text-xs font-medium">Takeaway</span>
             </div>
             <Link to="/commander" className="btn-order inline-flex items-center gap-2">
               Voir toutes les options

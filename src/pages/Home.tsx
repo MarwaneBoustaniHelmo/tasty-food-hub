@@ -23,15 +23,24 @@ const Home = () => {
       featured: false,
       platforms: [
         { label: "Site Officiel", icon: "🌐", href: "https://www.tastyfoodangleur.be", color: "bg-primary" },
-        { label: "Uber Eats", icon: "🛵", href: "https://www.ubereats.com/be/store/tasty-food-angleur/uObTfxymWn2x53kZNuo8NQ", color: "bg-[#06C167]" },
-        { label: "Deliveroo", icon: "🚴", href: "https://deliveroo.be/fr/menu/liege/liege-angleur/tasty-food-angleur", color: "bg-[#00CCBC]" },
+        { label: "Uber Eats", icon: "🛵", href: "https://www.ubereats.com/be-en/store/tasty-food-angleur/uObTfxymWn2x53kZNuo8NQ", color: "bg-[#06C167]" },
+        { label: "Deliveroo", icon: "🚴", href: "https://deliveroo.fr/fr/menu/Liege/liege-angleur/tasty-food-angleur", color: "bg-[#00CCBC]" },
       ],
     },
     {
-      name: "Wandre / Saint-Gilles",
+      name: "Saint-Gilles",
       featured: false,
       platforms: [
         { label: "Uber Eats", icon: "🛵", href: "https://www.ubereats.com/be/store/tasty-food-saint-gilles/zWuPWDrJX1WeeHcEdno3FQ", color: "bg-[#06C167]" },
+        { label: "Deliveroo", icon: "🚴", href: "https://deliveroo.be/fr/menu/Liege/saint-paul/tasty-food-saint-gilles", color: "bg-[#00CCBC]" },
+      ],
+    },
+    {
+      name: "Wandre",
+      featured: false,
+      platforms: [
+        { label: "Uber Eats", icon: "🛵", href: "https://www.ubereats.com/be/store/tasty-food-wandre/9BB6rSrVVKS9UR_2fyAYoQ", color: "bg-[#06C167]" },
+        { label: "Takeaway", icon: "📦", href: "https://www.takeaway.com/be-fr/menu/tasty-food-1", color: "bg-[#FF8000]" },
       ],
     },
   ];
@@ -74,6 +83,11 @@ const Home = () => {
               Liège & Environs
             </span>
           </h1>
+
+          {/* Subtitle - Order message */}
+          <p className="text-muted-foreground text-sm md:text-lg max-w-xl mx-auto">
+            👉 Commandez Tasty Food sur nos plateformes officielles
+          </p>
 
           {/* Mobile Primary CTAs */}
           <div className="md:hidden space-y-3 pt-2">
@@ -162,7 +176,7 @@ const Home = () => {
           </div>
 
           {/* Desktop: Grid layout */}
-          <div className="hidden md:grid grid-cols-3 gap-6 max-w-4xl mx-auto">
+          <div className="hidden md:grid grid-cols-4 gap-6 max-w-5xl mx-auto">
             {restaurants.map((restaurant) => (
               <div
                 key={restaurant.name}
@@ -259,11 +273,10 @@ const Home = () => {
               L'EXPÉRIENCE <span className="text-gradient-gold">TASTY</span>
             </h2>
             <p className="text-sm md:text-lg text-muted-foreground leading-relaxed">
-              Smash burgers halal, ingrédients frais, saveurs audacieuses. 
-              Découvrez notre technique unique et notre passion pour la street food premium.
+              Tasty Food propose des smash burgers halal et des concepts street food croustillants préparés avec des ingrédients frais et des saveurs audacieuses.
             </p>
             <div className="flex flex-wrap gap-2 md:gap-3">
-              {["100% Halal", "Produits frais", "Smash technique", "3 restaurants"].map((tag) => (
+              {["100% Halal", "Produits frais", "Smash technique", "4 restaurants"].map((tag) => (
                 <span key={tag} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-primary/20 text-primary text-xs md:text-sm">
                   <Check size={14} />
                   {tag}
@@ -302,7 +315,7 @@ const Home = () => {
               🎵 TikTok
             </a>
             <a
-              href="https://www.facebook.com/p/Tasty-Food-Li%C3%A8ge-61550609498498/"
+              href="https://www.facebook.com/p/Tasty-Food-Li%C3%A8ge-61553406575906/?locale=fr_FR"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 p-3 md:p-4 rounded-xl bg-[#1877F2] text-white font-medium hover:scale-105 transition-transform"

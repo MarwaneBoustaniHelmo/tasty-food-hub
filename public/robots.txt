@@ -1,3 +1,13 @@
+# Robots.txt for Tasty Food Liège
+# https://tastyfoodliege.be
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://tastyfoodliege.be/sitemap.xml
+
+# Allow all major crawlers
 User-agent: Googlebot
 Allow: /
 
@@ -10,5 +20,9 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
-User-agent: *
+User-agent: LinkedInBot
 Allow: /
+
+# Disallow internal/utility paths (if any)
+Disallow: /api/
+Disallow: /_/

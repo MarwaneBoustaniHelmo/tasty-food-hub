@@ -54,51 +54,50 @@ const Home = () => {
 
   return (
     <main>
-      {/* Hero Section - Mobile optimized */}
-      <section className="relative min-h-[60vh] md:min-h-screen flex items-end md:items-center justify-center overflow-hidden pt-28 md:pt-0">
-        {/* Background Image */}
+      {/* Hero Section - Mobile optimized: 40vh mobile, 70vh desktop */}
+      <section className="relative min-h-[40vh] md:min-h-[70vh] flex items-end justify-center overflow-hidden pt-24 md:pt-0">
+        {/* Background Image with aspect ratio for CLS prevention */}
         <div className="absolute inset-0">
           <img
             src={heroMain}
-            alt="Smash Burger Tasty Food Liège - Menu complet avec tacos et frites"
+            alt="Smash Burger Tasty Food Liège"
             className="w-full h-full object-cover"
             loading="eager"
+            fetchPriority="high"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/40" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-background/30" />
         </div>
 
         {/* Content */}
-        <div className="relative z-10 container pb-6 md:pb-16 md:pt-32 space-y-4 md:space-y-8 text-center">
+        <div className="relative z-10 container px-4 pb-6 md:pb-16 space-y-3 md:space-y-6 text-center">
+          {/* Desktop badge */}
           <div className="hidden md:block">
-            <span className="inline-block px-4 py-2 rounded-full bg-primary/20 border border-primary/30 text-primary text-sm font-medium mb-6">
+            <span className="inline-block px-4 py-2 rounded-full bg-primary/20 border border-primary/30 text-primary text-sm font-medium mb-4">
               🍔 Halal • Premium Street Food
             </span>
           </div>
           
-          {/* Title */}
-          <h1 className="font-display text-3xl md:text-6xl lg:text-7xl leading-tight">
-            <span className="text-gradient-gold">SMASH BURGERS HALAL</span>
-            <br />
-            <span className="text-foreground text-lg md:text-3xl lg:text-4xl">
-              Liège & Environs
+          {/* Title - Mobile: 32px, Desktop: 56px */}
+          <h1 className="font-display text-[32px] md:text-[56px] lg:text-[64px] leading-[1.1]">
+            <span className="text-gradient-gold">SMASH BURGERS</span>
+            <br className="md:hidden" />
+            <span className="text-foreground text-lg md:text-2xl lg:text-3xl block mt-1">
+              Halal • Liège & Environs
             </span>
           </h1>
 
-          {/* Subtitle - Order message */}
-          <p className="text-muted-foreground text-sm md:text-lg max-w-xl mx-auto">
-            👉 Commandez Tasty Food sur nos plateformes officielles
+          {/* Subtitle - Short and clear */}
+          <p className="text-muted-foreground text-sm md:text-base max-w-md mx-auto leading-relaxed">
+            👉 Commandez sur nos plateformes officielles
           </p>
 
-          {/* Mobile Primary CTAs */}
-          <div className="md:hidden space-y-3 pt-2">
+          {/* Mobile Primary CTA - Above the fold */}
+          <div className="md:hidden pt-2">
             <OrderBottomSheet>
-              <button className="btn-order w-full text-lg py-4 touch-target">
-                🍔 COMMANDER MAINTENANT
+              <button className="btn-order w-full text-base py-4 touch-target">
+                🍔 COMMANDER
               </button>
             </OrderBottomSheet>
-            <Link to="/restaurants" className="btn-gold w-full py-4 touch-target">
-              Voir nos restaurants
-            </Link>
           </div>
 
           {/* Desktop CTAs */}
@@ -114,15 +113,15 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-8 md:py-12 bg-card border-y border-border">
-        <div className="container">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+      {/* Features Section - Compact on mobile */}
+      <section className="py-6 md:py-12 bg-card border-y border-border">
+        <div className="container px-4">
+          <div className="grid grid-cols-4 gap-2 md:gap-6">
             {features.map((feature) => (
-              <div key={feature.title} className="text-center p-3 md:p-4">
-                <span className="text-3xl md:text-4xl mb-2 block">{feature.icon}</span>
-                <h3 className="font-display text-sm md:text-lg text-primary">{feature.title}</h3>
-                <p className="text-xs md:text-sm text-muted-foreground">{feature.description}</p>
+              <div key={feature.title} className="text-center p-2 md:p-4">
+                <span className="text-2xl md:text-4xl mb-1 md:mb-2 block">{feature.icon}</span>
+                <h3 className="font-display text-xs md:text-lg text-primary leading-tight">{feature.title}</h3>
+                <p className="text-[10px] md:text-sm text-muted-foreground hidden md:block">{feature.description}</p>
               </div>
             ))}
           </div>
@@ -130,34 +129,34 @@ const Home = () => {
       </section>
 
       {/* Quick Order Section */}
-      <section className="py-10 md:py-20">
-        <div className="container">
+      <section className="py-8 md:py-20">
+        <div className="container px-4">
           <div className="text-center mb-6 md:mb-12">
-            <h2 className="section-title text-gradient-gold mb-2 md:mb-4">
+            <h2 className="font-display text-2xl md:text-4xl text-gradient-gold mb-2">
               COMMANDEZ EN 3 CLICS
             </h2>
-            <p className="text-muted-foreground text-sm md:text-lg max-w-xl mx-auto">
-              Choisissez votre restaurant et votre plateforme préférée
+            <p className="text-muted-foreground text-sm md:text-base max-w-md mx-auto">
+              Choisissez votre restaurant préféré
             </p>
           </div>
 
-          {/* Mobile: Vertical full-width layout */}
-          <div className="space-y-4 md:hidden">
+          {/* Mobile: Vertical cards */}
+          <div className="space-y-3 md:hidden">
             {restaurants.map((restaurant) => (
               <div
                 key={restaurant.name}
                 className={`rounded-2xl border p-4 ${
                   restaurant.featured 
-                    ? "bg-gradient-to-br from-primary/20 to-accent/10 border-primary/40" 
-                    : "bg-secondary/50 border-border"
+                    ? "bg-gradient-to-br from-primary/15 to-accent/10 border-primary/40" 
+                    : "bg-card border-border"
                 }`}
               >
-                <h3 className={`font-display text-xl mb-3 flex items-center gap-2 ${restaurant.featured ? "text-gradient-gold" : "text-primary"}`}>
+                <h3 className={`font-display text-lg mb-3 flex items-center gap-2 ${restaurant.featured ? "text-gradient-gold" : "text-primary"}`}>
                   📍 {restaurant.name}
-                  {restaurant.featured && <span className="text-xs bg-primary text-primary-foreground px-2 py-0.5 rounded-full">VEDETTE</span>}
+                  {restaurant.featured && <span className="text-[10px] bg-primary text-primary-foreground px-2 py-0.5 rounded-full">TOP</span>}
                 </h3>
                 <div className="space-y-2">
-                  {restaurant.platforms.map((platform, idx) => (
+                  {restaurant.platforms.slice(0, 2).map((platform, idx) => (
                     <a
                       key={idx}
                       href={platform.href}
@@ -165,18 +164,26 @@ const Home = () => {
                       rel="noopener noreferrer"
                       className={`mobile-platform-btn ${platform.color}`}
                     >
-                      <span className="text-xl">{platform.icon}</span>
-                      <span className="flex-1 font-semibold">{platform.label}</span>
-                      <ExternalLink size={18} className="opacity-70" />
+                      <span className="text-lg">{platform.icon}</span>
+                      <span className="flex-1 font-semibold text-sm">{platform.label}</span>
+                      <ExternalLink size={16} className="opacity-70" />
                     </a>
                   ))}
+                  {restaurant.platforms.length > 2 && (
+                    <Link 
+                      to="/commander" 
+                      className="block text-center text-xs text-primary py-2 hover:underline"
+                    >
+                      + {restaurant.platforms.length - 2} autres options
+                    </Link>
+                  )}
                 </div>
               </div>
             ))}
           </div>
 
           {/* Desktop: Grid layout */}
-          <div className="hidden md:grid grid-cols-4 gap-6 max-w-5xl mx-auto">
+          <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
             {restaurants.map((restaurant) => (
               <div
                 key={restaurant.name}
@@ -211,40 +218,40 @@ const Home = () => {
 
           {/* See all link */}
           <div className="text-center mt-6 md:mt-8">
-            <Link to="/commander" className="btn-gold inline-flex items-center gap-2">
-              Voir toutes les options
+            <Link to="/commander" className="btn-gold inline-flex items-center gap-2 text-sm md:text-base">
+              Toutes les options
               <ArrowRight size={16} />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Menu Preview */}
-      <section className="py-10 md:py-20 bg-card">
-        <div className="container">
+      {/* Menu Preview - 2 columns mobile */}
+      <section className="py-8 md:py-20 bg-card">
+        <div className="container px-4">
           <div className="text-center mb-6 md:mb-12">
-            <h2 className="section-title text-foreground mb-2 md:mb-4">
+            <h2 className="font-display text-2xl md:text-4xl text-foreground mb-2">
               NOS <span className="text-gradient-gold">SAVEURS</span>
             </h2>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6">
+          <div className="grid grid-cols-3 gap-2 md:gap-6">
             {[
               { img: heroBurger, title: "SMASH BURGERS" },
               { img: loadedFries, title: "LOADED FRIES" },
               { img: tacos, title: "TEX-MEX" },
             ].map((item) => (
               <div key={item.title} className="card-restaurant group overflow-hidden">
-                <div className="relative h-32 md:h-64 overflow-hidden">
+                <div className="relative aspect-square md:aspect-[4/5] overflow-hidden">
                   <img
                     src={item.img}
                     alt={item.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     loading="lazy"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-card to-transparent" />
-                  <div className="absolute bottom-2 md:bottom-4 left-2 md:left-4">
-                    <h3 className="font-display text-sm md:text-2xl text-gradient-gold">
+                  <div className="absolute inset-0 bg-gradient-to-t from-card via-card/30 to-transparent" />
+                  <div className="absolute bottom-2 md:bottom-4 left-2 md:left-4 right-2">
+                    <h3 className="font-display text-xs md:text-xl text-gradient-gold leading-tight">
                       {item.title}
                     </h3>
                   </div>
@@ -255,115 +262,106 @@ const Home = () => {
         </div>
       </section>
 
-      {/* About Preview */}
-      <section className="py-10 md:py-20 relative overflow-hidden">
+      {/* About Preview - More compact */}
+      <section className="py-8 md:py-20 relative overflow-hidden">
         <div className="absolute inset-0">
           <img
             src={restaurantInterior}
-            alt="Intérieur restaurant"
-            className="w-full h-full object-cover opacity-30"
+            alt="Intérieur restaurant Tasty Food"
+            className="w-full h-full object-cover opacity-20"
             loading="lazy"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-background via-background/95 to-background/80" />
         </div>
 
-        <div className="container relative z-10">
-          <div className="max-w-2xl space-y-4 md:space-y-6">
-            <h2 className="section-title text-foreground">
+        <div className="container px-4 relative z-10">
+          <div className="max-w-xl space-y-4">
+            <h2 className="font-display text-2xl md:text-4xl text-foreground">
               L'EXPÉRIENCE <span className="text-gradient-gold">TASTY</span>
             </h2>
-            <p className="text-sm md:text-lg text-muted-foreground leading-relaxed">
-              Tasty Food propose des smash burgers halal et des concepts street food croustillants préparés avec des ingrédients frais et des saveurs audacieuses.
+            <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+              Smash burgers halal et street food croustillante. Ingrédients frais, saveurs audacieuses.
             </p>
-            <div className="flex flex-wrap gap-2 md:gap-3">
-              {["100% Halal", "Produits frais", "Smash technique", "4 restaurants"].map((tag) => (
+            <div className="flex flex-wrap gap-2">
+              {["100% Halal", "Produits frais", "4 restaurants"].map((tag) => (
                 <span key={tag} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-primary/20 text-primary text-xs md:text-sm">
-                  <Check size={14} />
+                  <Check size={12} />
                   {tag}
                 </span>
               ))}
             </div>
-            <Link to="/concept" className="btn-gold inline-flex touch-target">
+            <Link to="/concept" className="btn-gold inline-flex touch-target text-sm">
               Découvrir notre concept
-              <ArrowRight size={18} />
+              <ArrowRight size={16} />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Social Section */}
-      <section className="py-10 md:py-16 bg-card">
-        <div className="container text-center">
+      {/* Social Section - Compact */}
+      <section className="py-8 md:py-16 bg-card">
+        <div className="container px-4 text-center">
           <h2 className="font-display text-xl md:text-3xl text-primary mb-4 md:mb-6">
-            SUIVEZ NOS AVENTURES
+            SUIVEZ-NOUS
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-2xl mx-auto">
+          <div className="grid grid-cols-4 gap-2 md:gap-3 max-w-lg mx-auto">
             <a
               href="https://www.instagram.com/tastyfoodliege"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 p-3 md:p-4 rounded-xl bg-gradient-to-br from-[#F58529] via-[#DD2A7B] to-[#8134AF] text-white font-medium hover:scale-105 transition-transform"
+              className="flex items-center justify-center p-3 md:p-4 rounded-xl bg-gradient-to-br from-[#F58529] via-[#DD2A7B] to-[#8134AF] text-white text-lg md:text-xl hover:scale-105 transition-transform touch-target"
+              aria-label="Instagram"
             >
-              📸 Instagram
+              📸
             </a>
             <a
               href="https://www.tiktok.com/@tastyfoodliege"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 p-3 md:p-4 rounded-xl bg-black border border-[#00F2EA] text-white font-medium hover:scale-105 transition-transform"
+              className="flex items-center justify-center p-3 md:p-4 rounded-xl bg-black border border-[#00F2EA] text-white text-lg md:text-xl hover:scale-105 transition-transform touch-target"
+              aria-label="TikTok"
             >
-              🎵 TikTok
+              🎵
             </a>
             <a
               href="https://www.facebook.com/p/Tasty-Food-Li%C3%A8ge-61553406575906/?locale=fr_FR"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 p-3 md:p-4 rounded-xl bg-[#1877F2] text-white font-medium hover:scale-105 transition-transform"
+              className="flex items-center justify-center p-3 md:p-4 rounded-xl bg-[#1877F2] text-white text-lg md:text-xl hover:scale-105 transition-transform touch-target"
+              aria-label="Facebook"
             >
-              👍 Facebook
+              👍
             </a>
             <a
               href="https://www.snapchat.com/add/tastyfoodlg"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 p-3 md:p-4 rounded-xl bg-[#FFFC00] text-black font-medium hover:scale-105 transition-transform"
+              className="flex items-center justify-center p-3 md:p-4 rounded-xl bg-[#FFFC00] text-black text-lg md:text-xl hover:scale-105 transition-transform touch-target"
+              aria-label="Snapchat"
             >
-              👻 Snapchat
+              👻
             </a>
           </div>
         </div>
       </section>
 
-      {/* Final CTA */}
-      <section className="py-10 md:py-20 text-center">
-        <div className="container">
-          <h2 className="section-title text-gradient-gold mb-4 md:mb-6">
+      {/* Final CTA - Desktop only (mobile has sticky button) */}
+      <section className="hidden md:block py-20 text-center">
+        <div className="container px-4">
+          <h2 className="font-display text-4xl text-gradient-gold mb-6">
             PRÊT À COMMANDER ?
           </h2>
-          
-          {/* Mobile */}
-          <div className="md:hidden">
-            <OrderBottomSheet>
-              <button className="btn-order w-full text-lg py-4 touch-target">
-                COMMANDER MAINTENANT
-              </button>
-            </OrderBottomSheet>
-          </div>
-
-          {/* Desktop */}
-          <div className="hidden md:block">
-            <Link to="/commander" className="btn-order text-lg px-10 py-4">
-              Voir toutes les options
-              <ArrowRight size={20} />
-            </Link>
-          </div>
+          <Link to="/commander" className="btn-order text-lg px-10 py-4">
+            Voir toutes les options
+            <ArrowRight size={20} />
+          </Link>
         </div>
       </section>
 
-      {/* Mobile Order Reminder */}
-      <div className="mobile-order-reminder md:hidden">
+      {/* Info banner - Mobile reminder above sticky button */}
+      <div className="md:hidden py-4 px-4 text-center bg-card border-t border-border">
         <p className="text-xs text-muted-foreground">
-          👉 Commandes exclusivement via nos plateformes officielles
+          👉 Commandes via plateformes officielles uniquement
         </p>
       </div>
     </main>

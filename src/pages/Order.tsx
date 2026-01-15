@@ -1,5 +1,6 @@
 import { ExternalLink, MapPin, Info } from "lucide-react";
 import { Link } from "react-router-dom";
+import SEOHead from "@/components/SEOHead";
 
 const Order = () => {
   // All restaurant data with complete platform links
@@ -57,21 +58,28 @@ const Order = () => {
 
   return (
     <main className="pt-24 md:pt-28 pb-10 md:pb-20 min-h-screen">
+      {/* SEO Meta Tags */}
+      <SEOHead
+        title="Commander Halal à Liège – Livraison Uber Eats, Deliveroo"
+        description="Commandez vos burgers halal en ligne à Liège. Livraison via Uber Eats, Deliveroo, Takeaway. 4 restaurants : Seraing, Angleur, Saint-Gilles, Wandre. 18h-02h."
+        canonical="/commander"
+      />
+
       <div className="container px-4">
         {/* Header */}
-        <div className="text-center mb-8 md:mb-12">
+        <header className="text-center mb-8 md:mb-12">
           <h1 className="section-title mb-2 md:mb-4">
-            OÙ <span className="text-gradient-gold">COMMANDER</span> TASTY FOOD
+            <span className="text-gradient-gold">COMMANDER</span> HALAL À LIÈGE
           </h1>
           <p className="text-muted-foreground text-sm md:text-lg max-w-2xl mx-auto">
-            Toutes les commandes sont passées via nos plateformes partenaires officielles.
+            Faites-vous livrer les meilleurs smash burgers halal de Liège via nos plateformes partenaires officielles.
           </p>
-        </div>
+        </header>
 
         {/* Restaurant Sections */}
         <div className="space-y-6 md:space-y-8 max-w-3xl mx-auto">
           {restaurants.map((restaurant) => (
-            <div
+            <article
               key={restaurant.id}
               className={`rounded-2xl border p-5 md:p-8 ${
                 restaurant.featured
@@ -80,13 +88,13 @@ const Order = () => {
               }`}
             >
               {/* Header */}
-              <div className="flex items-center gap-3 mb-5 md:mb-6">
+              <header className="flex items-center gap-3 mb-5 md:mb-6">
                 <div className={`p-2 md:p-3 rounded-xl ${restaurant.featured ? "bg-primary/30" : "bg-primary/20"}`}>
-                  <MapPin className="text-primary" size={24} />
+                  <MapPin className="text-primary" size={24} aria-hidden="true" />
                 </div>
                 <div>
                   <h2 className={`font-display text-2xl md:text-3xl ${restaurant.featured ? "text-gradient-gold" : "text-primary"}`}>
-                    {restaurant.name}
+                    Tasty Food {restaurant.name}
                     {restaurant.featured && (
                       <span className="ml-2 text-xs bg-primary text-primary-foreground px-2 py-0.5 rounded-full align-middle">
                         VEDETTE
@@ -95,11 +103,11 @@ const Order = () => {
                   </h2>
                   <p className="text-xs md:text-sm text-muted-foreground">{restaurant.description}</p>
                 </div>
-              </div>
+              </header>
 
               {/* Direct ordering (if available) */}
               {restaurant.platforms.some(p => p.category === "direct") && (
-                <div className="mb-5 md:mb-6">
+                <section className="mb-5 md:mb-6" aria-label="Commander en direct">
                   <h3 className="text-sm font-semibold text-foreground/80 mb-3 uppercase tracking-wide">
                     🍔 Commander en direct
                   </h3>
@@ -113,22 +121,23 @@ const Order = () => {
                           target="_blank"
                           rel="noopener noreferrer"
                           className={`mobile-platform-btn ${platform.color} border-2 border-primary/50`}
+                          aria-label={`Commander sur ${platform.name} - ${restaurant.name}`}
                         >
-                          <span className="text-2xl">{platform.icon}</span>
+                          <span className="text-2xl" aria-hidden="true">{platform.icon}</span>
                           <span className="flex-1 font-semibold text-base">{platform.name}</span>
-                          <ExternalLink size={20} className="opacity-70" />
+                          <ExternalLink size={20} className="opacity-70" aria-hidden="true" />
                         </a>
                       ))}
                   </div>
-                </div>
+                </section>
               )}
 
               {/* Delivery platforms */}
-              <div className="mb-5 md:mb-6">
+              <section className="mb-5 md:mb-6" aria-label="Commander en livraison">
                 <h3 className="text-sm font-semibold text-foreground/80 mb-3 uppercase tracking-wide">
                   🚴 Commander en livraison
                 </h3>
-                <div className="space-y-2">
+                <nav className="space-y-2">
                   {restaurant.platforms
                     .filter(p => p.category === "delivery")
                     .map((platform) => (
@@ -138,50 +147,51 @@ const Order = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                         className={`mobile-platform-btn ${platform.color}`}
+                        aria-label={`Commander sur ${platform.name} - Livraison ${restaurant.name}`}
                       >
-                        <span className="text-xl">{platform.icon}</span>
+                        <span className="text-xl" aria-hidden="true">{platform.icon}</span>
                         <span className="flex-1 font-semibold text-sm">{platform.name}</span>
-                        <ExternalLink size={18} className="opacity-70" />
+                        <ExternalLink size={18} className="opacity-70" aria-hidden="true" />
                       </a>
                     ))}
-                </div>
-              </div>
+                </nav>
+              </section>
 
               {/* Address */}
-              <div className="pt-4 border-t border-border/50 text-center">
+              <footer className="pt-4 border-t border-border/50 text-center">
                 <p className="text-foreground font-medium text-sm md:text-base">
                   📍 Tasty Food {restaurant.name}
                 </p>
-                <p className="text-muted-foreground text-xs md:text-sm">
+                <address className="text-muted-foreground text-xs md:text-sm not-italic">
                   {restaurant.address}
-                </p>
-              </div>
-            </div>
+                </address>
+              </footer>
+            </article>
           ))}
         </div>
 
         {/* Info Banner */}
-        <div className="max-w-3xl mx-auto my-8">
+        <aside className="max-w-3xl mx-auto my-8">
           <div className="p-4 md:p-6 rounded-2xl bg-accent/10 border border-accent/20 text-center">
             <div className="flex items-center justify-center gap-2 mb-2">
-              <Info size={18} className="text-accent" />
+              <Info size={18} className="text-accent" aria-hidden="true" />
               <p className="text-foreground font-medium text-sm md:text-base">
-                Commande en ligne uniquement
+                Livraison halal à Liège
               </p>
             </div>
             <p className="text-muted-foreground text-xs md:text-sm">
-              Utilisez exclusivement nos plateformes partenaires officielles (Uber Eats, Deliveroo, Takeaway ou sites officiels).
+              Toutes nos commandes passent par nos plateformes partenaires officielles (Uber Eats, Deliveroo, Takeaway ou sites officiels). Livraison rapide 30-40 min.
             </p>
           </div>
-        </div>
+        </aside>
 
         {/* CTA to restaurants */}
-        <div className="max-w-3xl mx-auto text-center">
-          <Link to="/restaurants" className="btn-gold inline-flex items-center gap-2">
+        <nav className="max-w-3xl mx-auto text-center">
+          <Link to="/restaurants" className="btn-gold inline-flex items-center gap-2" aria-label="Découvrir nos restaurants halal à Liège">
             Découvrir nos restaurants
-            <ExternalLink size={16} />
+            <ExternalLink size={16} aria-hidden="true" />
           </Link>
-        </div>
+        </nav>
       </div>
     </main>
   );

@@ -6,16 +6,32 @@ interface OrderBottomSheetProps {
   children: React.ReactNode;
 }
 
-const orderLocations = [
+// Platform type
+interface Platform {
+  name: string;
+  icon: string;
+  href: string | null;
+  color: string;
+}
+
+// Location type
+interface OrderLocation {
+  name: string;
+  address: string;
+  featured: boolean;
+  platforms: Platform[];
+}
+
+// Updated data with all correct links
+const orderLocations: OrderLocation[] = [
   {
-    name: "Seraing",
-    address: "15 Rue Gustave Baivy, 4101 Seraing",
+    name: "Seraing / Jemeppe",
+    address: "Rue Gustave Baivy 15, 4101 Jemeppe-sur-Meuse",
     featured: true,
     platforms: [
-      { name: "Site Officiel", icon: "🌐", href: "https://www.tastyfoodseraing-seraing.be", color: "bg-primary" },
-      { name: "Uber Eats – Tasty Food", icon: "🛵", href: "https://www.ubereats.com/be/store/tasty-food-seraing/NpA7eB6mS6mam_TwsTcigg", color: "bg-[#06C167]" },
-      { name: "Uber Eats – Crousty", icon: "🍗", href: "https://www.ubereats.com/be/store/crousty-by-tasty-seraing/33RMV2JdXTm0Q5b64r7-Hw", color: "bg-[#06C167]" },
-      { name: "Deliveroo", icon: "🚴", href: "https://deliveroo.be/fr/menu/Liege/jemeppe-sur-meuse/tasty-food-seraing", color: "bg-[#00CCBC]" },
+      { name: "Uber Eats", icon: "🛵", href: "https://www.ubereats.com/be-en/store/tasty-food-seraing/NpA7eB6mS6mam_TwsTcigg", color: "bg-[#06C167]" },
+      { name: "Deliveroo", icon: "🚴", href: "https://deliveroo.be/en/menu/liege/jemeppe-sur-meuse/tasty-food-seraing", color: "bg-[#00CCBC]" },
+      { name: "Takeaway.com", icon: "🍔", href: "https://www.takeaway.com/be/menu/tasty-food-seraing", color: "bg-[#FF8000]" },
     ],
   },
   {
@@ -23,36 +39,56 @@ const orderLocations = [
     address: "100 Rue Vaudrée, 4031 Angleur",
     featured: false,
     platforms: [
-      { name: "Site Officiel", icon: "🌐", href: "https://www.tastyfoodangleur.be", color: "bg-primary" },
-      { name: "Uber Eats – Tasty Food", icon: "🛵", href: "https://www.ubereats.com/be-en/store/tasty-food-angleur/uObTfxymWn2x53kZNuo8NQ", color: "bg-[#06C167]" },
-      { name: "Uber Eats – Crousty", icon: "🍗", href: "https://www.ubereats.com/be-en/store/crousty-by-tasty-angleur/XXAamr3eU2mAD46r4vscdg", color: "bg-[#06C167]" },
-      { name: "Deliveroo", icon: "🚴", href: "https://deliveroo.fr/fr/menu/Liege/liege-angleur/tasty-food-angleur", color: "bg-[#00CCBC]" },
-    ],
-  },
-  {
-    name: "Saint-Gilles",
-    address: "Rue Saint-Gilles 58, 4000 Liège",
-    featured: false,
-    platforms: [
-      { name: "Uber Eats – Tasty Food", icon: "🛵", href: "https://www.ubereats.com/be/store/tasty-food-saint-gilles/zWuPWDrJX1WeeHcEdno3FQ", color: "bg-[#06C167]" },
-      { name: "Uber Eats – Crousty", icon: "🍗", href: "https://www.ubereats.com/be/store/crousty-by-tasty-saint-gilles/fERWmj65UQCyUbmpsmDT1w", color: "bg-[#06C167]" },
-      { name: "Deliveroo", icon: "🚴", href: "https://deliveroo.be/fr/menu/Liege/saint-paul/tasty-food-saint-gilles", color: "bg-[#00CCBC]" },
+      { name: "Site Officiel", icon: "🌐", href: "https://www.tastyfoodangleur.be/", color: "bg-primary" },
+      { name: "Uber Eats", icon: "🛵", href: "https://www.ubereats.com/be/store/tasty-food-angleur/uObTfxymWn2x53kZNuo8NQ", color: "bg-[#06C167]" },
+      { name: "Deliveroo", icon: "🚴", href: "https://deliveroo.fr/en/menu/Liege/liege-angleur/tasty-food-angleur", color: "bg-[#00CCBC]" },
+      { name: "Takeaway.com", icon: "🍔", href: "https://www.takeaway.com/be/menu/tasty-food-angleur", color: "bg-[#FF8000]" },
     ],
   },
   {
     name: "Wandre",
-    address: "Rue du Pont de Wandre 75, 4020 Liège",
+    address: "Rue du Pont de Wandre 75, 4020 Wandre",
     featured: false,
     platforms: [
       { name: "Uber Eats", icon: "🛵", href: "https://www.ubereats.com/be/store/tasty-food-wandre/9BB6rSrVVKS9UR_2fyAYoQ", color: "bg-[#06C167]" },
-      { name: "Takeaway", icon: "📦", href: "https://www.takeaway.com/be-fr/menu/tasty-food-1", color: "bg-[#FF8000]" },
+      { name: "Takeaway.com", icon: "🍔", href: "https://www.takeaway.com/be/menu/tasty-food-1", color: "bg-[#FF8000]" },
+    ],
+  },
+  {
+    name: "Saint-Gilles (Liège)",
+    address: "58 Rue Saint-Gilles, 4000 Liège",
+    featured: false,
+    platforms: [
+      { name: "Uber Eats", icon: "🛵", href: "https://www.ubereats.com/be-en/store/tasty-food-saint-gilles/zWuPWDrJX1WeeHcEdno3FQ", color: "bg-[#06C167]" },
+      { name: "Deliveroo", icon: "🚴", href: "https://deliveroo.be/en/menu/Liege/saint-paul/tasty-food-saint-gilles", color: "bg-[#00CCBC]" },
+      { name: "Takeaway.com", icon: "🍔", href: "https://www.takeaway.com/be/menu/tasty-food-liege-1", color: "bg-[#FF8000]" },
     ],
   },
 ];
 
+// Platform button for bottom sheet
+const SheetPlatformButton = ({ platform }: { platform: Platform }) => {
+  if (!platform.href) {
+    return null;
+  }
+
+  return (
+    <a
+      href={platform.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`mobile-platform-btn ${platform.color}`}
+    >
+      <span className="text-xl">{platform.icon}</span>
+      <span className="flex-1 font-semibold">{platform.name}</span>
+      <ExternalLink size={18} className="opacity-70" />
+    </a>
+  );
+};
+
 const OrderBottomSheet = ({ children }: OrderBottomSheetProps) => {
   const [open, setOpen] = useState(false);
-  const [expandedLocation, setExpandedLocation] = useState<string | null>("Seraing");
+  const [expandedLocation, setExpandedLocation] = useState<string | null>("Seraing / Jemeppe");
 
   const toggleLocation = (name: string) => {
     setExpandedLocation(expandedLocation === name ? null : name);
@@ -75,9 +111,16 @@ const OrderBottomSheet = ({ children }: OrderBottomSheetProps) => {
               OÙ COMMANDER ?
             </SheetTitle>
             <p className="text-sm text-muted-foreground text-center">
-              Choisissez votre restaurant Tasty Food
+              Choisissez le restaurant le plus proche de chez vous
             </p>
           </SheetHeader>
+
+          {/* Tip banner */}
+          <div className="px-4 py-3 bg-primary/10 border-b border-primary/20">
+            <p className="text-xs text-center text-foreground/80">
+              💡 <strong>Conseil :</strong> Pour une livraison plus rapide, choisissez toujours le restaurant le plus proche.
+            </p>
+          </div>
 
           {/* Scrollable content */}
           <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
@@ -117,18 +160,9 @@ const OrderBottomSheet = ({ children }: OrderBottomSheetProps) => {
                 {/* Platforms - Expandable */}
                 {expandedLocation === location.name && (
                   <div className="px-4 pb-4 space-y-2 animate-fade-in">
+                    <p className="text-xs text-muted-foreground mb-2">Choisissez votre plateforme :</p>
                     {location.platforms.map((platform) => (
-                      <a
-                        key={platform.name}
-                        href={platform.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`mobile-platform-btn ${platform.color}`}
-                      >
-                        <span className="text-xl">{platform.icon}</span>
-                        <span className="flex-1 font-semibold">{platform.name}</span>
-                        <ExternalLink size={18} className="opacity-70" />
-                      </a>
+                      <SheetPlatformButton key={platform.name} platform={platform} />
                     ))}
                   </div>
                 )}
@@ -139,7 +173,7 @@ const OrderBottomSheet = ({ children }: OrderBottomSheetProps) => {
           {/* Bottom safe area */}
           <div className="px-6 py-4 border-t border-border bg-card">
             <p className="text-xs text-muted-foreground text-center">
-              👉 Commandes via plateformes officielles uniquement
+              Les prix et délais peuvent varier selon la plateforme choisie.
             </p>
           </div>
         </div>

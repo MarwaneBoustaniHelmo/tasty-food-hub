@@ -101,6 +101,15 @@
     @apply max-w-7xl mx-auto px-4;
   }
 
+  /* Hide scrollbar utility */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
   /* Mobile-first touch target minimum - 48px per WCAG, 56px for primary actions */
   .touch-target {
     min-height: 48px;

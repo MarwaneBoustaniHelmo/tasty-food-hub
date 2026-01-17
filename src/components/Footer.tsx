@@ -118,7 +118,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-card border-t border-border">
+    <footer className="bg-card border-t border-border safe-area-bottom" role="contentinfo">
       {/* Mobile order reminder */}
       <div className="md:hidden py-3 px-4 bg-accent/10 border-b border-border text-center">
         <p className="text-xs text-muted-foreground">
@@ -137,7 +137,7 @@ const Footer = () => {
           </div>
 
           {/* Quick links - horizontal on mobile - INCLUDES CONCEPT */}
-          <nav className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm">
+          <nav className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm" aria-label="Navigation rapide">
             <Link to="/" className="text-muted-foreground hover:text-primary transition-colors">Accueil</Link>
             <Link to="/restaurants" className="text-muted-foreground hover:text-primary transition-colors">Restaurants</Link>
             <Link to="/commander" className="text-muted-foreground hover:text-primary transition-colors">Commander</Link>
@@ -194,7 +194,7 @@ const Footer = () => {
           {/* Quick Links */}
           <div className="space-y-4">
             <h4 className="font-display text-xl text-primary">Navigation</h4>
-            <nav className="flex flex-col gap-2">
+            <nav className="flex flex-col gap-2" aria-label="Navigation secondaire">
               <Link to="/" className="text-muted-foreground hover:text-primary transition-colors text-sm">Accueil</Link>
               <Link to="/restaurants" className="text-muted-foreground hover:text-primary transition-colors text-sm">Nos Restaurants</Link>
               <Link to="/commander" className="text-muted-foreground hover:text-primary transition-colors text-sm">Commander</Link>

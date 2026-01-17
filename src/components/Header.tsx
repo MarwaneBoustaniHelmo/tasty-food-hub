@@ -20,9 +20,12 @@ const Header = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border">
+    <header 
+      className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border safe-area-top"
+      role="banner"
+    >
       {/* Mobile Compact Order Banner */}
-      <div className="md:hidden bg-card/95 backdrop-blur-sm py-2 px-4 flex items-center justify-between gap-2 border-b border-border">
+      <div className="md:hidden bg-card/95 backdrop-blur-sm py-2 px-4 flex items-center justify-between gap-2 border-b border-border" role="complementary" aria-label="Bannière de commande rapide">
         <span className="text-xs text-muted-foreground flex-1 truncate">
           👉 Commander sur nos plateformes
         </span>
@@ -49,7 +52,7 @@ const Header = () => {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-6 lg:gap-8">
+        <nav className="hidden md:flex items-center gap-6 lg:gap-8" role="navigation" aria-label="Navigation principale">
           {navLinks.map((link) => (
             <Link
               key={link.path}

@@ -7,6 +7,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import MobileStickyOrder from "@/components/MobileStickyOrder";
 import ScrollToTop from "@/components/ScrollToTop";
+import SkipToContent from "@/components/SkipToContent";
 import Home from "@/pages/Home";
 import Restaurants from "@/pages/Restaurants";
 import Order from "@/pages/Order";
@@ -23,9 +24,11 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        {/* Skip to content link for keyboard accessibility */}
+        <SkipToContent />
         <div className="flex flex-col min-h-screen">
           <Header />
-          <div className="flex-1 pb-20 md:pb-0">
+          <main id="main-content" className="flex-1 pb-20 md:pb-0" role="main">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/restaurants" element={<Restaurants />} />
@@ -35,7 +38,7 @@ const App = () => (
               <Route path="/contact" element={<Contact />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
-          </div>
+          </main>
           <Footer />
           {/* Mobile-only sticky order button */}
           <MobileStickyOrder />

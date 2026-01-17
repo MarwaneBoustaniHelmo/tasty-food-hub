@@ -36,6 +36,9 @@
 
     --radius: 0.75rem;
 
+    /* Safari iOS viewport height fix */
+    --vh: 1vh;
+
     /* Custom Tasty Food tokens */
     --gold: 45 90% 50%;
     --gold-dark: 43 85% 40%;
@@ -74,6 +77,8 @@
   html {
     scroll-behavior: smooth;
     -webkit-tap-highlight-color: transparent;
+    /* iOS momentum scrolling */
+    -webkit-overflow-scrolling: touch;
   }
 
   body {
@@ -81,6 +86,9 @@
     font-family: 'Inter', sans-serif;
     font-size: 16px;
     line-height: 1.6;
+    /* Prevent text size adjust on orientation change */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -93,6 +101,17 @@
   h2 { @apply text-[24px] leading-[1.2] md:text-[36px] lg:text-[40px]; letter-spacing: -0.01em; }
   h3 { @apply text-[20px] leading-[1.3] md:text-[28px]; }
   h4 { @apply text-[18px] leading-[1.4] md:text-[22px]; }
+
+  /* Focus visible styles for accessibility */
+  :focus-visible {
+    outline: 3px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+
+  /* Remove default focus for mouse users */
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
 }
 
 @layer components {
@@ -273,9 +292,135 @@
 }
 
 @layer utilities {
+  /* ========================================
+   * SAFARI iOS VIEWPORT HEIGHT FIX
+   * Safari mobile dynamically shows/hides address bar
+   * causing 100vh to change. Use --vh variable instead.
+   * ======================================== */
+  .full-viewport-height {
+    height: 100vh; /* Fallback for older browsers */
+    height: calc(var(--vh, 1vh) * 100);
+  }
+
+  /* Modern browsers with dvh support */
+  @supports (height: 100dvh) {
+    .full-viewport-height {
+      height: 100dvh;
+    }
+  }
+
+  /* ========================================
+   * BACKDROP-FILTER FALLBACKS
+   * Firefox and older browsers don't support backdrop-filter
+   * ======================================== */
+  .backdrop-blur-fallback {
+    background-color: hsl(var(--background) / 0.95); /* Fallback */
+  }
+
+  @supports (backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px)) {
+    .backdrop-blur-fallback {
+      background-color: hsl(var(--background) / 0.8);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+    }
+  }
+
+  /* ========================================
+   * GRID FALLBACKS
+   * Progressive enhancement for CSS Grid
+   * ======================================== */
+  .grid-fallback {
+    display: block; /* IE11 fallback */
+  }
+
+  @supports (display: grid) {
+    .grid-fallback {
+      display: grid;
+    }
+  }
+
+  /* ========================================
+   * ASPECT-RATIO FALLBACKS
+   * Safari < 15 doesn't support aspect-ratio
+   * ======================================== */
+  .aspect-video-fallback {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 fallback */
+    height: 0;
+  }
+
+  @supports (aspect-ratio: 16/9) {
+    .aspect-video-fallback {
+      padding-bottom: 0;
+      height: auto;
+      aspect-ratio: 16 / 9;
+    }
+  }
+
+  .aspect-video-fallback > * {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  @supports (aspect-ratio: 16/9) {
+    .aspect-video-fallback > * {
+      position: static;
+    }
+  }
+
+  /* ========================================
+   * iOS SAFE AREA INSETS
+   * Support for iPhone notch and home indicator
+   * ======================================== */
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .safe-area-left {
+    padding-left: env(safe-area-inset-left, 0px);
+  }
+
+  .safe-area-right {
+    padding-right: env(safe-area-inset-right, 0px);
+  }
+
+  .safe-area-inset {
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+  }
+
+  /* ========================================
+   * iOS MOMENTUM SCROLLING
+   * Smooth scrolling with inertia on iOS
+   * ======================================== */
+  .momentum-scroll {
+    -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  /* ========================================
+   * GPU ACCELERATED ANIMATIONS
+   * Use transform/opacity for 60fps performance
+   * ======================================== */
+  .gpu-accelerated {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+
   /* Float animation - Desktop only */
   .animate-float {
     animation: float 6s ease-in-out infinite;
+    will-change: transform;
   }
 
   @keyframes float {
@@ -286,6 +431,7 @@
   /* Slow pulse animation */
   .animate-pulse-slow {
     animation: pulse-slow 3s ease-in-out infinite;
+    will-change: opacity;
   }
 
   @keyframes pulse-slow {
@@ -293,24 +439,36 @@
     50% { opacity: 0.7; }
   }
 
-  /* Fade in animation */
+  /* Fade in animation - GPU accelerated */
   .animate-fade-in {
     animation: fade-in 0.3s ease-out;
   }
 
   @keyframes fade-in {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { 
+      opacity: 0; 
+      transform: translateY(10px); 
+    }
+    to { 
+      opacity: 1; 
+      transform: translateY(0); 
+    }
   }
 
-  /* Slide up animation */
+  /* Slide up animation - GPU accelerated */
   .animate-slide-up {
     animation: slide-up 0.3s ease-out;
   }
 
   @keyframes slide-up {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { 
+      opacity: 0; 
+      transform: translateY(20px); 
+    }
+    to { 
+      opacity: 1; 
+      transform: translateY(0); 
+    }
   }
 
   /* Shimmer effect for loading */
@@ -330,15 +488,33 @@
     100% { background-position: -200% 0; }
   }
 
-  /* Disable heavy animations on mobile for performance */
+  /* ========================================
+   * MOBILE PERFORMANCE OPTIMIZATIONS
+   * Disable heavy animations and effects on mobile
+   * ======================================== */
   @media (max-width: 767px) {
     .animate-float,
     .animate-pulse-slow {
       animation: none;
     }
+
+    /* Simplify shadows on mobile for performance */
+    .mobile-simple-shadow {
+      box-shadow: 0 2px 4px hsl(0 0% 0% / 0.1);
+    }
+
+    /* Remove backdrop-filter on low-power mobile devices */
+    .mobile-no-blur {
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+      background-color: hsl(var(--background) / 0.95);
+    }
   }
 
-  /* Reduce motion for accessibility */
+  /* ========================================
+   * ACCESSIBILITY: REDUCED MOTION
+   * Respect user preference for reduced motion
+   * ======================================== */
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -346,6 +522,45 @@
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+
+    /* Remove will-change when motion is reduced */
+    .animate-float,
+    .animate-pulse-slow,
+    .gpu-accelerated {
+      will-change: auto;
+    }
+  }
+
+  /* ========================================
+   * HIGH CONTRAST MODE SUPPORT
+   * Improve visibility in high contrast mode
+   * ======================================== */
+  @media (prefers-contrast: high) {
+    .btn-order,
+    .btn-gold,
+    .btn-platform {
+      border: 2px solid currentColor;
+    }
+  }
+
+  /* ========================================
+   * PRINT STYLES
+   * Basic print optimization
+   * ======================================== */
+  @media print {
+    .no-print {
+      display: none !important;
+    }
+
+    body {
+      background: white;
+      color: black;
+    }
+
+    a {
+      text-decoration: underline;
     }
   }
 }

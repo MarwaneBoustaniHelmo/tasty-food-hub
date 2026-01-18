@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import { AlertTriangle, MapPin, ChevronDown } from "lucide-react";
+import { AlertTriangle, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 import SEOHead from "@/components/SEOHead";
 import BranchSelector from "@/components/order/BranchSelector";
@@ -8,14 +8,36 @@ import MenuSection from "@/components/order/MenuSection";
 import ItemDetailSheet from "@/components/order/ItemDetailSheet";
 import PlatformCTA from "@/components/order/PlatformCTA";
 import CroustySection from "@/components/order/CroustySection";
+import GeolocationBanner from "@/components/order/GeolocationBanner";
+import PromotionsBanner from "@/components/order/PromotionsBanner";
+import OrderFloatingWidget from "@/components/order/OrderFloatingWidget";
+import { useGeolocation } from "@/hooks/useGeolocation";
 import { restaurantsMenu, croustyLocations, MenuItem } from "@/data/menuData";
 
 const Order = () => {
+  // Geolocation hook
+  const {
+    loading: geoLoading,
+    error: geoError,
+    nearestRestaurant,
+    distances,
+    permissionDenied,
+    requestLocation,
+    clearLocation
+  } = useGeolocation();
+
   // State
-  const [selectedRestaurant, setSelectedRestaurant] = useState<string | null>(null);
+  const [selectedRestaurant, setSelectedRestaurant] = useState<string | null>(() => {
+    // Check localStorage for saved preference
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("tasty-preferred-restaurant") || null;
+    }
+    return null;
+  });
   const [activeCategory, setActiveCategory] = useState<string>("");
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
   const [isItemSheetOpen, setIsItemSheetOpen] = useState(false);
+  const [showGeoBanner, setShowGeoBanner] = useState(true);
 
   // Refs for category sections
   const categoryRefs = useRef<Map<string, HTMLElement>>(new Map());
@@ -53,6 +75,21 @@ const Order = () => {
     return () => observer.disconnect();
   }, [restaurant]);
 
+  // Handle restaurant selection (with localStorage persistence)
+  const handleSelectRestaurant = useCallback((id: string) => {
+    setSelectedRestaurant(id);
+    localStorage.setItem("tasty-preferred-restaurant", id);
+    setShowGeoBanner(false);
+    
+    // Scroll to menu section
+    setTimeout(() => {
+      const menuSection = document.getElementById("menu-content");
+      if (menuSection) {
+        menuSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, 100);
+  }, []);
+
   // Scroll to category
   const scrollToCategory = useCallback((categoryId: string) => {
     const element = categoryRefs.current.get(categoryId);
@@ -66,6 +103,12 @@ const Order = () => {
     setSelectedItem(item);
     setIsItemSheetOpen(true);
   };
+
+  // Dismiss geolocation banner
+  const handleDismissGeo = useCallback(() => {
+    setShowGeoBanner(false);
+    clearLocation();
+  }, [clearLocation]);
 
   return (
     <main className="pt-20 md:pt-24 pb-32 md:pb-20 min-h-screen">
@@ -87,34 +130,50 @@ const Order = () => {
           </p>
         </header>
 
-        {/* Important Banner */}
-        <div className="max-w-2xl mx-auto mb-6">
-          <div className="p-4 rounded-2xl bg-primary/10 border border-primary/30">
-            <div className="flex items-start gap-3">
-              <AlertTriangle size={20} className="text-primary shrink-0 mt-0.5" />
-              <div>
-                <p className="text-foreground font-semibold text-sm md:text-base mb-1">
-                  💡 Livraison plus rapide
-                </p>
-                <p className="text-foreground/80 text-xs md:text-sm">
-                  Choisissez le restaurant <strong>le plus proche de chez vous</strong> pour une livraison optimale.
-                </p>
+        {/* Geolocation Banner */}
+        {showGeoBanner && !selectedRestaurant && (
+          <GeolocationBanner
+            loading={geoLoading}
+            error={geoError}
+            nearestRestaurant={nearestRestaurant}
+            distances={distances}
+            permissionDenied={permissionDenied}
+            onRequestLocation={requestLocation}
+            onSelectRestaurant={handleSelectRestaurant}
+            onDismiss={handleDismissGeo}
+          />
+        )}
+
+        {/* Important Banner - Show only if no geolocation action */}
+        {(!showGeoBanner || selectedRestaurant) && (
+          <div className="max-w-2xl mx-auto mb-6">
+            <div className="p-4 rounded-2xl bg-primary/10 border border-primary/30">
+              <div className="flex items-start gap-3">
+                <AlertTriangle size={20} className="text-primary shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-foreground font-semibold text-sm md:text-base mb-1">
+                    💡 Livraison plus rapide
+                  </p>
+                  <p className="text-foreground/80 text-xs md:text-sm">
+                    Choisissez le restaurant <strong>le plus proche de chez vous</strong> pour une livraison optimale.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Branch Selector */}
         <BranchSelector
           restaurants={restaurantsMenu}
           selectedId={selectedRestaurant}
-          onSelect={setSelectedRestaurant}
+          onSelect={handleSelectRestaurant}
         />
       </section>
 
       {/* Menu Content - Only shown when restaurant is selected */}
       {restaurant ? (
-        <>
+        <div id="menu-content">
           {/* Welcome Message */}
           <div className="container px-4 mb-4">
             <div className="max-w-3xl mx-auto text-center p-4 rounded-xl bg-secondary/50">
@@ -125,6 +184,13 @@ const Order = () => {
                 <MapPin size={12} />
                 {restaurant.address}
               </p>
+            </div>
+          </div>
+
+          {/* Promotions Banner */}
+          <div className="container px-4">
+            <div className="max-w-3xl mx-auto">
+              <PromotionsBanner restaurantId={selectedRestaurant!} />
             </div>
           </div>
 
@@ -174,7 +240,7 @@ const Order = () => {
             platforms={restaurant.platforms}
             restaurantName={restaurant.shortName}
           />
-        </>
+        </div>
       ) : (
         /* Empty State */
         <div className="container px-4 py-12">
@@ -194,7 +260,7 @@ const Order = () => {
               {restaurantsMenu.map((r) => (
                 <button
                   key={r.id}
-                  onClick={() => setSelectedRestaurant(r.id)}
+                  onClick={() => handleSelectRestaurant(r.id)}
                   className="w-full px-4 py-3 rounded-xl bg-card border border-border hover:border-primary/50 transition-colors text-left flex items-center gap-3"
                 >
                   <div className="p-2 rounded-lg bg-primary/20">
@@ -221,7 +287,7 @@ const Order = () => {
       </div>
 
       {/* Bottom CTA */}
-      <div className="container px-4 py-6">
+      <div className="container px-4 py-6 pb-24 md:pb-6">
         <div className="max-w-md mx-auto text-center">
           <Link 
             to="/restaurants" 
@@ -231,6 +297,12 @@ const Order = () => {
           </Link>
         </div>
       </div>
+
+      {/* Floating Order Widget */}
+      <OrderFloatingWidget
+        selectedRestaurant={selectedRestaurant}
+        onSelectRestaurant={handleSelectRestaurant}
+      />
     </main>
   );
 };

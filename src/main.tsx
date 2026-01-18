@@ -1,6 +1,8 @@
+import React from "react";
 import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
 import App from "./App.tsx";
+import "./i18n";
 import "./index.css";
 
 // Safari iOS viewport height fix - set --vh CSS variable
@@ -14,7 +16,11 @@ window.addEventListener('resize', setViewportHeight);
 window.addEventListener('orientationchange', () => setTimeout(setViewportHeight, 100));
 
 createRoot(document.getElementById("root")!).render(
-  <HelmetProvider>
-    <App />
-  </HelmetProvider>
+  <React.StrictMode>
+    <React.Suspense fallback={<div className="flex items-center justify-center min-h-screen bg-background text-foreground">Loading...</div>}>
+      <HelmetProvider>
+        <App />
+      </HelmetProvider>
+    </React.Suspense>
+  </React.StrictMode>
 );

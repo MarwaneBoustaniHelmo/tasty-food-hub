@@ -1,0 +1,104 @@
+{
+  "nav": {
+    "home": "Home",
+    "restaurants": "Restaurants",
+    "order": "Bestellen",
+    "concept": "Concept",
+    "videos": "Onze Video's",
+    "contact": "Contact"
+  },
+  "header": {
+    "orderBanner": "👉 Bestel via onze platforms",
+    "orderButton": "BESTELLEN",
+    "orderNow": "🍔 NU BESTELLEN",
+    "menuTitle": "Navigatiemenu",
+    "menuDescription": "Hoofdnavigatie voor Tasty Food website",
+    "openMenu": "Menu openen",
+    "closeMenu": "Menu sluiten"
+  },
+  "home": {
+    "heroBadge": "🍔 Halal Restaurant • Premium Street Food in Luik",
+    "heroTitle": "HALAL SMASH BURGERS",
+    "heroSubtitle": "Fast Food Restaurant in Luik & Omgeving",
+    "heroDescription": "4 halal restaurants in Luik: Seraing, Angleur, Saint-Gilles, Wandre. Bestel bezorging via Uber Eats, Deliveroo of onze officiële websites.",
+    "orderButton": "Nu bestellen",
+    "viewRestaurants": "Bekijk onze restaurants",
+    "features": {
+      "halal": {
+        "title": "100% Halal",
+        "description": "Gecertificeerd vlees"
+      },
+      "smash": {
+        "title": "Smash Techniek",
+        "description": "Knapperige korst"
+      },
+      "fries": {
+        "title": "Huisgemaakte Friet",
+        "description": "Vers en knapperig"
+      },
+      "delivery": {
+        "title": "Snelle Bezorging",
+        "description": "30-40 min"
+      }
+    },
+    "seoTitle": "De Beste Halal Fast Food in Luik",
+    "seoContent1": "Tasty Food is uw referentie voor halal eten in Luik. Onze halal smash burgers worden op bestelling gemaakt met verse, kwaliteitsvolle ingrediënten. De \"smash\" techniek creëert een unieke gekarameliseerde korst die het verschil maakt.",
+    "seoContent2": "Vind ons in onze 4 restaurants: Seraing, Angleur, Saint-Gilles (centrum Luik) en Wandre. Allemaal open van 18u tot 02u, 7 dagen per week.",
+    "seoContent3": "Het bestellen van uw halal burger in Luik was nog nooit zo eenvoudig: gebruik Uber Eats, Deliveroo, Takeaway of onze officiële websites voor snelle bezorging (30-40 min).",
+    "orderOnline": "ONLINE BESTELLEN",
+    "chooseRestaurant": "Kies uw favoriete halal restaurant in Luik",
+    "featured": "UITGELICHT",
+    "top": "TOP",
+    "moreOptions": "+ {{count}} meer opties",
+    "allOrderOptions": "Alle bestel opties",
+    "specialties": "ONZE SPECIALITEITEN",
+    "specialtiesSubtitle": "Halal street food bereid met passie in Luik",
+    "smashBurgers": "SMASH BURGERS",
+    "loadedFries": "LOADED FRIES",
+    "texMex": "TEX-MEX",
+    "practicalInfo": "PRAKTISCHE INFO",
+    "hours": "OPENINGSUREN",
+    "hoursValue": "18:00 – 02:00",
+    "daysOpen": "7 dagen / week",
+    "addresses": "4 LOCATIES",
+    "delivery": "BEZORGING",
+    "experienceTitle": "DE TASTY FOOD ERVARING",
+    "experienceText": "Sinds 2020 biedt Tasty Food de beste halal smash burgers in de regio Luik. Verse ingrediënten, 100% gecertificeerd halal vlees, en authentieke street food smaken.",
+    "discoverConcept": "Ontdek ons concept"
+  },
+  "footer": {
+    "tagline": "Halal Smash Burgers • 4 locaties in Luik",
+    "taglineDesktop": "Halal Smash Burgers in Luik & omgeving. Premium kwaliteit, authentieke smaken.",
+    "hours": "Openingsuren: 18:00 – 02:00",
+    "navigation": "Navigatie",
+    "ourAddresses": "Onze Adressen",
+    "orderSection": "Bestellen",
+    "followUs": "Volg ons",
+    "copy": "Kopiëren",
+    "copied": "Gekopieerd",
+    "legalNotice": "Juridische kennisgeving",
+    "privacyPolicy": "Privacybeleid",
+    "copyright": "© {{year}} Tasty Food – Luik. Alle rechten voorbehouden.",
+    "orderReminder": "👉 Bestellingen via Uber Eats, Deliveroo, Takeaway of officiële websites",
+    "orderOnlyVia": "Bestellingen alleen beschikbaar via Uber Eats, Deliveroo, Takeaway of officiële websites.",
+    "officialSite": "Officiële website – Tasty Food Luik"
+  },
+  "platforms": {
+    "officialSite": "Officiële Website",
+    "uberEats": "Uber Eats",
+    "deliveroo": "Deliveroo",
+    "takeaway": "Takeaway"
+  },
+  "common": {
+    "orderOn": "Bestellen op {{platform}}",
+    "orderAt": "Bestellen bij {{city}}",
+    "followOn": "Volgen op {{platform}}",
+    "loading": "Laden..."
+  },
+  "language": {
+    "fr": "Français",
+    "en": "English",
+    "nl": "Nederlands",
+    "select": "Taal"
+  }
+}

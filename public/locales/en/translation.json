@@ -64,7 +64,9 @@
     "delivery": "DELIVERY",
     "experienceTitle": "THE TASTY FOOD EXPERIENCE",
     "experienceText": "Since 2020, Tasty Food offers the best halal smash burgers in the Liège region. Fresh ingredients, 100% certified halal meat, and authentic street food flavors.",
-    "discoverConcept": "Discover our concept"
+    "discoverConcept": "Discover our concept",
+    "readyToOrder": "READY TO ORDER?",
+    "deliveryPromise": "Get the best halal burgers in Liège delivered to you"
   },
   "footer": {
     "tagline": "Halal Smash Burgers • 4 locations in Liège",

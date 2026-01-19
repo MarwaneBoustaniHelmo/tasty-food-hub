@@ -1,0 +1,106 @@
+{
+  "nav": {
+    "home": "Home",
+    "restaurants": "Restaurants",
+    "order": "Order",
+    "concept": "Concept",
+    "videos": "Our Videos",
+    "contact": "Contact"
+  },
+  "header": {
+    "orderBanner": "👉 Order on our platforms",
+    "orderButton": "ORDER",
+    "orderNow": "🍔 ORDER NOW",
+    "menuTitle": "Navigation menu",
+    "menuDescription": "Main navigation for Tasty Food website",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "home": {
+    "heroBadge": "🍔 Halal Restaurant • Premium Street Food in Liège",
+    "heroTitle": "HALAL SMASH BURGERS",
+    "heroSubtitle": "Fast Food Restaurant in Liège & Surroundings",
+    "heroDescription": "4 halal restaurants in Liège: Seraing, Angleur, Saint-Gilles, Wandre. Order delivery via Uber Eats, Deliveroo or our official websites.",
+    "orderButton": "Order now",
+    "viewRestaurants": "View our restaurants",
+    "features": {
+      "halal": {
+        "title": "100% Halal",
+        "description": "Certified meat"
+      },
+      "smash": {
+        "title": "Smash Technique",
+        "description": "Crispy crust"
+      },
+      "fries": {
+        "title": "Homemade Fries",
+        "description": "Fresh and crispy"
+      },
+      "delivery": {
+        "title": "Fast Delivery",
+        "description": "30-40 min"
+      }
+    },
+    "seoTitle": "The Best Halal Fast Food in Liège",
+    "seoContent1": "Tasty Food is your reference for halal dining in Liège. Our halal smash burgers are made to order with fresh, quality ingredients. The \"smash\" technique creates a unique caramelized crust that makes all the difference.",
+    "seoContent2": "Find us at our 4 restaurants: Seraing, Angleur, Saint-Gilles (Liège center) and Wandre. All open from 6 PM to 2 AM, 7 days a week.",
+    "seoContent3": "Ordering your halal burger in Liège has never been easier: use Uber Eats, Deliveroo, Takeaway or our official websites for fast delivery (30-40 min).",
+    "orderOnline": "ORDER ONLINE",
+    "chooseRestaurant": "Choose your favorite halal restaurant in Liège",
+    "featured": "FEATURED",
+    "top": "TOP",
+    "moreOptions": "+ {{count}} more options",
+    "allOrderOptions": "All order options",
+    "specialties": "OUR SPECIALTIES",
+    "specialtiesSubtitle": "Halal street food prepared with passion in Liège",
+    "smashBurgers": "SMASH BURGERS",
+    "loadedFries": "LOADED FRIES",
+    "texMex": "TEX-MEX",
+    "practicalInfo": "PRACTICAL INFO",
+    "hours": "HOURS",
+    "hoursValue": "6:00 PM – 2:00 AM",
+    "daysOpen": "7 days / week",
+    "addresses": "4 LOCATIONS",
+    "delivery": "DELIVERY",
+    "experienceTitle": "THE TASTY FOOD EXPERIENCE",
+    "experienceText": "Since 2020, Tasty Food offers the best halal smash burgers in the Liège region. Fresh ingredients, 100% certified halal meat, and authentic street food flavors.",
+    "discoverConcept": "Discover our concept",
+    "readyToOrder": "READY TO ORDER?",
+    "deliveryPromise": "Get the best halal burgers in Liège delivered to you"
+  },
+  "footer": {
+    "tagline": "Halal Smash Burgers • 4 locations in Liège",
+    "taglineDesktop": "Halal Smash Burgers in Liège & surroundings. Premium quality, authentic flavors.",
+    "hours": "Hours: 6:00 PM – 2:00 AM",
+    "navigation": "Navigation",
+    "ourAddresses": "Our Addresses",
+    "orderSection": "Order",
+    "followUs": "Follow us",
+    "copy": "Copy",
+    "copied": "Copied",
+    "legalNotice": "Legal notice",
+    "privacyPolicy": "Privacy policy",
+    "copyright": "© {{year}} Tasty Food – Liège. All rights reserved.",
+    "orderReminder": "👉 Orders via Uber Eats, Deliveroo, Takeaway or official websites",
+    "orderOnlyVia": "Orders available only via Uber Eats, Deliveroo, Takeaway or official websites.",
+    "officialSite": "Official website – Tasty Food Liège"
+  },
+  "platforms": {
+    "officialSite": "Official Website",
+    "uberEats": "Uber Eats",
+    "deliveroo": "Deliveroo",
+    "takeaway": "Takeaway"
+  },
+  "common": {
+    "orderOn": "Order on {{platform}}",
+    "orderAt": "Order at {{city}}",
+    "followOn": "Follow on {{platform}}",
+    "loading": "Loading..."
+  },
+  "language": {
+    "fr": "Français",
+    "en": "English",
+    "nl": "Nederlands",
+    "select": "Language"
+  }
+}

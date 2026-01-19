@@ -1,0 +1,106 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "restaurants": "Restaurants",
+    "order": "Commander",
+    "concept": "Concept",
+    "videos": "Nos Vidéos",
+    "contact": "Contact"
+  },
+  "header": {
+    "orderBanner": "👉 Commander sur nos plateformes",
+    "orderButton": "COMMANDER",
+    "orderNow": "🍔 COMMANDER MAINTENANT",
+    "menuTitle": "Menu de navigation",
+    "menuDescription": "Navigation principale du site Tasty Food",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu"
+  },
+  "home": {
+    "heroBadge": "🍔 Restaurant Halal • Street Food Premium à Liège",
+    "heroTitle": "SMASH BURGERS HALAL",
+    "heroSubtitle": "Restaurant Fast Food à Liège & Environs",
+    "heroDescription": "4 restaurants halal à Liège : Seraing, Angleur, Saint-Gilles, Wandre. Commandez en livraison via Uber Eats, Deliveroo ou nos sites officiels.",
+    "orderButton": "Commander maintenant",
+    "viewRestaurants": "Voir nos restaurants",
+    "features": {
+      "halal": {
+        "title": "100% Halal",
+        "description": "Viande certifiée"
+      },
+      "smash": {
+        "title": "Smash Technique",
+        "description": "Croûte croustillante"
+      },
+      "fries": {
+        "title": "Frites Maison",
+        "description": "Fraîches et croustillantes"
+      },
+      "delivery": {
+        "title": "Livraison Rapide",
+        "description": "30-40 min"
+      }
+    },
+    "seoTitle": "Le Meilleur Fast Food Halal à Liège",
+    "seoContent1": "Tasty Food est votre référence pour la restauration halal à Liège. Nos smash burgers halal sont préparés à la commande avec des ingrédients frais et de qualité. La technique du \"smash\" crée une croûte caramélisée unique qui fait toute la différence.",
+    "seoContent2": "Retrouvez-nous dans nos 4 restaurants : Seraing, Angleur, Saint-Gilles (Liège centre) et Wandre. Tous ouverts de 18h à 02h, 7 jours sur 7.",
+    "seoContent3": "Commander votre burger halal à Liège n'a jamais été aussi simple : utilisez Uber Eats, Deliveroo, Takeaway ou nos sites officiels pour une livraison rapide (30-40 min).",
+    "orderOnline": "COMMANDEZ EN LIGNE",
+    "chooseRestaurant": "Choisissez votre restaurant halal préféré à Liège",
+    "featured": "VEDETTE",
+    "top": "TOP",
+    "moreOptions": "+ {{count}} autres options",
+    "allOrderOptions": "Toutes les options de commande",
+    "specialties": "NOS SPÉCIALITÉS",
+    "specialtiesSubtitle": "Street food halal préparée avec passion à Liège",
+    "smashBurgers": "SMASH BURGERS",
+    "loadedFries": "LOADED FRIES",
+    "texMex": "TEX-MEX",
+    "practicalInfo": "INFOS PRATIQUES",
+    "hours": "HORAIRES",
+    "hoursValue": "18h00 – 02h00",
+    "daysOpen": "7 jours / 7",
+    "addresses": "4 ADRESSES",
+    "delivery": "LIVRAISON",
+    "experienceTitle": "L'EXPÉRIENCE TASTY FOOD",
+    "experienceText": "Depuis 2020, Tasty Food propose les meilleurs smash burgers halal de la région liégeoise. Ingrédients frais, viande 100% halal certifiée, et des saveurs street food authentiques.",
+    "discoverConcept": "Découvrir notre concept",
+    "readyToOrder": "PRÊT À COMMANDER ?",
+    "deliveryPromise": "Faites-vous livrer les meilleurs burgers halal de Liège"
+  },
+  "footer": {
+    "tagline": "Smash Burgers Halal • 4 adresses à Liège",
+    "taglineDesktop": "Smash Burgers Halal à Liège & environs. Qualité premium, saveurs authentiques.",
+    "hours": "Horaires : 18h00 – 02h00",
+    "navigation": "Navigation",
+    "ourAddresses": "Nos Adresses",
+    "orderSection": "Commander",
+    "followUs": "Suivez-nous",
+    "copy": "Copier",
+    "copied": "Copié",
+    "legalNotice": "Mentions légales",
+    "privacyPolicy": "Politique de confidentialité",
+    "copyright": "© {{year}} Tasty Food – Liège. Tous droits réservés.",
+    "orderReminder": "👉 Commandes via Uber Eats, Deliveroo, Takeaway ou sites officiels",
+    "orderOnlyVia": "Commandes disponibles uniquement via Uber Eats, Deliveroo, Takeaway ou sites officiels.",
+    "officialSite": "Site officiel – Tasty Food Liège"
+  },
+  "platforms": {
+    "officialSite": "Site Officiel",
+    "uberEats": "Uber Eats",
+    "deliveroo": "Deliveroo",
+    "takeaway": "Takeaway"
+  },
+  "common": {
+    "orderOn": "Commander sur {{platform}}",
+    "orderAt": "Commander à {{city}}",
+    "followOn": "Suivre sur {{platform}}",
+    "loading": "Chargement..."
+  },
+  "language": {
+    "fr": "Français",
+    "en": "English",
+    "nl": "Nederlands",
+    "select": "Langue"
+  }
+}

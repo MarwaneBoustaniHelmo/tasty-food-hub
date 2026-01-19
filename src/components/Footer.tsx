@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { MapPin, ExternalLink, Copy, Check } from "lucide-react";
 import { useMemo, useState } from "react";
 
@@ -8,23 +9,29 @@ const ORDER_LINKS = {
   seraing: {
     site: "https://www.tastyfoodseraing-seraing.be",
     uber: "https://www.ubereats.com/be/store/tasty-food-seraing/NpA7eB6mS6mam_TwsTcigg",
+    crousty: "https://www.ubereats.com/be/store/crousty-by-tasty-seraing/33RMV2JdXTm0Q5b64r7-Hw",
     deliveroo: "https://deliveroo.be/fr/menu/Liege/jemeppe-sur-meuse/tasty-food-seraing",
   },
   angleur: {
     site: "https://www.tastyfoodangleur.be",
-    uber: "https://www.ubereats.com/be/store/tasty-food-angleur/uObTfxymWn2x53kZNuo8NQ",
-    deliveroo: "https://deliveroo.be/fr/menu/liege/liege-angleur/tasty-food-angleur",
+    uber: "https://www.ubereats.com/be-en/store/tasty-food-angleur/uObTfxymWn2x53kZNuo8NQ",
+    crousty: "https://www.ubereats.com/be-en/store/crousty-by-tasty-angleur/XXAamr3eU2mAD46r4vscdg",
+    deliveroo: "https://deliveroo.fr/fr/menu/Liege/liege-angleur/tasty-food-angleur",
   },
   saintGilles: {
     uber: "https://www.ubereats.com/be/store/tasty-food-saint-gilles/zWuPWDrJX1WeeHcEdno3FQ",
+    crousty: "https://www.ubereats.com/be/store/crousty-by-tasty-saint-gilles/fERWmj65UQCyUbmpsmDT1w",
+    deliveroo: "https://deliveroo.be/fr/menu/Liege/saint-paul/tasty-food-saint-gilles",
   },
   wandre: {
     uber: "https://www.ubereats.com/be/store/tasty-food-wandre/9BB6rSrVVKS9UR_2fyAYoQ",
+    takeaway: "https://www.takeaway.com/be-fr/menu/tasty-food-1",
   },
 };
 
 const Footer = () => {
   const [copied, setCopied] = useState(false);
+  const { t } = useTranslation();
 
   const socialLinks = useMemo(
     () => [
@@ -89,14 +96,14 @@ const Footer = () => {
         maps: "https://maps.google.com/?q=100+Rue+Vaudree+4031+Angleur+Belgium",
       },
       {
+        name: "Saint-Gilles",
+        address: "Rue Saint-Gilles 58, 4000 Liège",
+        maps: "https://maps.google.com/?q=Rue+Saint-Gilles+58+4000+Liege+Belgium",
+      },
+      {
         name: "Wandre",
         address: "Rue du Pont de Wandre 75, 4020 Liège",
         maps: "https://maps.google.com/?q=Rue+du+Pont+de+Wandre+75+4020+Liege+Belgium",
-      },
-      {
-        name: "Saint-Gilles (Liège centre)",
-        address: "Liège (centre)",
-        maps: "https://maps.google.com/?q=Liege+Centre+Belgium",
       },
     ],
     []
@@ -113,11 +120,11 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-card border-t border-border">
+    <footer className="bg-card border-t border-border safe-area-bottom" role="contentinfo">
       {/* Mobile order reminder */}
       <div className="md:hidden py-3 px-4 bg-accent/10 border-b border-border text-center">
         <p className="text-xs text-muted-foreground">
-          👉 Commandes via Uber Eats, Deliveroo ou sites officiels
+          {t("footer.orderReminder")}
         </p>
       </div>
 
@@ -127,18 +134,18 @@ const Footer = () => {
           <div className="text-center">
             <h3 className="font-display text-2xl text-gradient-gold mb-2">TASTY FOOD</h3>
             <p className="text-xs text-muted-foreground">
-              Smash Burgers Halal • Liège & environs
+              {t("footer.tagline")}
             </p>
           </div>
 
-          {/* Quick links - horizontal on mobile - INCLUDES CONCEPT */}
-          <nav className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm">
-            <Link to="/" className="text-muted-foreground hover:text-primary transition-colors">Accueil</Link>
-            <Link to="/restaurants" className="text-muted-foreground hover:text-primary transition-colors">Restaurants</Link>
-            <Link to="/commander" className="text-muted-foreground hover:text-primary transition-colors">Commander</Link>
-            <Link to="/concept" className="text-muted-foreground hover:text-primary transition-colors">Concept</Link>
-            <Link to="/videos" className="text-muted-foreground hover:text-primary transition-colors">Nos Vidéos</Link>
-            <Link to="/contact" className="text-muted-foreground hover:text-primary transition-colors">Contact</Link>
+          {/* Quick links - horizontal on mobile */}
+          <nav className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm" aria-label="Navigation rapide">
+            <Link to="/" className="text-muted-foreground hover:text-primary transition-colors">{t("nav.home")}</Link>
+            <Link to="/restaurants" className="text-muted-foreground hover:text-primary transition-colors">{t("nav.restaurants")}</Link>
+            <Link to="/commander" className="text-muted-foreground hover:text-primary transition-colors">{t("nav.order")}</Link>
+            <Link to="/concept" className="text-muted-foreground hover:text-primary transition-colors">{t("nav.concept")}</Link>
+            <Link to="/videos" className="text-muted-foreground hover:text-primary transition-colors">{t("nav.videos")}</Link>
+            <Link to="/contact" className="text-muted-foreground hover:text-primary transition-colors">{t("nav.contact")}</Link>
           </nav>
 
           {/* Social - 4 icons */}
@@ -150,7 +157,7 @@ const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`p-3 rounded-full ${social.gradient} touch-target flex items-center justify-center hover:scale-110 transition-transform duration-200`}
-                aria-label={`Suivre sur ${social.name}`}
+                aria-label={t("common.followOn", { platform: social.name })}
               >
                 <span className={social.textColor}>{social.icon}</span>
               </a>
@@ -165,10 +172,10 @@ const Footer = () => {
             <button
               onClick={copySnap}
               className="flex items-center gap-1 px-2 py-1 text-xs bg-accent/20 rounded-md hover:bg-accent/40 transition-colors text-muted-foreground"
-              aria-label="Copier le nom d'utilisateur Snapchat"
+              aria-label={t("footer.copy")}
             >
               {copied ? <Check size={12} className="text-green-500" /> : <Copy size={12} />}
-              {copied ? "Copié" : "Copier"}
+              {copied ? t("footer.copied") : t("footer.copy")}
             </button>
           </div>
         </div>
@@ -179,29 +186,29 @@ const Footer = () => {
           <div className="space-y-4">
             <h3 className="font-display text-2xl text-gradient-gold">TASTY FOOD</h3>
             <p className="text-muted-foreground text-sm">
-              Smash Burgers Halal à Liège & environs. Qualité premium, saveurs authentiques.
+              {t("footer.taglineDesktop")}
             </p>
             <p className="text-xs text-muted-foreground">
-              Horaires : 18h00 – 02h00
+              {t("footer.hours")}
             </p>
           </div>
 
           {/* Quick Links */}
           <div className="space-y-4">
-            <h4 className="font-display text-xl text-primary">Navigation</h4>
-            <nav className="flex flex-col gap-2">
-              <Link to="/" className="text-muted-foreground hover:text-primary transition-colors text-sm">Accueil</Link>
-              <Link to="/restaurants" className="text-muted-foreground hover:text-primary transition-colors text-sm">Nos Restaurants</Link>
-              <Link to="/commander" className="text-muted-foreground hover:text-primary transition-colors text-sm">Commander</Link>
-              <Link to="/concept" className="text-muted-foreground hover:text-primary transition-colors text-sm">Concept</Link>
-              <Link to="/videos" className="text-muted-foreground hover:text-primary transition-colors text-sm">Nos Vidéos</Link>
-              <Link to="/contact" className="text-muted-foreground hover:text-primary transition-colors text-sm">Contact</Link>
+            <h4 className="font-display text-xl text-primary">{t("footer.navigation")}</h4>
+            <nav className="flex flex-col gap-2" aria-label="Navigation secondaire">
+              <Link to="/" className="text-muted-foreground hover:text-primary transition-colors text-sm">{t("nav.home")}</Link>
+              <Link to="/restaurants" className="text-muted-foreground hover:text-primary transition-colors text-sm">{t("nav.restaurants")}</Link>
+              <Link to="/commander" className="text-muted-foreground hover:text-primary transition-colors text-sm">{t("nav.order")}</Link>
+              <Link to="/concept" className="text-muted-foreground hover:text-primary transition-colors text-sm">{t("nav.concept")}</Link>
+              <Link to="/videos" className="text-muted-foreground hover:text-primary transition-colors text-sm">{t("nav.videos")}</Link>
+              <Link to="/contact" className="text-muted-foreground hover:text-primary transition-colors text-sm">{t("nav.contact")}</Link>
             </nav>
           </div>
 
           {/* Locations with address element for SEO */}
           <div className="space-y-4">
-            <h4 className="font-display text-xl text-primary">Nos Adresses</h4>
+            <h4 className="font-display text-xl text-primary">{t("footer.ourAddresses")}</h4>
             <address className="not-italic space-y-3">
               {locations.map((loc) => (
                 <a
@@ -224,7 +231,7 @@ const Footer = () => {
 
           {/* Commander + Social */}
           <div className="space-y-4">
-            <h4 className="font-display text-xl text-primary">Commander</h4>
+            <h4 className="font-display text-xl text-primary">{t("footer.orderSection")}</h4>
             
             {/* Quick order links for Seraing */}
             <div className="space-y-2">
@@ -235,7 +242,7 @@ const Footer = () => {
                 className="flex items-center gap-2 px-3 py-2 rounded-lg bg-primary/20 hover:bg-primary/30 transition-colors text-sm text-foreground"
               >
                 <span>🍔</span>
-                <span>Seraing — Site officiel</span>
+                <span>Seraing — {t("platforms.officialSite")}</span>
               </a>
               <a
                 href={ORDER_LINKS.seraing.uber}
@@ -244,7 +251,7 @@ const Footer = () => {
                 className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#06C167]/20 hover:bg-[#06C167]/30 transition-colors text-sm text-foreground"
               >
                 <span>🛵</span>
-                <span>Seraing — Uber Eats</span>
+                <span>Seraing — {t("platforms.uberEats")}</span>
               </a>
               <a
                 href={ORDER_LINKS.seraing.deliveroo}
@@ -253,13 +260,13 @@ const Footer = () => {
                 className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#00CCBC]/20 hover:bg-[#00CCBC]/30 transition-colors text-sm text-foreground"
               >
                 <span>🚴</span>
-                <span>Seraing — Deliveroo</span>
+                <span>Seraing — {t("platforms.deliveroo")}</span>
               </a>
             </div>
 
             {/* Social links */}
             <div className="pt-2">
-              <h5 className="font-medium text-sm text-muted-foreground mb-2">Suivez-nous</h5>
+              <h5 className="font-medium text-sm text-muted-foreground mb-2">{t("footer.followUs")}</h5>
               <div className="grid grid-cols-2 gap-2">
                 {socialLinks.map((social) => (
                   <a
@@ -268,7 +275,7 @@ const Footer = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className={`flex items-center gap-2 px-3 py-2 rounded-lg ${social.gradient} hover:scale-105 transition-all duration-200`}
-                    aria-label={`Suivre sur ${social.name}`}
+                    aria-label={t("common.followOn", { platform: social.name })}
                   >
                     <span className={social.textColor}>{social.icon}</span>
                     <span className={`text-xs font-medium ${social.textColor}`}>{social.name}</span>
@@ -284,10 +291,10 @@ const Footer = () => {
                 <button
                   onClick={copySnap}
                   className="flex items-center gap-1 px-2 py-1 text-xs bg-accent/20 rounded-md hover:bg-accent/40 transition-colors text-muted-foreground"
-                  aria-label="Copier le nom d'utilisateur Snapchat"
+                  aria-label={t("footer.copy")}
                 >
                   {copied ? <Check size={12} className="text-green-500" /> : <Copy size={12} />}
-                  {copied ? "Copié" : "Copier"}
+                  {copied ? t("footer.copied") : t("footer.copy")}
                 </button>
               </div>
             </div>
@@ -297,22 +304,27 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="mt-6 md:mt-12 pt-4 md:pt-6 border-t border-border text-center md:flex md:justify-between md:items-center">
           <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} Tasty Food – Liège. Tous droits réservés.
+            {t("footer.copyright", { year: new Date().getFullYear() })}
           </p>
           <div className="flex justify-center gap-4 mt-2 md:mt-0">
             <Link to="/mentions-legales" className="text-xs text-muted-foreground hover:text-primary transition-colors">
-              Mentions légales
+              {t("footer.legalNotice")}
             </Link>
             <Link to="/confidentialite" className="text-xs text-muted-foreground hover:text-primary transition-colors">
-              Politique de confidentialité
+              {t("footer.privacyPolicy")}
             </Link>
           </div>
         </div>
 
-        {/* Site credit */}
-        <p className="text-center text-xs text-muted-foreground/50 mt-4">
-          Site officiel – Tasty Food Liège
-        </p>
+        {/* Final reminder + Site credit */}
+        <div className="mt-4 text-center space-y-2">
+          <p className="text-xs text-muted-foreground">
+            {t("footer.orderOnlyVia")}
+          </p>
+          <p className="text-xs text-muted-foreground/50">
+            {t("footer.officialSite")}
+          </p>
+        </div>
       </div>
     </footer>
   );

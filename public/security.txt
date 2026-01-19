@@ -1,0 +1,10 @@
+# Security Policy for Tasty Food Liège
+# If you discover a security vulnerability, please report it responsibly.
+
+Contact: https://www.instagram.com/tastyfoodliege
+Preferred-Languages: fr, en
+Canonical: https://tastyfoodliege.be/.well-known/security.txt
+Expires: 2026-12-31T23:59:59.000Z
+
+# Policy
+# We take security seriously. Please report any vulnerabilities through our social media channels.

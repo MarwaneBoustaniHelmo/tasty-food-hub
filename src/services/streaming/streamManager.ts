@@ -39,14 +39,17 @@ export class StreamManager {
       let streamingText = '';
 
       try {
-        // Fetch streaming endpoint
-        const response = await fetch(this.apiUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ 
-            message: prompt,
-            systemPrompt,
-          }),
+        // Build URL with query parameters
+        const url = new URL(this.apiUrl);
+        url.searchParams.set('message', prompt);
+        if (systemPrompt) {
+          url.searchParams.set('system', systemPrompt);
+        }
+
+        // Fetch streaming endpoint (GET with query params)
+        const response = await fetch(url.toString(), {
+          method: 'GET',
+          headers: { 'Accept': 'text/event-stream' },
         });
 
         if (!response.ok) {

@@ -1,19 +1,20 @@
-# ⚡ Streaming Response System - Guide
+# ⚡ Streaming Response System - SSE Guide
 
-Real-time token-by-token response streaming for 8x faster perceived user experience.
+Real-time token-by-token response streaming with server-side SSE for production-grade security and 8x faster perceived user experience.
 
 ---
 
 ## 📋 Overview
 
-This streaming system provides **ChatGPT-like real-time responses** where users see text appear progressively instead of waiting for complete responses.
+This streaming system provides **ChatGPT-like real-time responses** using Server-Sent Events (SSE) where users see text appear progressively with API keys protected on the backend.
 
 ### Key Benefits
 
 ✅ **8x faster perceived speed** - First token in ~300ms vs 2.5s wait  
+✅ **Production-grade security** - API keys hidden on server  
+✅ **Rate limiting** - 10 requests/min per IP (configurable)  
 ✅ **Better engagement** - Users see responses building in real-time  
 ✅ **Lower bounce rate** - Immediate feedback keeps users engaged  
-✅ **Production-ready** - Error handling, cancellation, retry logic  
 ✅ **Analytics built-in** - Track streaming speed and token counts
 
 ---
@@ -23,64 +24,92 @@ This streaming system provides **ChatGPT-like real-time responses** where users 
 ```
 User Input
     ↓
-StreamManager (Core Service)
+React Hook (useStreamingChat)
+    ↓
+StreamManager (SSE Client)
+    ↓
+Express Backend (/api/chat/stream)
+    ↓
+Rate Limiting + Security
+    ↓
+ServerStreamManager (SSE Server)
     ↓
 Claude 3.5 Sonnet Streaming API
     ↓
 Token-by-Token Processing
     ↓
-React Component (Live Updates)
+SSE Stream to Frontend
     ↓
 User sees response building ✨
 ```
 
-### Components Created
+### Components
 
+**Frontend:**
 1. **StreamManager** (`src/services/streaming/streamManager.ts`)
-   - Core streaming logic
-   - Claude API integration
-   - Token buffering and speed calculation
-   - Error handling and timeout management
+   - SSE client connection
+   - Parse streaming events
+   - Token buffering and error handling
 
 2. **StreamingChat** (`src/components/StreamingChat.tsx`)
    - Full chat UI component
-   - Message history
-   - Real-time token display
-   - Speed metrics display
+   - Message history, real-time display
 
 3. **useStreamingChat** (`src/hooks/useStreamingChat.ts`)
-   - React hook for streaming logic
-   - Message state management
-   - Stream cancellation
-   - Retry functionality
+   - React hook for streaming state
+   - Message management, cancellation
 
-4. **StreamingDemo** (`src/pages/StreamingDemo.tsx`)
-   - Live demonstration page
-   - Performance stats
-   - Before/After comparison
-   - Technical details
+**Backend:**
+4. **ServerStreamManager** (`server/streaming/serverStreamManager.ts`)
+   - Claude API integration (server-side)
+   - SSE event formatting and transmission
+   - Backpressure handling
+
+5. **Express Endpoint** (`server/index.ts`)
+   - `/api/chat/stream` POST endpoint
+   - Rate limiting middleware
+   - Request validation
 
 ---
 
 ## 🚀 Quick Start
 
-### 1. Ensure API Key is Configured
+### 1. Configure Environment
 
+**Backend (`server/.env`):**
 ```env
-# .env.local
-VITE_ANTHROPIC_API_KEY=sk-ant-api03-...
+ANTHROPIC_API_KEY=sk-ant-api03-...
+API_PORT=3001
 ```
 
-### 2. Visit Demo Page
+**Frontend (`.env`):**
+```env
+VITE_API_URL=http://localhost:3001
+```
+
+### 2. Install Backend Dependencies
+
+```bash
+cd server
+npm install
+# or
+bun install
+```
+
+### 3. Start Both Servers
+
+```bash
+# Terminal 1: Backend
+cd server
+npm run dev
+
+# Terminal 2: Frontend
+npm run dev
+```
+
+### 4. Visit Demo Page
 
 Navigate to: **http://localhost:8080/streaming-demo**
-
-### 3. Try It Out
-
-- Type any question (e.g., "What are your hours?")
-- Watch response appear token-by-token
-- See real-time speed metrics
-- Compare with non-streaming behavior
 
 ---
 
@@ -247,16 +276,35 @@ Perceived Speed: 8x faster
 
 ## 🔧 Configuration
 
-### StreamManager Options
+### Client Configuration
 
 ```typescript
 import { StreamManager } from '@/services/streaming/streamManager';
 
 const customStreamManager = new StreamManager({
-  bufferSize: 1024,  // Buffer size in bytes (default: 1024)
+  apiUrl: 'https://api.tastyfood.be/api/chat/stream',
   timeout: 60000,    // Timeout in ms (default: 60000)
-  encoding: 'utf-8', // Text encoding (default: 'utf-8')
 });
+```
+
+### Server Configuration
+
+Edit `server/streaming/serverStreamManager.ts`:
+
+```typescript
+export class ServerStreamManager {
+  private bufferSize: number = 1024;  // Token buffer size
+  private timeout: number = 60000;     // Request timeout
+}
+```
+
+### Rate Limiting
+
+Configure in `server/index.ts`:
+
+```typescript
+const RATE_LIMIT_WINDOW = 60000; // 1 minute
+const RATE_LIMIT_MAX = 10;        // 10 requests per minute
 ```
 
 ### Component Props

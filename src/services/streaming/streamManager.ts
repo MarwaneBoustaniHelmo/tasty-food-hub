@@ -93,22 +93,41 @@ export class StreamManager {
 
             if (line.startsWith('data: ')) {
               try {
-                const data: TokenChunk = JSON.parse(line.slice(6));
+                const event = JSON.parse(line.slice(6));
 
-                if (data.type === 'text') {
-                  streamingText += data.token;
-                  fullText += data.token;
-                  onToken?.(data);
-                } else if (data.type === 'error') {
-                  console.error('Stream error:', data.token);
-                  onToken?.(data);
-                  const error = new Error(data.token);
+                if (event.type === 'token') {
+                  const token = event.data.token;
+                  streamingText += token;
+                  fullText += token;
+                  
+                  const chunk: TokenChunk = {
+                    token,
+                    type: 'text',
+                    timestamp: event.timestamp,
+                    metadata: event.data,
+                  };
+                  onToken?.(chunk);
+                } else if (event.type === 'error') {
+                  console.error('Stream error:', event.data.message);
+                  const chunk: TokenChunk = {
+                    token: event.data.message,
+                    type: 'error',
+                    timestamp: event.timestamp,
+                  };
+                  onToken?.(chunk);
+                  const error = new Error(event.data.message);
                   onError?.(error);
                   reject(error);
                   return;
-                } else if (data.type === 'done') {
+                } else if (event.type === 'done') {
                   clearTimeout(timeoutId);
-                  onToken?.(data);
+                  const chunk: TokenChunk = {
+                    token: '',
+                    type: 'done',
+                    timestamp: event.timestamp,
+                    metadata: event.data,
+                  };
+                  onToken?.(chunk);
                   onComplete?.(fullText);
                   resolve(fullText);
                   return;

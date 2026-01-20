@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { Search, Filter, RefreshCw } from 'lucide-react';
 import SEOHead from '@/components/SEOHead';
+import { PriceComparison } from '@/components/PriceComparison';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import {
@@ -125,6 +126,11 @@ const Menu = () => {
             Comparez les prix de nos plats sur Uber Eats, Deliveroo et Takeaway. Trouvez la meilleure offre pour chaque restaurant.
           </p>
         </header>
+
+        {/* Platform Availability Widget */}
+        <div className="max-w-3xl mx-auto mb-8">
+          <PriceComparison restaurantName="Tasty Food" />
+        </div>
 
         {/* Filters */}
         <div className="max-w-5xl mx-auto">

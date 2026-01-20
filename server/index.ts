@@ -4,6 +4,7 @@ import compression from "compression";
 import { v4 as uuidv4 } from "uuid";
 import { Anthropic } from "@anthropic-ai/sdk";
 import dotenv from "dotenv";
+import axios from "axios";
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -644,6 +645,12 @@ app.get('/', (_req, res) => {
         method: 'GET',
         description: 'Get SSE connection statistics'
       },
+      priceComparison: {
+        path: '/api/price-comparison',
+        method: 'GET',
+        description: 'CORS proxy for delivery platform prices',
+        params: { restaurant_name: 'string' }
+      },
       menu: {
         path: '/api/menu',
         method: 'GET',
@@ -667,6 +674,95 @@ app.get('/', (_req, res) => {
     },
     documentation: 'See README_MENU.md and SSE_DEPLOYMENT.md for full documentation'
   });
+});
+
+// ============================================================================
+// PRICE COMPARISON - CORS Proxy for Delivery Platforms
+// ============================================================================
+
+/**
+ * GET /api/price-comparison - Fetch prices from delivery platforms
+ * Query params: restaurant_name (e.g., "Tasty Food")
+ * 
+ * This endpoint acts as a CORS proxy to avoid browser security issues
+ * when fetching data from external APIs.
+ */
+app.get('/api/price-comparison', async (req: Request, res: Response) => {
+  try {
+    const { restaurant_name } = req.query;
+
+    if (!restaurant_name || typeof restaurant_name !== 'string') {
+      return res.status(400).json({
+        error: 'Missing required parameter: restaurant_name',
+        status: 400,
+      });
+    }
+
+    // Timeout for external API calls (prevent hanging)
+    const timeout = parseInt(process.env.API_TIMEOUT_MS || '5000');
+
+    console.log(`[PriceComparison] Fetching prices for: ${restaurant_name}`);
+
+    // Fetch from delivery platforms with timeout and error handling
+    const [uberEats, deliveroo, takeaway] = await Promise.allSettled([
+      axios.get(`https://api.uber.com/v2/eats/search?q=${encodeURIComponent(restaurant_name)}`, {
+        timeout,
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+          'Accept': 'application/json',
+        },
+      }).catch((err) => {
+        console.warn('[PriceComparison] Uber Eats failed:', err.message);
+        return null;
+      }),
+
+      axios.get(`https://api.deliveroo.com/orderapp/v1/search?query=${encodeURIComponent(restaurant_name)}`, {
+        timeout,
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+          'Accept': 'application/json',
+        },
+      }).catch((err) => {
+        console.warn('[PriceComparison] Deliveroo failed:', err.message);
+        return null;
+      }),
+
+      axios.get(`https://api.takeaway.com/v1/restaurants?deliveryArea=${encodeURIComponent(restaurant_name)}`, {
+        timeout,
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+          'Accept': 'application/json',
+        },
+      }).catch((err) => {
+        console.warn('[PriceComparison] Takeaway failed:', err.message);
+        return null;
+      }),
+    ]);
+
+    // Return results (even if some failed)
+    res.json({
+      status: 'ok',
+      restaurant: restaurant_name,
+      timestamp: new Date().toISOString(),
+      data: {
+        uberEats: uberEats.status === 'fulfilled' && uberEats.value ? uberEats.value.data : null,
+        deliveroo: deliveroo.status === 'fulfilled' && deliveroo.value ? deliveroo.value.data : null,
+        takeaway: takeaway.status === 'fulfilled' && takeaway.value ? takeaway.value.data : null,
+      },
+      errors: {
+        uberEats: uberEats.status === 'rejected' ? uberEats.reason?.message || 'Failed to fetch' : null,
+        deliveroo: deliveroo.status === 'rejected' ? deliveroo.reason?.message || 'Failed to fetch' : null,
+        takeaway: takeaway.status === 'rejected' ? takeaway.reason?.message || 'Failed to fetch' : null,
+      },
+    });
+  } catch (error) {
+    console.error('[PriceComparison] Error:', error);
+    res.status(500).json({
+      error: 'Failed to fetch price comparison data',
+      status: 500,
+      details: error instanceof Error ? error.message : 'Unknown error',
+    });
+  }
 });
 
 /**

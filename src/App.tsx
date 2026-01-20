@@ -19,6 +19,7 @@ import Contact from "@/pages/Contact";
 import Support from "@/pages/Support";
 import NotFound from "@/pages/NotFound";
 import TestDatabase from "@/pages/TestDatabase";
+import StreamingDemo from "@/pages/StreamingDemo";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +44,7 @@ const App = () => (
               <Route path="/contact" element={<Contact />} />
               <Route path="/support" element={<Support />} />
               <Route path="/test-db" element={<TestDatabase />} />
+              <Route path="/streaming-demo" element={<StreamingDemo />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>

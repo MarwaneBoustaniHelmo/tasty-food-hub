@@ -414,13 +414,7 @@ app.post('/api/menu/refresh', async (req, res) => {
  * GET /api/menu/status - Get cache status
  */
 app.get('/api/menu/status', (req, res) => {
-  try chatStream: {
-        path: '/api/chat/stream',
-        method: 'POST',
-        description: 'Stream LLM responses via SSE (Server-Sent Events)',
-        body: { message: 'string', systemPrompt: 'string (optional)' }
-      },
-      {
+  try {
     if (!fs.existsSync(CACHE_FILE)) {
       return res.json({
         cached: false,
@@ -452,11 +446,28 @@ app.get('/api/menu/status', (req, res) => {
 /**
  * GET / - API info and available endpoints
  */
-app.get('/', (req, res) => {
+app.get('/', (_req, res) => {
   res.json({
-    name: 'Tasty Food Menu Aggregation API',
-    version: '1.0.0',
+    name: 'Tasty Food API',
+    version: '2.0.0',
     endpoints: {
+      chatStream: {
+        path: '/api/chat/stream',
+        method: 'GET',
+        description: 'Stream LLM responses via SSE (Server-Sent Events)',
+        params: { message: 'string', conversation_id: 'string (optional)' }
+      },
+      chatRest: {
+        path: '/api/chat',
+        method: 'POST',
+        description: 'Non-streaming chat endpoint',
+        body: { message: 'string' }
+      },
+      sseStats: {
+        path: '/api/sse/stats',
+        method: 'GET',
+        description: 'Get SSE connection statistics'
+      },
       menu: {
         path: '/api/menu',
         method: 'GET',
@@ -478,20 +489,113 @@ app.get('/', (req, res) => {
         description: 'Health check endpoint'
       }
     },
-    documentation: 'See README_MENU.md for full documentation'
+    documentation: 'See README_MENU.md and SSE_DEPLOYMENT.md for full documentation'
   });
 });
 
 /**
  * GET /health - Health check
  */
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: Date.now() });
+app.get('/health', (_req: Request, res: Response) => {
+  res.json({
+    status: "ok",
+    timestamp: new Date().toISOString(),
+    sseConnections: sseManager.getStats().activeClients,
+  });
 });
 
+// ============================================================================
+// ERROR HANDLERS
+// ============================================================================
+
+/**
+ * 404 handler
+ */
+app.use((_req: Request, res: Response) => {
+  res.status(404).json({
+    error: "Not Found",
+    available_endpoints: {
+      sse: "GET /api/chat/stream?message=...",
+      rest: "POST /api/chat",
+      stats: "GET /api/sse/stats",
+      menu: "GET /api/menu",
+      health: "GET /health",
+    },
+  });
+});
+
+/**
+ * Global error handler
+ */
+app.use(
+  (
+    error: any,
+    _req: express.Request,
+    res: express.Response,
+    _next: express.NextFunction,
+  ) => {
+    console.error("[GlobalError]", error);
+    res.status(500).json({
+      error: error?.message ?? "Internal server error",
+      status: 500,
+    });
+  },
+);
+
+// ============================================================================
+// UTILITY FUNCTIONS
+// ============================================================================
+
+async function saveConversation(data: {
+  conversation_id?: string;
+  user_message: string;
+  assistant_response: string;
+  token_count: number;
+}): Promise<void> {
+  // TODO: Implement database persistence
+  console.log("[Database] Conversation saved", {
+    conversation_id: data.conversation_id,
+    user_length: data.user_message.length,
+    response_length: data.assistant_response.length,
+    tokens: data.token_count,
+  });
+}
+
+// ============================================================================
+// SERVER STARTUP
+// ============================================================================
+
+const NODE_ENV = process.env.NODE_ENV || "development";
+
 app.listen(PORT, () => {
-  console.log(`🚀 Menu API server running on http://localhost:${PORT}`);
-  console.log(`📋 Menu endpoint: http://localhost:${PORT}/api/menu`);
-  console.log(`🔄 Refresh endpoint: http://localhost:${PORT}/api/menu/refresh`);
-  console.log(`📊 Status endpoint: http://localhost:${PORT}/api/menu/status`);
+  console.log("\n" + "=".repeat(70));
+  console.log("🚀 SSE Chat Server Started");
+  console.log("=".repeat(70));
+  console.log(`🔗 Server URL:    http://localhost:${PORT}`);
+  console.log(`📊 Environment:   ${NODE_ENV}`);
+  console.log(`🔑 API Key Set:   ${process.env.ANTHROPIC_API_KEY ? "✓" : "✗"}`);
+  console.log("\n📡 Available Endpoints:");
+  console.log(
+    `   GET  /api/chat/stream    Stream LLM response via SSE`,
+  );
+  console.log(`   POST /api/chat           Non-streaming REST endpoint`);
+  console.log(`   GET  /api/sse/stats      Connection statistics`);
+  console.log(`   GET  /api/menu           Menu aggregation API`);
+  console.log(`   GET  /health             Health check`);
+  console.log("\n💡 Example Usage:");
+  console.log(
+    `   curl -N "http://localhost:${PORT}/api/chat/stream?message=Hello"`,
+  );
+  console.log("\n" + "=".repeat(70) + "\n");
+});
+
+// Graceful shutdown
+process.on("SIGINT", () => {
+  console.log("\n[Server] Shutting down gracefully...");
+  process.exit(0);
+});
+
+process.on("SIGTERM", () => {
+  console.log("\n[Server] Shutting down gracefully...");
+  process.exit(0);
 });

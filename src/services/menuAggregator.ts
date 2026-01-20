@@ -1,6 +1,6 @@
-import { fetchUberEatsMenuFor } from './scrapers/ubereats';
-import { UBEREATS_BRANCHES } from '@/types/menu-aggregation';
-import type { MenuItem, ScraperResult } from '@/types/menu-aggregation';
+import { fetchUberEatsMenuFor } from './scrapers/ubereats.js';
+import { UBEREATS_BRANCHES } from '../types/menu-aggregation.js';
+import type { MenuItem, ScraperResult } from '../types/menu-aggregation.js';
 import fs from 'fs';
 import path from 'path';
 

@@ -4,6 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { getAggregatedMenu, refreshMenuCache } from '../src/services/menuAggregator.js';
+import { serverStreamManager } from './streaming/serverStreamManager.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -12,8 +13,68 @@ const app = express();
 const PORT = process.env.API_PORT || 3001;
 const CACHE_FILE = path.join(__dirname, '..', 'data', 'menu-cache.json');
 
+// Rate limiting for streaming endpoint (simple in-memory)
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+const RATE_LIMIT_WINDOW = 60000; // 1 minute
+const RATE_LIMIT_MAX = 10; // 10 requests per minute
+
+function checkRateLimit(ip: string): { allowed: boolean; retryAfter?: number } {
+  const now = Date.now();
+  const record = rateLimitMap.get(ip);
+
+  if (!record || now > record.resetTime) {
+    rateLimitMap.set(ip, { count: 1, resetTime: now + RATE_LIMIT_WINDOW });
+    return { allowed: true };
+  }
+
+  if (record.count >= RATE_LIMIT_MAX) {
+    const retryAfter = Math.ceil((record.resetTime - now) / 1000);
+    return { allowed: false, retryAfter };
+  }
+
+  record.count++;
+  return { allowed: true };
+}
+
 app.use(cors());
 app.use(express.json());
+
+/**
+ * POST /api/chat/stream - Stream LLM response via SSE
+ */
+app.post('/api/chat/stream', async (req, res) => {
+  try {
+    const { message, systemPrompt } = req.body;
+
+    if (!message) {
+      return res.status(400).json({ error: 'Message is required' });
+    }
+
+    // Rate limiting
+    const clientIp = req.ip || req.socket.remoteAddress || 'unknown';
+    const rateLimitCheck = checkRateLimit(clientIp);
+    
+    if (!rateLimitCheck.allowed) {
+      res.setHeader('Retry-After', String(rateLimitCheck.retryAfter));
+      return res.status(429).json({ 
+        error: 'Too many requests',
+        retryAfter: rateLimitCheck.retryAfter 
+      });
+    }
+
+    // Stream response via SSE
+    await serverStreamManager.streamToSSE(res, message, systemPrompt);
+
+  } catch (error: any) {
+    console.error('Streaming error:', error);
+    if (!res.headersSent) {
+      res.status(500).json({
+        error: 'Failed to stream response',
+        message: error.message
+      });
+    }
+  }
+});
 
 /**
  * GET /api/menu - Get cached menu data
@@ -67,7 +128,13 @@ app.post('/api/menu/refresh', async (req, res) => {
  * GET /api/menu/status - Get cache status
  */
 app.get('/api/menu/status', (req, res) => {
-  try {
+  try chatStream: {
+        path: '/api/chat/stream',
+        method: 'POST',
+        description: 'Stream LLM responses via SSE (Server-Sent Events)',
+        body: { message: 'string', systemPrompt: 'string (optional)' }
+      },
+      {
     if (!fs.existsSync(CACHE_FILE)) {
       return res.json({
         cached: false,

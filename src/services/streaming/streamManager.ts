@@ -1,9 +1,11 @@
-import Anthropic from '@anthropic-ai/sdk';
+/**
+ * Stream Manager - Client-side SSE consumer
+ * Connects to Express backend streaming endpoint
+ */
 
 export interface StreamOptions {
-  bufferSize?: number;
+  apiUrl?: string;
   timeout?: number;
-  encoding?: 'utf-8' | 'ascii';
 }
 
 export interface TokenChunk {
@@ -14,24 +16,16 @@ export interface TokenChunk {
 }
 
 export class StreamManager {
-  private bufferSize: number = 1024;
-  private timeout: number = 60000;
-  private encoding: 'utf-8' | 'ascii' = 'utf-8';
-  private anthropic: Anthropic;
+  private apiUrl: string;
+  private timeout: number;
 
   constructor(options: StreamOptions = {}) {
-    this.bufferSize = options.bufferSize || 1024;
+    this.apiUrl = options.apiUrl || 'http://localhost:3001/api/chat/stream';
     this.timeout = options.timeout || 60000;
-    this.encoding = options.encoding || 'utf-8';
-    
-    this.anthropic = new Anthropic({
-      apiKey: import.meta.env.VITE_ANTHROPIC_API_KEY || '',
-      dangerouslyAllowBrowser: true, // For Vite client-side
-    });
   }
 
   /**
-   * Stream LLM response token-by-token
+   * Stream LLM response via SSE from backend
    */
   async streamLLMResponse(
     prompt: string,
@@ -41,89 +35,91 @@ export class StreamManager {
     onComplete?: (fullText: string) => void,
   ): Promise<string> {
     return new Promise(async (resolve, reject) => {
+      let fullText = '';
+      let streamingText = '';
+
       try {
-        let fullText = '';
-        let tokenCount = 0;
+        // Fetch streaming endpoint
+        const response = await fetch(this.apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            message: prompt,
+            systemPrompt,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        if (!response.body) {
+          throw new Error('No response body');
+        }
+
+        // Parse streaming response
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
         let buffer = '';
-
-        // Create streaming request
-        const stream = await this.anthropic.messages.stream({
-          model: 'claude-3-5-sonnet-20241022',
-          max_tokens: 1024,
-          temperature: 0.5,
-          system: systemPrompt,
-          messages: [{ role: 'user', content: prompt }],
-        });
-
-        // Process each text delta
-        stream.on('text', (text: string) => {
-          buffer += text;
-          fullText += text;
-          tokenCount++;
-
-          // Emit token chunk
-          onToken?.({
-            token: text,
-            type: 'text',
-            timestamp: Date.now(),
-            metadata: { tokenCount },
-          });
-
-          // Flush buffer if size exceeded
-          if (buffer.length >= this.bufferSize) {
-            buffer = '';
-          }
-        });
-
-        // Handle stream completion
-        stream.on('end', () => {
-          // Emit remaining buffer
-          if (buffer) {
-            onToken?.({
-              token: buffer,
-              type: 'text',
-              timestamp: Date.now(),
-            });
-          }
-
-          // Emit done signal
-          onToken?.({
-            token: '',
-            type: 'done',
-            timestamp: Date.now(),
-            metadata: { totalTokens: tokenCount, fullText },
-          });
-
-          onComplete?.(fullText);
-          resolve(fullText);
-        });
-
-        // Handle stream errors
-        stream.on('error', (error: Error) => {
-          console.error('Stream error:', error);
-          
-          onToken?.({
-            token: error.message,
-            type: 'error',
-            timestamp: Date.now(),
-          });
-
-          onError?.(error);
-          reject(error);
-        });
 
         // Timeout handling
         const timeoutId = setTimeout(() => {
-          if (tokenCount === 0) {
-            const timeoutError = new Error('Stream timeout: No tokens received');
-            onError?.(timeoutError);
-            reject(timeoutError);
-          }
+          reader.cancel();
+          const timeoutError = new Error('Stream timeout');
+          onError?.(timeoutError);
+          reject(timeoutError);
         }, this.timeout);
 
-        // Clear timeout on completion
-        stream.on('end', () => clearTimeout(timeoutId));
-        stream.on('error', () => clearTimeout(timeoutId));
+        while (true) {
+          const { done, value } = await reader.read();
+
+          if (done) {
+            clearTimeout(timeoutId);
+            break;
+          }
+
+          // Decode chunk
+          buffer += decoder.decode(value, { stream: true });
+
+          // Parse SSE events
+          const lines = buffer.split('\n');
+          buffer = lines[lines.length - 1]; // Keep incomplete line
+
+          for (let i = 0; i < lines.length - 1; i++) {
+            const line = lines[i];
+
+            if (line.startsWith('data: ')) {
+              try {
+                const data: TokenChunk = JSON.parse(line.slice(6));
+
+                if (data.type === 'text') {
+                  streamingText += data.token;
+                  fullText += data.token;
+                  onToken?.(data);
+                } else if (data.type === 'error') {
+                  console.error('Stream error:', data.token);
+                  onToken?.(data);
+                  const error = new Error(data.token);
+                  onError?.(error);
+                  reject(error);
+                  return;
+                } else if (data.type === 'done') {
+                  clearTimeout(timeoutId);
+                  onToken?.(data);
+                  onComplete?.(fullText);
+                  resolve(fullText);
+                  return;
+                }
+              } catch (error) {
+                console.error('Failed to parse SSE data:', error);
+              }
+            }
+          }
+        }
+
+        // If we exit loop without 'done' event
+        onComplete?.(fullText);
+        resolve(fullText);
 
       } catch (error) {
         const err = error instanceof Error ? error : new Error(String(error));
@@ -161,20 +157,6 @@ ${ragContext}`;
   }
 
   /**
-   * Format token for SSE transmission (for server-side use)
-   */
-  formatSSEEvent(chunk: TokenChunk): string {
-    return `data: ${JSON.stringify(chunk)}\n\n`;
-  }
-
-  /**
-   * Estimate tokens remaining
-   */
-  estimateTokensRemaining(currentTokens: number, targetLength: number = 300): number {
-    return Math.max(0, targetLength - currentTokens);
-  }
-
-  /**
    * Calculate streaming speed (tokens per second)
    */
   calculateSpeed(tokenCount: number, startTime: number): number {
@@ -184,6 +166,8 @@ ${ragContext}`;
 }
 
 export const streamManager = new StreamManager({
-  bufferSize: 512,
+  apiUrl: import.meta.env.VITE_API_URL 
+    ? `${import.meta.env.VITE_API_URL}/api/chat/stream`
+    : 'http://localhost:3001/api/chat/stream',
   timeout: 60000,
 });

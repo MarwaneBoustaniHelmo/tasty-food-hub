@@ -875,21 +875,6 @@ app.use(
 // UTILITY FUNCTIONS
 // ============================================================================
 
-async function saveConversation(data: {
-  conversation_id?: string;
-  user_message: string;
-  assistant_response: string;
-  token_count: number;
-}): Promise<void> {
-  // TODO: Implement database persistence
-  console.log("[Database] Conversation saved", {
-    conversation_id: data.conversation_id,
-    user_length: data.user_message.length,
-    response_length: data.assistant_response.length,
-    tokens: data.token_count,
-  });
-}
-
 // ============================================================================
 // SERVER STARTUP
 // ============================================================================

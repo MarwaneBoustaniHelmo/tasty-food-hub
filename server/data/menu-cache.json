@@ -1,0 +1,9 @@
+{
+  "items": [],
+  "timestamp": 1768946049846,
+  "errors": [
+    "Uber Eats scraping failed for Angleur: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"https://www.ubereats.com/be-en/store/tasty-food-angleur/uObTfxymWn2x53kZNuo8NQ\", waiting until \"networkidle\"\u001b[22m\n",
+    "Uber Eats scraping failed for Wandre: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"https://www.ubereats.com/be/store/tasty-food-wandre/9BB6rSrVVKS9UR_2fyAYoQ\", waiting until \"networkidle\"\u001b[22m\n",
+    "Uber Eats scraping failed for Seraing: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"https://www.ubereats.com/be/store/tasty-food-seraing/NpA7eB6mS6mam_TwsTcigg\", waiting until \"networkidle\"\u001b[22m\n"
+  ]
+}

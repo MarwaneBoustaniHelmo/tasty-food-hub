@@ -1,7 +1,39 @@
-import { ExternalLink, Play } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ExternalLink, Play, Loader2 } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const Videos = () => {
   const tiktokProfile = "https://www.tiktok.com/@tastyfoodliege";
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
+
+  useEffect(() => {
+    // Load TikTok embed script
+    const script = document.createElement('script');
+    script.src = 'https://www.tiktok.com/embed.js';
+    script.async = true;
+    
+    script.onload = () => {
+      console.log('TikTok embed script loaded successfully');
+      // Give time for TikTok to render
+      setTimeout(() => setIsLoading(false), 2000);
+    };
+    
+    script.onerror = () => {
+      console.error('Failed to load TikTok embed script');
+      setHasError(true);
+      setIsLoading(false);
+    };
+    
+    document.body.appendChild(script);
+    
+    return () => {
+      // Cleanup script on unmount
+      if (document.body.contains(script)) {
+        document.body.removeChild(script);
+      }
+    };
+  }, []);
   
   return (
     <main className="pt-24 md:pt-28 pb-10 md:pb-20 min-h-screen">
@@ -37,8 +69,39 @@ const Videos = () => {
         {/* TikTok Embed Section */}
         <div className="max-w-3xl mx-auto mb-8 md:mb-12">
           <div className="rounded-2xl bg-card border border-border p-6 md:p-8">
-            <div className="text-center">
-              {/* TikTok Profile Embed */}
+            {/* Loading State */}
+            {isLoading && (
+              <div className="flex flex-col items-center justify-center py-16 gap-4">
+                <Loader2 className="w-12 h-12 animate-spin text-primary" />
+                <p className="text-muted-foreground">Chargement des vidéos TikTok...</p>
+              </div>
+            )}
+
+            {/* Error State */}
+            {hasError && (
+              <Alert className="border-amber-500/20 bg-amber-500/5">
+                <AlertDescription className="text-center py-8">
+                  <p className="text-muted-foreground mb-4">
+                    Impossible de charger le contenu TikTok. Visitez notre profil directement :
+                  </p>
+                  <a
+                    href={tiktokProfile}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-gold inline-flex items-center gap-2"
+                  >
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                    </svg>
+                    Voir sur TikTok
+                    <ExternalLink size={16} />
+                  </a>
+                </AlertDescription>
+              </Alert>
+            )}
+
+            {/* TikTok Embed */}
+            <div className={isLoading || hasError ? 'hidden' : 'block'}>
               <blockquote 
                 className="tiktok-embed" 
                 cite={tiktokProfile}
@@ -56,25 +119,6 @@ const Videos = () => {
                   </a>
                 </section>
               </blockquote>
-              <script async src="https://www.tiktok.com/embed.js"></script>
-              
-              {/* Fallback if embed doesn't load */}
-              <noscript>
-                <div className="py-8">
-                  <p className="text-muted-foreground mb-4">
-                    Activez JavaScript pour voir nos vidéos TikTok
-                  </p>
-                  <a
-                    href={tiktokProfile}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-gold inline-flex items-center gap-2"
-                  >
-                    Voir sur TikTok
-                    <ExternalLink size={16} />
-                  </a>
-                </div>
-              </noscript>
             </div>
           </div>
         </div>

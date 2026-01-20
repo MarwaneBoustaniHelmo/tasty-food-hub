@@ -833,8 +833,157 @@ app.get('/health', (_req: Request, res: Response) => {
   });
 });
 
+// ============================================================================// ROUTES - RESERVATIONS
 // ============================================================================
-// ERROR HANDLERS
+
+/**
+ * POST /api/reservations - Create a new restaurant reservation
+ * Body: { restaurant_id, date, time, party_size, name, email, phone, notes }
+ */
+app.post('/api/reservations', async (req: Request, res: Response) => {
+  try {
+    const {
+      restaurant_id,
+      date,
+      time,
+      party_size,
+      name,
+      email,
+      phone,
+      notes,
+    } = req.body;
+
+    // Validation
+    const errors: string[] = [];
+    if (!restaurant_id) errors.push('restaurant_id is required');
+    if (!date) errors.push('date is required');
+    if (!time) errors.push('time is required');
+    if (!party_size || party_size < 1) errors.push('party_size must be at least 1');
+    if (!name) errors.push('name is required');
+    if (!email) errors.push('email is required');
+    if (!phone) errors.push('phone is required');
+
+    if (errors.length > 0) {
+      return res.status(400).json({
+        error: 'Validation failed',
+        details: errors,
+      });
+    }
+
+    // Create reservation object
+    const reservation = {
+      id: uuidv4(),
+      restaurant_id,
+      date,
+      time,
+      party_size: parseInt(party_size),
+      name,
+      email,
+      phone,
+      notes: notes || '',
+      status: 'pending',
+      created_at: new Date().toISOString(),
+    };
+
+    // TODO: Save to Supabase database
+    // Example with Supabase:
+    // const { data, error } = await supabase
+    //   .from('reservations')
+    //   .insert([reservation])
+    //   .select()
+    //   .single();
+    //
+    // if (error) throw error;
+
+    console.log('[Reservations] New reservation created:', {
+      id: reservation.id,
+      restaurant: restaurant_id,
+      date,
+      time,
+      party_size,
+      customer: name,
+    });
+
+    // TODO: Send confirmation email
+    // await sendReservationConfirmationEmail(reservation);
+
+    res.status(201).json({
+      success: true,
+      reservation,
+      message: 'Réservation créée avec succès',
+    });
+  } catch (error: any) {
+    console.error('[Reservations] Error creating reservation:', error);
+    res.status(500).json({
+      error: 'Failed to create reservation',
+      message: error?.message || 'Internal server error',
+    });
+  }
+});
+
+/**
+ * GET /api/reservations/:id - Get reservation by ID
+ */
+app.get('/api/reservations/:id', async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    // TODO: Fetch from database
+    // const { data, error } = await supabase
+    //   .from('reservations')
+    //   .select('*')
+    //   .eq('id', id)
+    //   .single();
+    //
+    // if (error || !data) {
+    //   return res.status(404).json({ error: 'Reservation not found' });
+    // }
+
+    // Mock response for development
+    res.json({
+      message: 'Reservation retrieval endpoint - database integration pending',
+      id,
+    });
+  } catch (error: any) {
+    console.error('[Reservations] Error fetching reservation:', error);
+    res.status(500).json({
+      error: 'Failed to fetch reservation',
+      message: error?.message || 'Internal server error',
+    });
+  }
+});
+
+/**
+ * DELETE /api/reservations/:id - Cancel a reservation
+ */
+app.delete('/api/reservations/:id', async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    // TODO: Update status in database
+    // const { error } = await supabase
+    //   .from('reservations')
+    //   .update({ status: 'cancelled', cancelled_at: new Date().toISOString() })
+    //   .eq('id', id);
+    //
+    // if (error) throw error;
+
+    console.log(`[Reservations] Reservation ${id} cancelled`);
+
+    res.json({
+      success: true,
+      message: 'Réservation annulée avec succès',
+    });
+  } catch (error: any) {
+    console.error('[Reservations] Error cancelling reservation:', error);
+    res.status(500).json({
+      error: 'Failed to cancel reservation',
+      message: error?.message || 'Internal server error',
+    });
+  }
+});
+
+// ============================================================================// ERROR HANDLERS
 // ============================================================================
 
 /**

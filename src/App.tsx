@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { EnhancedChatBot } from "./components/EnhancedChatBot";
+import ChatBotFloatingButton from "@/components/ChatBotFloatingButton";
 import MobileStickyOrder from "@/components/MobileStickyOrder";
 import ScrollToTop from "@/components/ScrollToTop";
 import SkipToContent from "@/components/SkipToContent";
@@ -16,6 +16,7 @@ import Menu from "@/pages/Menu";
 import Concept from "@/pages/Concept";
 import Videos from "@/pages/Videos";
 import Contact from "@/pages/Contact";
+import Reservation from "@/pages/Reservation";
 import Support from "@/pages/Support";
 import NotFound from "@/pages/NotFound";
 import TestDatabase from "@/pages/TestDatabase";
@@ -42,6 +43,7 @@ const App = () => (
               <Route path="/concept" element={<Concept />} />
               <Route path="/videos" element={<Videos />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/reservation" element={<Reservation />} />
               <Route path="/support" element={<Support />} />
               <Route path="/test-db" element={<TestDatabase />} />
               <Route path="/streaming-demo" element={<StreamingDemo />} />
@@ -53,9 +55,10 @@ const App = () => (
           <MobileStickyOrder />
           {/* Scroll to top button */}
           <ScrollToTop />
+          {/* Floating ChatBot Button */}
+          <ChatBotFloatingButton />
         </div>
       </BrowserRouter>
-      <EnhancedChatBot />
     </TooltipProvider>
   </QueryClientProvider>
 );

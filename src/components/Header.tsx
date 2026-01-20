@@ -15,6 +15,7 @@ const Header = () => {
     { path: "/", labelKey: "nav.home", icon: Home },
     { path: "/restaurants", labelKey: "nav.restaurants", icon: MapPin },
     { path: "/commander", labelKey: "nav.order", icon: ShoppingBag },
+    { path: "/menu", labelKey: "nav.menu", icon: Menu },
     { path: "/concept", labelKey: "nav.concept", icon: Lightbulb },
     { path: "/videos", labelKey: "nav.videos", icon: Video },
     { path: "/contact", labelKey: "nav.contact", icon: Phone },

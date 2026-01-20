@@ -1,0 +1,154 @@
+{
+  "timestamp": 1768923149330,
+  "ttl": 43200000,
+  "items": [
+    {
+      "id": "classic-burger",
+      "name": "Classic Burger",
+      "description": "Burger classique avec steak haché, salade, tomate, oignons",
+      "category": "Burgers",
+      "tags": ["burger", "classic", "beef"],
+      "imageUrl": null,
+      "platforms": [
+        {
+          "platform": "ubereats",
+          "branch": "Saint-Gilles",
+          "price": 8.50,
+          "available": true,
+          "url": "https://www.ubereats.com/be/store/tasty-food-saint-gilles/zWuPWDrJX1WeeHcEdno3FQ"
+        },
+        {
+          "platform": "ubereats",
+          "branch": "Angleur",
+          "price": 8.50,
+          "available": true,
+          "url": "https://www.ubereats.com/be-en/store/tasty-food-angleur/uObTfxymWn2x53kZNuo8NQ"
+        },
+        {
+          "platform": "deliveroo",
+          "branch": "Angleur",
+          "price": 9.00,
+          "available": true,
+          "url": "https://deliveroo.be/fr/menu/liege/liege-angleur/tasty-food-angleur"
+        }
+      ]
+    },
+    {
+      "id": "double-cheese-burger",
+      "name": "Double Cheese Burger",
+      "description": "Deux steaks hachés, double cheddar, salade, tomate",
+      "category": "Burgers",
+      "tags": ["burger", "cheese", "double"],
+      "imageUrl": null,
+      "platforms": [
+        {
+          "platform": "ubereats",
+          "branch": "Saint-Gilles",
+          "price": 11.50,
+          "available": true,
+          "url": "https://www.ubereats.com/be/store/tasty-food-saint-gilles/zWuPWDrJX1WeeHcEdno3FQ"
+        },
+        {
+          "platform": "ubereats",
+          "branch": "Sclessin",
+          "price": 11.50,
+          "available": true,
+          "url": "https://www.ubereats.com/be-en/store/tasty-food-sclessin/wdHqg-DkQ6OcXkv11r9_lA"
+        },
+        {
+          "platform": "deliveroo",
+          "branch": "Seraing",
+          "price": 12.00,
+          "available": true,
+          "url": "https://deliveroo.be/fr/menu/seraing/seraing/tasty-food-seraing"
+        }
+      ]
+    },
+    {
+      "id": "tacos-poulet",
+      "name": "Tacos Poulet",
+      "description": "Tacos avec poulet mariné, frites, fromage fondu, sauce au choix",
+      "category": "Tacos",
+      "tags": ["tacos", "chicken", "cheese"],
+      "imageUrl": null,
+      "platforms": [
+        {
+          "platform": "ubereats",
+          "branch": "Saint-Gilles",
+          "price": 9.00,
+          "available": true,
+          "url": "https://www.ubereats.com/be/store/tasty-food-saint-gilles/zWuPWDrJX1WeeHcEdno3FQ"
+        },
+        {
+          "platform": "ubereats",
+          "branch": "Bressoux",
+          "price": 8.50,
+          "available": true,
+          "url": "https://www.ubereats.com/be/store/tasty-food-bressoux/eNvdCMl9Qey-vKy40-Hkhg"
+        },
+        {
+          "platform": "deliveroo",
+          "branch": "Angleur",
+          "price": 9.50,
+          "available": true,
+          "url": "https://deliveroo.be/fr/menu/liege/liege-angleur/tasty-food-angleur"
+        }
+      ]
+    },
+    {
+      "id": "frites-maison",
+      "name": "Frites Maison",
+      "description": "Frites fraîches coupées et cuites minute",
+      "category": "Frites",
+      "tags": ["fries", "side"],
+      "imageUrl": null,
+      "platforms": [
+        {
+          "platform": "ubereats",
+          "branch": "Saint-Gilles",
+          "price": 3.50,
+          "available": true,
+          "url": "https://www.ubereats.com/be/store/tasty-food-saint-gilles/zWuPWDrJX1WeeHcEdno3FQ"
+        },
+        {
+          "platform": "ubereats",
+          "branch": "Angleur",
+          "price": 3.50,
+          "available": true,
+          "url": "https://www.ubereats.com/be-en/store/tasty-food-angleur/uObTfxymWn2x53kZNuo8NQ"
+        },
+        {
+          "platform": "deliveroo",
+          "branch": "Angleur",
+          "price": 4.00,
+          "available": true,
+          "url": "https://deliveroo.be/fr/menu/liege/liege-angleur/tasty-food-angleur"
+        }
+      ]
+    },
+    {
+      "id": "coca-cola-33cl",
+      "name": "Coca-Cola 33cl",
+      "description": "Canette de Coca-Cola 33cl",
+      "category": "Boissons",
+      "tags": ["drink", "soda"],
+      "imageUrl": null,
+      "platforms": [
+        {
+          "platform": "ubereats",
+          "branch": "Saint-Gilles",
+          "price": 2.00,
+          "available": true,
+          "url": "https://www.ubereats.com/be/store/tasty-food-saint-gilles/zWuPWDrJX1WeeHcEdno3FQ"
+        },
+        {
+          "platform": "deliveroo",
+          "branch": "Seraing",
+          "price": 2.50,
+          "available": true,
+          "url": "https://deliveroo.be/fr/menu/seraing/seraing/tasty-food-seraing"
+        }
+      ]
+    }
+  ]
+}

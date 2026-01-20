@@ -12,9 +12,13 @@ import GeolocationBanner from "@/components/order/GeolocationBanner";
 import PromotionsBanner from "@/components/order/PromotionsBanner";
 import OrderFloatingWidget from "@/components/order/OrderFloatingWidget";
 import { useGeolocation } from "@/hooks/useGeolocation";
+import { useMenuData } from "@/hooks/useMenuData";
 import { restaurantsMenu, croustyLocations, MenuItem } from "@/data/menuData";
 
 const Order = () => {
+  // Menu data from database
+  const { categories: dbCategories, loading: menuLoading, error: menuError } = useMenuData();
+
   // Geolocation hook
   const {
     loading: geoLoading,
@@ -45,16 +49,19 @@ const Order = () => {
   // Get selected restaurant data
   const restaurant = restaurantsMenu.find(r => r.id === selectedRestaurant);
 
-  // Set default active category when restaurant changes
+  // Use database categories if available, fallback to static
+  const categories = dbCategories.length > 0 ? dbCategories : (restaurant?.categories || []);
+
+  // Set default active category when categories change
   useEffect(() => {
-    if (restaurant && restaurant.categories.length > 0) {
-      setActiveCategory(restaurant.categories[0].id);
+    if (categories.length > 0) {
+      setActiveCategory(categories[0].id);
     }
-  }, [restaurant]);
+  }, [categories]);
 
   // Intersection Observer for active category
   useEffect(() => {
-    if (!restaurant) return;
+    if (categories.length === 0) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -73,7 +80,7 @@ const Order = () => {
     });
 
     return () => observer.disconnect();
-  }, [restaurant]);
+  }, [categories]);
 
   // Handle restaurant selection (with localStorage persistence)
   const handleSelectRestaurant = useCallback((id: string) => {
@@ -196,7 +203,7 @@ const Order = () => {
 
           {/* Category Navigation */}
           <CategoryNav
-            categories={restaurant.categories}
+            categories={categories}
             activeCategory={activeCategory}
             onCategoryClick={scrollToCategory}
           />
@@ -207,7 +214,17 @@ const Order = () => {
               <div className="flex flex-col lg:flex-row gap-6">
                 {/* Menu Sections */}
                 <div className="flex-1 order-2 lg:order-1">
-                  {restaurant.categories.map((category) => (
+                  {menuLoading ? (
+                    <div className="text-center py-12">
+                      <p className="text-muted-foreground">Chargement du menu...</p>
+                    </div>
+                  ) : menuError ? (
+                    <div className="text-center py-12">
+                      <p className="text-red-600">Erreur: {menuError}</p>
+                      <p className="text-sm text-muted-foreground mt-2">Menu statique utilisé comme solution de secours.</p>
+                    </div>
+                  ) : null}
+                  {categories.map((category) => (
                     <MenuSection
                       key={category.id}
                       ref={(el) => {

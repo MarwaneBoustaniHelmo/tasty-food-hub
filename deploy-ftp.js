@@ -1,15 +1,20 @@
 #!/usr/bin/env node
 
-const FtpDeploy = require('ftp-deploy');
-const path = require('path');
-const fs = require('fs');
-const { execSync } = require('child_process');
+import FtpDeploy from 'ftp-deploy';
+import path from 'path';
+import fs from 'fs';
+import { execSync } from 'child_process';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // FTP Configuration
 const ftpConfig = {
-  host: 'ftp.tastyfood.me',
+  host: '72.60.93.15',
   port: 21,
-  user: 'u487930812.TasyFoodLiege',
+  user: 'u487930812_tastyfood.me',
   password: process.env.FTP_PASSWORD,
   // FIXED: Point localRoot to dist folder (contents will be uploaded)
   localRoot: path.join(__dirname, 'dist'),

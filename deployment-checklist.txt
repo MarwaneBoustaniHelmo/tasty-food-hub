@@ -1,0 +1,301 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                    DEPLOYMENT CHECKLIST - TASTY FOOD HUB                  ║
+║                        Hostinger Deployment to tastyfood.me               ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+Date: __________________    Deployed by: __________________
+
+═══════════════════════════════════════════════════════════════════════════
+
+PRE-DEPLOYMENT CHECKLIST
+═══════════════════════════════════════════════════════════════════════════
+
+CODE READINESS
+□ All features tested locally (npm run dev)
+□ No console errors in browser (F12 → Console)
+□ All pages load correctly
+□ Forms work (Contact, Order, Support)
+□ Images display correctly
+□ Mobile responsive verified
+□ Cross-browser tested (Chrome, Firefox, Safari)
+□ All links functional
+□ SEO meta tags present
+□ Language switcher works (FR/EN/NL)
+
+BUILD VERIFICATION
+□ Project builds successfully (npm run build)
+□ No build errors or warnings
+□ dist/ folder created
+□ dist/index.html exists
+□ dist/assets/ folder contains JS and CSS
+□ No nested dist/dist/ folder (CRITICAL!)
+□ Preview works (npm run preview)
+□ Assets load correctly in preview
+□ Build size reasonable (< 5MB total)
+
+VERSION CONTROL
+□ All changes committed to Git
+□ Working branch merged to main
+□ Code pushed to GitHub/GitLab
+□ Version tagged (git tag v1.x.x)
+□ Changelog updated
+
+CREDENTIALS & ACCESS
+□ .env.deploy file created with FTP password
+□ FTP credentials verified
+□ FileZilla configured (if manual deployment)
+□ Hostinger account accessible (hPanel)
+□ Domain active (tastyfood.me)
+
+BACKUP
+□ Current live site downloaded
+□ Backup saved to /backups/ with timestamp
+□ Database backup (if applicable)
+□ .env files backed up
+
+DEPENDENCIES
+□ npm packages up to date
+□ No security vulnerabilities (npm audit)
+□ basic-ftp installed (for automated deployment)
+□ dotenv installed
+□ chalk installed
+
+═══════════════════════════════════════════════════════════════════════════
+
+DEPLOYMENT EXECUTION
+═══════════════════════════════════════════════════════════════════════════
+
+AUTOMATED DEPLOYMENT (node deploy.js)
+□ Script executed: node deploy.js
+□ Build completed successfully
+□ FTP connection established
+□ Old files cleared
+□ New files uploaded
+□ Upload count: ________ files
+□ Remote structure verified
+□ Deployment report generated
+□ No errors in console output
+
+OR
+
+MANUAL DEPLOYMENT (FileZilla)
+□ Built locally: npm run build
+□ FileZilla connected to 72.60.93.15
+□ Navigated to /public_html/dist/
+□ Old files deleted
+□ New files selected (all from dist/)
+□ Upload initiated
+□ Upload completed successfully
+□ No failed transfers (check queue)
+
+FILE VERIFICATION
+□ index.html present on remote
+□ assets/ folder present
+□ JS files present (assets/*.js)
+□ CSS files present (assets/*.css)
+□ Images present
+□ favicon.ico present (if exists)
+
+PERMISSIONS SET
+□ Files: 644 (rw-r--r--)
+□ Folders: 755 (rwxr-xr-x)
+□ .htaccess readable
+□ Recursive permissions applied
+
+═══════════════════════════════════════════════════════════════════════════
+
+POST-DEPLOYMENT VERIFICATION
+═══════════════════════════════════════════════════════════════════════════
+
+SITE ACCESSIBILITY
+□ https://tastyfood.me loads
+□ No SSL certificate errors
+□ Homepage displays correctly
+□ Images load
+□ Styles applied
+□ Fonts loaded
+
+NAVIGATION & PAGES
+□ Home page (/)
+□ Restaurants (/restaurants)
+□ Order/Commander (/commander)
+□ Menu (/menu)
+□ Concept (/concept)
+□ Videos (/videos)
+□ Contact (/contact)
+□ All pages load without errors
+
+FUNCTIONALITY
+□ Navigation menu works
+□ Mobile menu works
+□ Language switcher (FR/EN/NL)
+□ Contact form submits
+□ Order buttons functional
+□ Chatbot opens and works
+□ External links work (Uber Eats, Deliveroo)
+□ Google Maps links work
+□ Footer links work
+
+TECHNICAL CHECKS
+□ No 404 errors
+□ No console errors (F12)
+□ No missing images (Network tab)
+□ No MIME type errors
+□ Page refresh works (SPA routing)
+□ Browser back button works
+□ Sharing links work
+
+RESPONSIVE DESIGN
+□ Desktop view (1920x1080)
+□ Laptop view (1366x768)
+□ Tablet view (768x1024)
+□ Mobile view (375x667)
+□ Landscape mobile
+□ Touch interactions work
+
+PERFORMANCE
+□ Page load time < 3 seconds
+□ First Contentful Paint < 1.5s
+□ Time to Interactive < 3.5s
+□ No layout shift issues
+
+SEO & META
+□ Title tag correct
+□ Meta description present
+□ Open Graph tags present
+□ Canonical URL set
+□ robots.txt accessible
+□ sitemap.xml accessible
+□ Structured data valid (LocalBusiness schema)
+
+BROWSER TESTING
+□ Chrome (latest)
+□ Firefox (latest)
+□ Safari (latest)
+□ Edge (latest)
+□ Mobile Chrome
+□ Mobile Safari
+
+═══════════════════════════════════════════════════════════════════════════
+
+POST-DEPLOYMENT TASKS
+═══════════════════════════════════════════════════════════════════════════
+
+MONITORING SETUP
+□ Google Analytics tracking verified
+□ Google Search Console submitted
+□ Uptime monitoring configured
+□ Error tracking enabled (if using Sentry)
+
+CACHE & CDN
+□ Browser cache cleared
+□ CDN cache purged (if using Cloudflare)
+□ .htaccess caching rules active
+
+DOCUMENTATION
+□ Deployment logged in project docs
+□ Deployment report saved
+□ Changelog updated
+□ Team notified
+
+CLIENT/STAKEHOLDER
+□ Client notified of deployment
+□ Demo/walkthrough scheduled
+□ Feedback collected
+□ Support contact provided
+
+SECURITY
+□ .env.deploy NOT committed to Git
+□ FTP password stored securely
+□ SSL certificate valid
+□ Security headers active
+□ .htaccess protections enabled
+
+═══════════════════════════════════════════════════════════════════════════
+
+ROLLBACK PLAN (IF NEEDED)
+═══════════════════════════════════════════════════════════════════════════
+
+If deployment fails or critical issues found:
+
+IMMEDIATE ACTIONS
+□ Document the issue clearly
+□ Take screenshots of errors
+□ Save browser console logs
+□ Note exact steps that caused issue
+
+ROLLBACK STEPS
+□ Connect to FTP (FileZilla)
+□ Navigate to /public_html/dist/
+□ Delete current files
+□ Upload backup files from /backups/
+□ Verify site works with backup
+□ Notify team of rollback
+
+TROUBLESHOOTING
+□ Review deployment logs
+□ Check browser console errors
+□ Verify file permissions
+□ Check .htaccess configuration
+□ Contact Hostinger support if needed
+
+═══════════════════════════════════════════════════════════════════════════
+
+NOTES & COMMENTS
+═══════════════════════════════════════════════════════════════════════════
+
+Deployment Duration: __________ minutes
+
+Issues Encountered:
+_____________________________________________________________________________
+_____________________________________________________________________________
+_____________________________________________________________________________
+
+Solutions Applied:
+_____________________________________________________________________________
+_____________________________________________________________________________
+_____________________________________________________________________________
+
+Performance Metrics:
+- Page Load Time: __________ seconds
+- Total Page Size: __________ MB
+- Number of Requests: __________
+- PageSpeed Score: __________
+
+Next Steps:
+_____________________________________________________________________________
+_____________________________________________________________________________
+_____________________________________________________________________________
+
+═══════════════════════════════════════════════════════════════════════════
+
+DEPLOYMENT APPROVED
+═══════════════════════════════════════════════════════════════════════════
+
+Deployed by: ____________________    Date: __________________
+
+Verified by: ____________________    Date: __________________
+
+Approved by: ____________________    Date: __________________
+
+═══════════════════════════════════════════════════════════════════════════
+
+SUPPORT CONTACTS
+═══════════════════════════════════════════════════════════════════════════
+
+Hostinger Support:
+- 24/7 Live Chat: https://hpanel.hostinger.com
+- Email: support@hostinger.com
+
+Project Contacts:
+- Developer: ______________________
+- Project Manager: ______________________
+- Client: ______________________
+
+Emergency Rollback Contact: ______________________
+
+═══════════════════════════════════════════════════════════════════════════
+
+Version: 1.0.0
+Last Updated: January 22, 2026
+File: deployment-checklist.txt

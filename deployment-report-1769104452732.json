@@ -1,0 +1,57 @@
+{
+  "startTime": "2026-01-22T17:53:45.464Z",
+  "steps": [
+    {
+      "timestamp": "2026-01-22T17:53:45.464Z",
+      "message": "Building Vite project...",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-01-22T17:53:49.892Z",
+      "message": "Build completed successfully",
+      "type": "success"
+    },
+    {
+      "timestamp": "2026-01-22T17:53:49.892Z",
+      "message": "Verifying dist/ folder structure...",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-01-22T17:53:49.893Z",
+      "message": "Found 9 files/folders in dist/",
+      "type": "success"
+    },
+    {
+      "timestamp": "2026-01-22T17:53:49.893Z",
+      "message": "Connecting to FTP server (attempt 1/3)...",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-01-22T17:53:55.338Z",
+      "message": "Connection failed, retrying in 3s...",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2026-01-22T17:53:58.765Z",
+      "message": "Connecting to FTP server (attempt 2/3)...",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-01-22T17:54:04.264Z",
+      "message": "Connection failed, retrying in 3s...",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2026-01-22T17:54:07.267Z",
+      "message": "Connecting to FTP server (attempt 3/3)...",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-01-22T17:54:12.727Z",
+      "message": "Deployment failed: 530 Login incorrect.",
+      "type": "error"
+    }
+  ],
+  "errors": [],
+  "warnings": []
+}

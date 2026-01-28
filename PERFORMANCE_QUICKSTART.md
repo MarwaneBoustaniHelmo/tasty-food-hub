@@ -4,6 +4,19 @@
 
 ---
 
+## 🤖 Chatbot Backend (Gemini API – FREE)
+
+The chatbot uses **Google Gemini** instead of Anthropic. Set this for the server:
+
+**Server** (`server/.env`):
+```bash
+GEMINI_API_KEY=your_gemini_api_key_here
+```
+
+Get a free key: [Google AI Studio](https://aistudio.google.com/apikey). Model: `gemini-2.0-flash-exp`.
+
+---
+
 ## ✅ What Was Done
 
 ### 1. Vite Config ([vite.config.ts](../vite.config.ts))
@@ -124,5 +137,15 @@ Cache-Control: max-age=31536000, immutable
 Does everything: installs deps, builds, shows sizes, verifies files.
 
 ---
+
+---
+
+## 📌 Continue Development
+
+| Task | Doc / Command |
+|------|----------------|
+| **Fix Git push** (remote not found) | [GIT_PUSH_FIX.md](GIT_PUSH_FIX.md) |
+| **Image optimization** | Install ImageMagick + webp, then `./scripts/optimize-images.sh` |
+| **Deploy to Hostinger** | Build → upload `dist/` + `dist/.htaccess` → clear cache |
 
 **Status:** ✅ Ready to deploy!

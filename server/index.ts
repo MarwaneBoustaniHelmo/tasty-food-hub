@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import compression from "compression";
 import { v4 as uuidv4 } from "uuid";
-import { Anthropic } from "@anthropic-ai/sdk";
+import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
 import axios from "axios";
 import fs from 'fs';
@@ -159,11 +159,11 @@ class SSEManager {
 }
 
 // ============================================================================
-// ANTHROPIC CLIENT - LLM streaming setup
+// GEMINI CLIENT - LLM streaming setup (FREE tier via Gemini API)
 // ============================================================================
 
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
+const genAI = new GoogleGenAI({
+  apiKey: process.env.GEMINI_API_KEY,
 });
 
 // ============================================================================
@@ -430,7 +430,7 @@ app.use((req: Request, _res: Response, next: NextFunction) => {
  * Stream LLM response via Server-Sent Events
  *
  * Query params:
- *   - message: string (required) - User message to send to Claude
+ *   - message: string (required) - User message to send to Gemini
  *   - conversation_id: string (optional) - For multi-turn conversations
  *
  * Example:
@@ -465,46 +465,35 @@ app.get("/api/chat/stream", async (req: Request, res: Response) => {
 
     const startTime = Date.now();
 
-    // Stream from Claude API
-    const stream = await anthropic.messages.stream({
-      model: "claude-3-5-sonnet-20241022",
-      max_tokens: 1024, // Reduced for faster responses
-      system: RESTAURANT_SYSTEM_PROMPT,
-      messages: [
-        {
-          role: "user",
-          content: message,
-        },
-      ],
+    // Stream from Gemini API (gemini-2.0-flash-exp — free tier, fast)
+    const stream = await genAI.models.generateContentStream({
+      model: "gemini-2.0-flash-exp",
+      contents: message,
+      config: {
+        systemInstruction: RESTAURANT_SYSTEM_PROMPT,
+        maxOutputTokens: 1024,
+      },
     });
 
-    // Handle streaming tokens
-    stream.on("text", (token: string) => {
-      tokenCount += 1;
-      fullResponse += token;
-
-      // Send token to client via SSE
-      sseManager.sendToken(clientId, token);
-
-      // Log progress every 15 tokens
-      if (tokenCount % 15 === 0) {
-        console.log(
-          `[Chat] ${clientId} - Token ${tokenCount} | Length: ${fullResponse.length}`,
-        );
+    try {
+      for await (const chunk of stream) {
+        const text = chunk.text ?? "";
+        if (!text) continue;
+        tokenCount += 1;
+        fullResponse += text;
+        sseManager.sendToken(clientId, text);
+        if (tokenCount % 15 === 0) {
+          console.log(
+            `[Chat] ${clientId} - Token ${tokenCount} | Length: ${fullResponse.length}`,
+          );
+        }
       }
-    });
 
-    // Handle stream completion
-    stream.on("end", () => {
       const duration = Date.now() - startTime;
       console.log(
         `[Chat] Stream complete for ${clientId} in ${duration}ms | Tokens: ${tokenCount}`,
       );
-
-      // Send completion signal
       sseManager.closeStream(clientId);
-
-      // Save conversation (async, don't wait)
       saveConversation({
         conversation_id: conversation_id as string | undefined,
         user_message: message,
@@ -514,18 +503,12 @@ app.get("/api/chat/stream", async (req: Request, res: Response) => {
       }).catch((err) => {
         console.error("[Database] Save error:", err);
       });
-    });
-
-    // Handle stream errors
-    stream.on("error", (error: Error) => {
-      console.error(`[Chat] Stream error for ${clientId}:`, error);
-
-      // Send error to client
-      sseManager.sendError(clientId, error.message);
-
-      // Close stream
+    } catch (streamError: unknown) {
+      const err = streamError instanceof Error ? streamError : new Error(String(streamError));
+      console.error(`[Chat] Stream error for ${clientId}:`, err);
+      sseManager.sendError(clientId, err.message);
       sseManager.closeStream(clientId);
-    });
+    }
   } catch (error: any) {
     console.error("[Chat] Handler error:", error);
 
@@ -565,25 +548,20 @@ app.post("/api/chat", async (req: Request, res: Response) => {
 
     console.log(`[Chat REST] Message: "${message.substring(0, 150)}..."`);
 
-    // Non-streaming response
-    const response = await anthropic.messages.create({
-      model: "claude-3-5-sonnet-20241022",
-      system: RESTAURANT_SYSTEM_PROMPT,
-      max_tokens: 2048,
-      messages: [
-        {
-          role: "user",
-          content: message,
-        },
-      ],
+    const response = await genAI.models.generateContent({
+      model: "gemini-2.0-flash-exp",
+      contents: message,
+      config: {
+        systemInstruction: RESTAURANT_SYSTEM_PROMPT,
+        maxOutputTokens: 2048,
+      },
     });
 
-    const content = response.content[0];
-    const text = content.type === "text" ? content.text : "";
+    const text = response.text ?? "";
 
     res.json({
       message: text,
-      tokens: response.usage.output_tokens,
+      tokens: response.usageMetadata?.candidatesTokenCount ?? 0,
       timestamp: new Date().toISOString(),
     });
   } catch (error: any) {
@@ -1036,7 +1014,7 @@ app.listen(PORT, () => {
   console.log("=".repeat(70));
   console.log(`🔗 Server URL:    http://localhost:${PORT}`);
   console.log(`📊 Environment:   ${NODE_ENV}`);
-  console.log(`🔑 API Key Set:   ${process.env.ANTHROPIC_API_KEY ? "✓" : "✗"}`);
+  console.log(`🔑 API Key Set:   ${process.env.GEMINI_API_KEY ? "✓" : "✗"}`);
   console.log("\n📡 Available Endpoints:");
   console.log(
     `   GET  /api/chat/stream    Stream LLM response via SSE`,

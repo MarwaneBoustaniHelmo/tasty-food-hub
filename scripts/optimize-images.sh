@@ -13,8 +13,8 @@ echo "=========================================="
 # Check if imagemagick is installed
 if ! command -v convert &> /dev/null; then
     echo "❌ ImageMagick not found. Installing..."
-    echo "Run: sudo apt-get install imagemagick"
-    echo "Or: brew install imagemagick (macOS)"
+    echo "  Ubuntu/Debian: sudo apt-get install imagemagick webp"
+    echo "  macOS:         brew install imagemagick webp"
     exit 1
 fi
 

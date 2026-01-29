@@ -2,6 +2,9 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ArrowRight, ExternalLink, Check, MapPin, Clock, Phone } from "lucide-react";
 import heroMain from "@/assets/hero-main.jpg";
+import heroMainMobile from "@/assets/hero-main-mobile.jpg";
+import heroMainTablet from "@/assets/hero-main-tablet.jpg";
+import heroMainDesktop from "@/assets/hero-main-desktop.jpg";
 import heroBurger from "@/assets/hero-burger.jpg";
 import loadedFries from "@/assets/loaded-fries.jpg";
 import tacos from "@/assets/tacos.jpg";
@@ -69,11 +72,17 @@ const Home = () => {
 
       {/* Hero Section - Mobile optimized: 40vh mobile, 70vh desktop */}
       <section className="relative min-h-[40vh] md:min-h-[70vh] flex items-end justify-center overflow-hidden pt-24 md:pt-0">
-        {/* Background Image with aspect ratio for CLS prevention */}
+        {/* Background Image with responsive srcset for optimal performance */}
         <div className="absolute inset-0">
           <img
+            srcSet={`
+              ${heroMainMobile} 768w,
+              ${heroMainTablet} 1280w,
+              ${heroMainDesktop} 1920w
+            `}
+            sizes="(max-width: 768px) 768px, (max-width: 1280px) 1280px, 1920px"
             src={heroMain}
-            alt="Smash Burger halal Tasty Food Liège - Restaurant fast food"
+            alt="Smash Burger halal Tasty Food Liège - Burgers variés beef, chicken, bacon"
             className="w-full h-full object-cover"
             loading="eager"
             fetchPriority="high"

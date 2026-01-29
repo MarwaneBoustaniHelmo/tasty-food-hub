@@ -1,6 +1,9 @@
 import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import compression from "compression";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
+import validator from "validator";
 import { v4 as uuidv4 } from "uuid";
 import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
@@ -402,14 +405,69 @@ async function saveConversation(data: {
   }
 }
 
+// Middleware: Security headers
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "https://www.googletagmanager.com", "https://www.clarity.ms"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com"],
+      imgSrc: ["'self'", "data:", "https:"],
+      connectSrc: ["'self'", "https://www.google-analytics.com"],
+    },
+  },
+}));
+
 // Middleware: Performance optimization
 app.use(compression()); // gzip compression
+
+// Middleware: CORS with specific origins (NO WILDCARDS)
+const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || [
+  "http://localhost:8080",
+  "http://localhost:4173",
+  "https://tastyfood.me",
+  "https://www.tastyfood.me",
+  "https://tastyfoodliege.be",
+  "https://www.tastyfoodliege.be"
+];
+
 app.use(
   cors({
-    origin: process.env.ALLOWED_ORIGINS?.split(",") || "*",
+    origin: (origin, callback) => {
+      // Allow requests with no origin (mobile apps, Postman, etc.)
+      if (!origin) return callback(null, true);
+      
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        console.warn(`[CORS] Blocked origin: ${origin}`);
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
   }),
 );
+
+// Middleware: Rate limiting (prevent DDoS/abuse)
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per windowMs
+  message: { error: 'Too many requests, please try again later.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+const chatLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 10, // Limit chat to 10 messages per minute per IP
+  message: { error: 'Too many messages, please slow down.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Apply rate limiting to API routes
+app.use('/api/', apiLimiter);
 
 // Middleware: Body parsing
 app.use(express.json({ limit: "10mb" }));
@@ -436,7 +494,7 @@ app.use((req: Request, _res: Response, next: NextFunction) => {
  * Example:
  *   GET /api/chat/stream?message=What%20is%20AI?
  */
-app.get("/api/chat/stream", async (req: Request, res: Response) => {
+app.get("/api/chat/stream", chatLimiter, async (req: Request, res: Response) => {
   try {
     const { message, conversation_id } = req.query;
 
@@ -452,6 +510,27 @@ app.get("/api/chat/stream", async (req: Request, res: Response) => {
       return res.status(400).json({ error: "message cannot be empty" });
     }
 
+    // Security: Sanitize and validate input
+    const sanitizedMessage = validator.escape(message.trim());
+    
+    // Security: Length validation (prevent abuse)
+    if (sanitizedMessage.length > 2000) {
+      return res.status(400).json({ error: "Message too long (max 2000 characters)" });
+    }
+    
+    // Security: Detect prompt injection attempts
+    const suspiciousPatterns = [
+      /ignore.*previous.*instructions?/i,
+      /system.*prompt/i,
+      /<script/i,
+      /javascript:/i,
+    ];
+    
+    if (suspiciousPatterns.some(pattern => pattern.test(message))) {
+      console.warn(`[Security] Suspicious message detected from IP: ${req.ip}`);
+      return res.status(400).json({ error: "Invalid message content" });
+    }
+
     const clientId = uuidv4();
 
     // Register SSE client connection
@@ -465,9 +544,9 @@ app.get("/api/chat/stream", async (req: Request, res: Response) => {
 
     const startTime = Date.now();
 
-    // Stream from Gemini API (gemini-2.0-flash-exp — free tier, fast)
+    // Stream from Gemini API (gemini-2.5-flash — free tier, fast)
     const stream = await genAI.models.generateContentStream({
-      model: "gemini-2.0-flash-exp",
+      model: "gemini-2.5-flash",
       contents: message,
       config: {
         systemInstruction: RESTAURANT_SYSTEM_PROMPT,
@@ -549,7 +628,7 @@ app.post("/api/chat", async (req: Request, res: Response) => {
     console.log(`[Chat REST] Message: "${message.substring(0, 150)}..."`);
 
     const response = await genAI.models.generateContent({
-      model: "gemini-2.0-flash-exp",
+      model: "gemini-2.5-flash",
       contents: message,
       config: {
         systemInstruction: RESTAURANT_SYSTEM_PROMPT,

@@ -3,13 +3,9 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { lazy, Suspense } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import MobileStickyOrder from "@/components/MobileStickyOrder";
-
-// Lazy load ChatBot to reduce initial bundle size
-const ChatBotFloatingButton = lazy(() => import("@/components/ChatBotFloatingButton"));
 import ScrollToTop from "@/components/ScrollToTop";
 import SkipToContent from "@/components/SkipToContent";
 import Home from "@/pages/Home";
@@ -58,10 +54,6 @@ const App = () => (
           <MobileStickyOrder />
           {/* Scroll to top button */}
           <ScrollToTop />
-          {/* Floating ChatBot Button - Lazy loaded to reduce initial bundle */}
-          <Suspense fallback={null}>
-            <ChatBotFloatingButton />
-          </Suspense>
         </div>
       </BrowserRouter>
     </TooltipProvider>

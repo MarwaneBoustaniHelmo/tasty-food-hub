@@ -1,24 +1,8 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 import SEOHead from '@/components/SEOHead';
+import Section from '@/components/Section';
 
 const Support: React.FC = () => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    // Redirect to home with ticket param preserved
-    const params = new URLSearchParams(window.location.search);
-    const ticket = params.get('ticket');
-    
-    if (ticket) {
-      // Redirect to home page, the chatbot will pick up the ticket param
-      navigate(`/?ticket=${ticket}`, { replace: true });
-    } else {
-      // No ticket, just go to home
-      navigate('/', { replace: true });
-    }
-  }, [navigate]);
-
   return (
     <>
       <SEOHead
@@ -26,12 +10,19 @@ const Support: React.FC = () => {
         description="Support client et assistance pour vos commandes Tasty Food à Liège."
         canonical="/support"
       />
-      <div className="container mx-auto px-4 py-20 text-center">
-        <div className="flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-500"></div>
+      <Section className="py-20">
+        <div className="container mx-auto px-4 text-center">
+          <h1 className="text-4xl md:text-5xl font-bebas text-gold mb-6">
+            Support Client
+          </h1>
+          <p className="text-lg text-gray-600 mb-8">
+            Notre système de support sera bientôt disponible.
+          </p>
+          <p className="text-gray-500">
+            En attendant, contactez-nous via la page de contact ou par téléphone.
+          </p>
         </div>
-        <p className="mt-4 text-gray-600">Redirection vers votre conversation...</p>
-      </div>
+      </Section>
     </>
   );
 };

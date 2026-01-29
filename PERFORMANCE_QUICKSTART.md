@@ -13,7 +13,7 @@ The chatbot uses **Google Gemini** instead of Anthropic. Set this for the server
 GEMINI_API_KEY=your_gemini_api_key_here
 ```
 
-Get a free key: [Google AI Studio](https://aistudio.google.com/apikey). Model: `gemini-2.0-flash-exp`.
+Get a free key: [Google AI Studio](https://aistudio.google.com/apikey). Model: `gemini-2.5-flash`.
 
 ---
 

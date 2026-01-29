@@ -1,33 +1,101 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tasty Food - Halal Restaurant</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; background: #1a1a1a; color: #fff; }
-        header { background: #222; padding: 20px; text-align: center; }
-        h1 { color: #ffd700; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        .hero { background: #333; padding: 40px; border-radius: 10px; text-align: center; }
-        .button { display: inline-block; padding: 10px 20px; background: #ffd700; color: #000; text-decoration: none; border-radius: 5px; margin-top: 20px; }
-    </style>
-</head>
-<body>
-    <header>
-        <h1>🍔 TASTY FOOD</h1>
-        <p>Halal Restaurant in Liège, Belgium</p>
-    </header>
-    <main class="container">
-        <div class="hero">
-            <h2>Welcome to Tasty Food</h2>
-            <p>Premium Halal Smash Burgers & Street Food</p>
-            <a href="#" class="button">Order Now</a>
-        </div>
-    </main>
-    <footer style="text-align: center; padding: 20px; border-top: 1px solid #444;">
-        <p>&copy; 2026 Tasty Food - All rights reserved</p>
-    </footer>
-</body>
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
+    
+    <!-- Preload critical fonts for performance -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" as="style" />
+    
+    <!-- Primary Meta Tags -->
+    <title>Tasty Food Liège – Restaurant Halal, Smash Burgers & Street Food</title>
+    <meta name="title" content="Tasty Food Liège – Restaurant Halal, Smash Burgers & Street Food" />
+    <meta name="description" content="Restaurant halal à Liège : smash burgers, loaded fries, tacos. 4 adresses (Seraing, Angleur, Saint-Gilles, Wandre). Livraison Uber Eats, Deliveroo. Ouvert 18h-02h." />
+    <meta name="keywords" content="restaurant halal liège, fast food halal liège, burger halal liège, smash burger liège, street food halal liège, tasty food liège, commander halal liège, livraison halal liège, halal seraing, halal angleur" />
+    <meta name="author" content="Tasty Food Liège" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <link rel="canonical" href="https://tastyfoodliege.be/" />
+    
+    <!-- Geo Tags for Local SEO -->
+    <meta name="geo.region" content="BE-WLG" />
+    <meta name="geo.placename" content="Liège, Belgique" />
+    <meta name="geo.position" content="50.6326;5.5797" />
+    <meta name="ICBM" content="50.6326, 5.5797" />
+    
+    <!-- Language -->
+    <meta http-equiv="content-language" content="fr-BE" />
+    <link rel="alternate" hreflang="fr-be" href="https://tastyfoodliege.be/" />
+    <link rel="alternate" hreflang="x-default" href="https://tastyfoodliege.be/" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="restaurant" />
+    <meta property="og:site_name" content="Tasty Food Liège" />
+    <meta property="og:title" content="Tasty Food Liège – Restaurant Halal, Smash Burgers" />
+    <meta property="og:description" content="Smash burgers halal, loaded fries et street food à Liège. 4 restaurants. Livraison via Uber Eats & Deliveroo. Ouvert 18h-02h." />
+    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content="https://tastyfoodliege.be/" />
+    <meta property="og:locale" content="fr_BE" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@tastyfoodliege" />
+    <meta name="twitter:title" content="Tasty Food Liège – Restaurant Halal, Smash Burgers" />
+    <meta name="twitter:description" content="Smash burgers halal et street food à Liège. Commander sur Uber Eats & Deliveroo." />
+    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico" />
+    
+    <!-- Preconnect for Performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Mobile Theme -->
+    <meta name="theme-color" content="#1a1a1a" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    
+    <!-- Verification (placeholder - replace with actual codes) -->
+    <!-- <meta name="google-site-verification" content="YOUR_GOOGLE_VERIFICATION_CODE" /> -->
+    <!-- <meta name="facebook-domain-verification" content="YOUR_FB_VERIFICATION_CODE" /> -->
+    
+    <!-- Security Meta Tags -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-MN4P7XCJ');</script>
+    <!-- End Google Tag Manager -->
+    
+    <!-- Microsoft Clarity -->
+    <script type="text/javascript">
+      (function(c,l,a,r,i,t,y){
+          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "v734i6il2d");
+    </script>
+    <script type="module" crossorigin src="/assets/js/index-Bx4ggRFO.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/js/react-vendor-DBuZsFvS.js">
+    <link rel="modulepreload" crossorigin href="/assets/js/ui-vendor-I265p5tM.js">
+    <link rel="modulepreload" crossorigin href="/assets/js/query-vendor-BrJ7UIZw.js">
+    <link rel="stylesheet" crossorigin href="/assets/css/index-Om4XxDn1.css">
+  </head>
+
+  <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MN4P7XCJ"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    
+    <div id="root"></div>
+  </body>
 </html>

@@ -22,7 +22,7 @@
     --secondary-foreground: 45 10% 95%;
 
     --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 60%;
+    --muted-foreground: 0 0% 65%;
 
     --accent: 0 80% 55%;
     --accent-foreground: 0 0% 100%;
@@ -34,7 +34,7 @@
     --input: 0 0% 15%;
     --ring: 45 90% 50%;
 
-    --radius: 0.75rem;
+    --radius: 0.875rem;
 
     /* Safari iOS viewport height fix */
     --vh: 1vh;
@@ -52,15 +52,18 @@
     --takeaway: 30 100% 50%;
     --crousty: 28 87% 67%;
     
-    /* Gradients */
+    /* Gradients - Enhanced atmospheric depth */
     --gradient-gold: linear-gradient(135deg, hsl(45 90% 50%), hsl(35 85% 45%));
     --gradient-dark: linear-gradient(180deg, hsl(0 0% 8%) 0%, hsl(0 0% 3%) 100%);
-    --gradient-hero: linear-gradient(180deg, transparent 0%, hsl(0 0% 5% / 0.8) 50%, hsl(0 0% 5%) 100%);
+    --gradient-hero: linear-gradient(180deg, hsl(0 0% 5% / 0.1) 0%, hsl(0 0% 5% / 0.7) 60%, hsl(0 0% 5%) 100%);
+    --gradient-hero-overlay: radial-gradient(ellipse at center, transparent 0%, hsl(0 0% 5% / 0.3) 100%);
     
-    /* Shadows */
-    --shadow-gold: 0 4px 30px hsl(45 90% 50% / 0.15);
-    --shadow-card: 0 10px 40px hsl(0 0% 0% / 0.5);
-    --shadow-cta: 0 6px 25px hsl(0 80% 55% / 0.4);
+    /* Shadows - Layered elevation system */
+    --shadow-gold: 0 4px 30px hsl(45 90% 50% / 0.2), 0 0 60px hsl(45 90% 50% / 0.1);
+    --shadow-card: 0 2px 8px hsl(0 0% 0% / 0.3), 0 8px 24px hsl(0 0% 0% / 0.4);
+    --shadow-card-hover: 0 8px 32px hsl(0 0% 0% / 0.5), 0 16px 64px hsl(0 0% 0% / 0.3), 0 0 0 1px hsl(45 90% 50% / 0.1);
+    --shadow-cta: 0 6px 20px hsl(0 80% 55% / 0.4), 0 12px 40px hsl(0 80% 55% / 0.2);
+    --shadow-cta-hover: 0 8px 30px hsl(0 80% 55% / 0.5), 0 16px 60px hsl(0 80% 55% / 0.3);
   }
 
   .dark {
@@ -79,6 +82,9 @@
     -webkit-tap-highlight-color: transparent;
     /* iOS momentum scrolling */
     -webkit-overflow-scrolling: touch;
+    /* Performance: enable GPU acceleration */
+    transform: translateZ(0);
+    backface-visibility: hidden;
   }
 
   body {
@@ -89,6 +95,10 @@
     /* Prevent text size adjust on orientation change */
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
+    /* Improve font rendering */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -96,11 +106,13 @@
     letter-spacing: 0.02em;
   }
 
-  /* Typography scale - Mobile first */
-  h1 { @apply text-[32px] leading-[1.1] md:text-[48px] lg:text-[56px]; letter-spacing: -0.02em; }
-  h2 { @apply text-[24px] leading-[1.2] md:text-[36px] lg:text-[40px]; letter-spacing: -0.01em; }
-  h3 { @apply text-[20px] leading-[1.3] md:text-[28px]; }
-  h4 { @apply text-[18px] leading-[1.4] md:text-[22px]; }
+  /* Typography scale - Mobile first, premium scaling */
+  h1 { @apply text-[36px] leading-[1.05] md:text-[56px] lg:text-[64px]; letter-spacing: -0.02em; font-weight: 400; }
+  h2 { @apply text-[28px] leading-[1.15] md:text-[40px] lg:text-[44px]; letter-spacing: -0.015em; font-weight: 400; }
+  h3 { @apply text-[22px] leading-[1.25] md:text-[28px] lg:text-[32px]; font-weight: 400; }
+  h4 { @apply text-[18px] leading-[1.35] md:text-[22px] lg:text-[24px]; font-weight: 400; }
+  
+  p { @apply text-[15px] leading-relaxed md:text-[17px]; }
 
   /* Focus visible styles for accessibility */
   :focus-visible {
@@ -111,6 +123,18 @@
   /* Remove default focus for mouse users */
   :focus:not(:focus-visible) {
     outline: none;
+  }
+
+  /* Respect user's motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
@@ -135,28 +159,38 @@
     min-width: 48px;
   }
 
-  /* Primary CTA button - Red */
+  /* Primary CTA button - Red with layered shadow */
   .btn-order {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-base transition-all duration-200;
-    background: hsl(var(--red-cta));
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-base;
+    background: linear-gradient(135deg, hsl(var(--red-cta)) 0%, hsl(0 85% 50%) 100%);
     color: white;
     box-shadow: var(--shadow-cta);
     min-height: 48px;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    will-change: transform;
   }
 
   .btn-order:hover {
-    background: hsl(var(--red-cta-hover));
-    transform: translateY(-2px);
-    box-shadow: 0 8px 30px hsl(0 80% 55% / 0.5);
+    background: linear-gradient(135deg, hsl(var(--red-cta-hover)) 0%, hsl(0 90% 45%) 100%);
+    box-shadow: var(--shadow-cta-hover);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 10px 35px hsl(0 80% 55% / 0.5);
   }
 
   .btn-order:active {
-    transform: scale(0.98);
+    transform: translateY(-1px) scale(0.98);
+    transition-duration: 0.1s;
   }
 
   .btn-order:focus-visible {
     outline: 3px solid hsl(var(--gold));
     outline-offset: 2px;
+  }
+
+  .btn-order:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
   }
 
   /* Mobile sticky order button - Compact */
@@ -166,21 +200,33 @@
     color: white;
     box-shadow: var(--shadow-cta);
     min-height: 40px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .btn-order-mobile:active {
-    transform: scale(0.98);
+    transform: scale(0.95);
     opacity: 0.9;
+  }
+
+  .btn-order-mobile:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 
   /* Full-width mobile platform button - 48px height minimum */
   .mobile-platform-btn {
-    @apply flex items-center gap-3 w-full px-4 py-3 rounded-xl font-medium transition-all duration-200 text-foreground;
+    @apply flex items-center gap-3 w-full px-4 py-3 rounded-xl font-medium text-foreground;
     min-height: 48px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .mobile-platform-btn:hover {
+    transform: translateX(4px);
+    opacity: 0.95;
   }
 
   .mobile-platform-btn:active {
-    transform: scale(0.98);
+    transform: scale(0.97);
     opacity: 0.9;
   }
 
@@ -206,30 +252,35 @@
 
   .btn-platform:hover {
     border-color: hsl(var(--gold));
-    background: hsl(var(--gold) / 0.1);
-    transform: translateY(-2px);
+    background: hsl(var(--gold) / 0.15);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px hsl(0 0% 0% / 0.3);
   }
 
   .btn-platform:active {
-    transform: scale(0.98);
+    transform: translateY(-1px) scale(0.98);
+    transition-duration: 0.1s;
   }
 
   /* Gold accent button */
   .btn-gold {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-200;
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold;
     background: var(--gradient-gold);
     color: hsl(var(--background));
     box-shadow: var(--shadow-gold);
     min-height: 48px;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
   }
 
   .btn-gold:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 35px hsl(45 90% 50% / 0.3);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 10px 40px hsl(45 90% 50% / 0.4);
   }
 
   .btn-gold:active {
-    transform: scale(0.98);
+    transform: translateY(-1px) scale(0.98);
+    transition-duration: 0.1s;
   }
 
   .btn-gold:focus-visible {
@@ -245,18 +296,23 @@
     background-clip: text;
   }
 
-  /* Restaurant card */
+  /* Restaurant card with elevated hover effect */
   .card-restaurant {
-    @apply rounded-2xl overflow-hidden transition-all duration-300;
+    @apply rounded-2xl overflow-hidden;
     background: var(--gradient-dark);
     border: 1px solid hsl(var(--gold) / 0.2);
     box-shadow: var(--shadow-card);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    will-change: transform;
+    /* Performance: CSS containment */
+    contain: layout style paint;
   }
 
   @media (min-width: 768px) {
     .card-restaurant:hover {
-      border-color: hsl(var(--gold) / 0.5);
-      transform: translateY(-4px);
+      border-color: hsl(var(--gold) / 0.6);
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-card-hover);
     }
   }
 

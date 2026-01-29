@@ -1,10 +1,7 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ArrowRight, ExternalLink, Check, MapPin, Clock, Phone } from "lucide-react";
-import heroMain from "@/assets/hero-main.jpg";
-import heroMainMobile from "@/assets/hero-main-mobile.jpg";
-import heroMainTablet from "@/assets/hero-main-tablet.jpg";
-import heroMainDesktop from "@/assets/hero-main-desktop.jpg";
+import heroMain from "@/assets/hero-tastyfood-burgers.jpg";
 import heroBurger from "@/assets/hero-burger.jpg";
 import loadedFries from "@/assets/loaded-fries.jpg";
 import tacos from "@/assets/tacos.jpg";
@@ -12,6 +9,8 @@ import restaurantInterior from "@/assets/restaurant-interior.jpg";
 import OrderBottomSheet from "@/components/OrderBottomSheet";
 import SEOHead from "@/components/SEOHead";
 import LocalBusinessSchema from "@/components/LocalBusinessSchema";
+import { FallingFoodGame } from "@/components/Game/FallingFoodGame";
+import { MonthlyLeaderboard } from "@/components/Game/MonthlyLeaderboard";
 
 const Home = () => {
   const { t } = useTranslation();
@@ -70,65 +69,67 @@ const Home = () => {
       />
       <LocalBusinessSchema isOrganization />
 
-      {/* Hero Section - Mobile optimized: 40vh mobile, 70vh desktop */}
-      <section className="relative min-h-[40vh] md:min-h-[70vh] flex items-end justify-center overflow-hidden pt-24 md:pt-0">
-        {/* Background Image with responsive srcset for optimal performance */}
+      {/* Hero Section - Cinematic with parallax, mobile optimized */}
+      <section className="relative min-h-[45vh] md:min-h-[75vh] flex items-end justify-center overflow-hidden pt-20 md:pt-0">
+        {/* Background Image with parallax effect */}
         <div className="absolute inset-0">
-          <img
-            srcSet={`
-              ${heroMainMobile} 768w,
-              ${heroMainTablet} 1280w,
-              ${heroMainDesktop} 1920w
-            `}
-            sizes="(max-width: 768px) 768px, (max-width: 1280px) 1280px, 1920px"
-            src={heroMain}
-            alt="Smash Burger halal Tasty Food Liège - Burgers variés beef, chicken, bacon"
-            className="w-full h-full object-cover"
-            loading="eager"
-            fetchPriority="high"
-            width={1920}
-            height={1080}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-background/30" />
+          <div className="absolute inset-0 animate-parallax-slow">
+            <img
+              src={heroMain}
+              alt="Assortiment de burgers halal Tasty Food - smash burgers beef, chicken crispy et bacon sur table en bois"
+              className="w-full h-full object-cover scale-105"
+              loading="eager"
+              fetchPriority="high"
+              width={1920}
+              height={1080}
+            />
+          </div>
+          {/* Layered gradient overlay for depth */}
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/65 to-background/20" />
+          <div className="absolute inset-0" style={{ background: 'var(--gradient-hero-overlay)' }} />
+          {/* Ambient gold glow */}
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[120%] h-48 bg-primary/5 blur-3xl" />
         </div>
 
-        {/* Content */}
-        <div className="relative z-10 container px-4 pb-6 md:pb-16 space-y-3 md:space-y-6 text-center">
-          {/* Desktop badge */}
-          <div className="hidden md:block">
-            <span className="inline-block px-4 py-2 rounded-full bg-primary/20 border border-primary/30 text-primary text-sm font-medium mb-4">
+        {/* Content with staggered animations */}
+        <div className="relative z-10 container px-5 md:px-4 pb-8 md:pb-20 space-y-4 md:space-y-7 text-center">
+          {/* Desktop badge - bouncy entrance */}
+          <div className="hidden md:block opacity-0 animate-hero-badge">
+            <span className="inline-block px-5 py-2.5 rounded-full bg-primary/20 backdrop-blur-md border border-primary/40 text-primary text-sm font-semibold tracking-wide shadow-lg hover:bg-primary/30 hover:border-primary/60 hover:shadow-xl transition-all duration-400">
               {t("home.heroBadge")}
             </span>
           </div>
           
-          {/* Title - Mobile: 32px, Desktop: 56px */}
-          <h1 className="font-display text-[32px] md:text-[56px] lg:text-[64px] leading-[1.1]">
-            <span className="text-gradient-gold">{t("home.heroTitle")}</span>
-            <br className="md:hidden" />
-            <span className="text-foreground text-lg md:text-2xl lg:text-3xl block mt-1">
-              {t("home.heroSubtitle")}
-            </span>
-          </h1>
+          {/* Title - Cinematic entrance with delay */}
+          <div className="space-y-3 opacity-0 animate-hero-fade-in" style={{ animationDelay: '0.15s' }}>
+            <h1 className="font-display text-[38px] md:text-[60px] lg:text-[72px] leading-[1.05] tracking-tight">
+              <span className="text-gradient-gold inline-block drop-shadow-2xl">{t("home.heroTitle")}</span>
+              <br className="md:hidden" />
+              <span className="text-foreground/95 text-xl md:text-3xl lg:text-4xl block mt-2 font-body font-medium">
+                {t("home.heroSubtitle")}
+              </span>
+            </h1>
+          </div>
 
-          {/* Subtitle - Short and clear */}
-          <p className="text-muted-foreground text-sm md:text-base max-w-md mx-auto leading-relaxed">
+          {/* Subtitle - Delayed entrance */}
+          <p className="text-muted-foreground/90 text-[15px] md:text-[17px] max-w-lg mx-auto leading-relaxed opacity-0 animate-hero-fade-in" style={{ animationDelay: '0.35s' }}>
             {t("home.heroDescription")}
           </p>
 
-          {/* Mobile Primary CTA - Above the fold */}
-          <div className="md:hidden pt-2">
+          {/* Mobile Primary CTA - Above the fold with delay */}
+          <div className="md:hidden pt-1 opacity-0 animate-hero-fade-in" style={{ animationDelay: '0.5s' }}>
             <OrderBottomSheet>
-              <button className="btn-order w-full text-base py-4 touch-target" aria-label={t("home.orderButton")}>
+              <button className="btn-order w-full text-base py-4 touch-target shadow-2xl" aria-label={t("home.orderButton")}>
                 {t("header.orderNow")}
               </button>
             </OrderBottomSheet>
           </div>
 
-          {/* Desktop CTAs */}
-          <div className="hidden md:flex flex-row gap-4 justify-center items-center pt-4">
-            <Link to="/commander" className="btn-order text-lg px-8 py-4" aria-label={t("home.orderButton")}>
+          {/* Desktop CTAs - Delayed entrance */}
+          <div className="hidden md:flex flex-row gap-5 justify-center items-center pt-6 opacity-0 animate-hero-fade-in" style={{ animationDelay: '0.5s' }}>
+            <Link to="/commander" className="btn-order text-lg px-10 py-4 shadow-2xl" aria-label={t("home.orderButton")}>
               {t("home.orderButton")}
-              <ArrowRight size={20} />
+              <ArrowRight size={20} className="transition-transform duration-300 group-hover:translate-x-1" />
             </Link>
             <Link to="/restaurants" className="btn-gold text-lg px-8 py-4" aria-label={t("home.viewRestaurants")}>
               {t("home.viewRestaurants")}
@@ -137,29 +138,33 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Features Section - Compact on mobile */}
-      <section className="py-6 md:py-12 bg-card border-y border-border" aria-label="Nos engagements qualité">
-        <div className="container px-4">
-          <div className="grid grid-cols-4 gap-2 md:gap-6">
-            {features.map((feature) => (
-              <article key={feature.title} className="text-center p-2 md:p-4">
-                <span className="text-2xl md:text-4xl mb-1 md:mb-2 block" aria-hidden="true">{feature.icon}</span>
-                <h2 className="font-display text-xs md:text-lg text-primary leading-tight">{feature.title}</h2>
-                <p className="text-[10px] md:text-sm text-muted-foreground hidden md:block">{feature.description}</p>
+      {/* Features Section - Mobile optimized with better spacing */}
+      <section className="py-8 md:py-12 bg-gradient-to-b from-card to-background border-y border-border/50" aria-label="Nos engagements qualité">
+        <div className="container px-5 md:px-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+            {features.map((feature, index) => (
+              <article 
+                key={feature.title} 
+                className="text-center p-4 md:p-5 rounded-2xl bg-card/50 backdrop-blur-sm border border-border/30 transition-all duration-400 hover:transform hover:scale-105 hover:border-primary/30 hover:bg-card/80 group"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <span className="text-3xl md:text-4xl mb-2 md:mb-3 block transition-transform duration-400 group-hover:scale-110" aria-hidden="true">{feature.icon}</span>
+                <h2 className="font-display text-sm md:text-lg text-primary leading-tight mb-1 md:mb-2 transition-colors duration-300 group-hover:text-gold">{feature.title}</h2>
+                <p className="text-xs md:text-sm text-muted-foreground/80 leading-snug transition-colors duration-300 group-hover:text-muted-foreground">{feature.description}</p>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      {/* SEO Content Section - Hidden visually but accessible */}
-      <section className="py-8 md:py-16 bg-background">
-        <div className="container px-4">
-          <div className="max-w-3xl mx-auto text-center space-y-4">
-            <h2 className="font-display text-2xl md:text-4xl text-foreground">
+      {/* SEO Content Section */}
+      <section className="py-10 md:py-16 bg-background">
+        <div className="container px-5 md:px-4">
+          <div className="max-w-3xl mx-auto text-center space-y-5 md:space-y-6">
+            <h2 className="font-display text-[28px] md:text-[40px] lg:text-[44px] text-foreground leading-tight">
               {t("home.seoTitle").split("Fast Food Halal")[0]}<span className="text-gradient-gold">Fast Food Halal</span>{t("home.seoTitle").split("Fast Food Halal")[1] || ""}
             </h2>
-            <div className="text-muted-foreground text-sm md:text-base leading-relaxed space-y-3">
+            <div className="text-muted-foreground/90 text-[15px] md:text-[17px] leading-relaxed space-y-4">
               <p>{t("home.seoContent1")}</p>
               <p>{t("home.seoContent2")}</p>
               <p>{t("home.seoContent3")}</p>
@@ -169,31 +174,32 @@ const Home = () => {
       </section>
 
       {/* Quick Order Section */}
-      <section className="py-8 md:py-20" aria-label={t("nav.order")}>
-        <div className="container px-4">
-          <header className="text-center mb-6 md:mb-12">
-            <h2 className="font-display text-2xl md:text-4xl text-gradient-gold mb-2">
+      <section className="py-10 md:py-20 bg-gradient-to-b from-background to-card/30" aria-label={t("nav.order")}>
+        <div className="container px-5 md:px-4">
+          <header className="text-center mb-8 md:mb-12 space-y-3">
+            <h2 className="font-display text-[30px] md:text-[42px] text-gradient-gold drop-shadow-lg">
               {t("home.orderOnline")}
             </h2>
-            <p className="text-muted-foreground text-sm md:text-base max-w-md mx-auto">
+            <p className="text-muted-foreground/90 text-[15px] md:text-[17px] max-w-lg mx-auto leading-relaxed">
               {t("home.chooseRestaurant")}
             </p>
           </header>
 
-          {/* Mobile: Vertical cards */}
-          <div className="space-y-3 md:hidden">
+          {/* Mobile: Vertical cards with enhanced spacing */}
+          <div className="space-y-4 md:hidden">
             {restaurants.map((restaurant) => (
               <article
                 key={restaurant.name}
-                className={`rounded-2xl border p-4 ${
+                className={`rounded-2xl border p-5 shadow-lg transition-all duration-400 hover:shadow-2xl ${
                   restaurant.featured 
-                    ? "bg-gradient-to-br from-primary/15 to-accent/10 border-primary/40" 
-                    : "bg-card border-border"
+                    ? "bg-gradient-to-br from-primary/15 via-primary/10 to-accent/10 border-primary/50 ring-2 ring-primary/30" 
+                    : "bg-card/95 backdrop-blur-sm border-border/50"
                 }`}
               >
-                <h3 className={`font-display text-lg mb-3 flex items-center gap-2 ${restaurant.featured ? "text-gradient-gold" : "text-primary"}`}>
-                  📍 Tasty Food {restaurant.name}
-                  {restaurant.featured && <span className="text-[10px] bg-primary text-primary-foreground px-2 py-0.5 rounded-full">{t("home.top")}</span>}
+                <h3 className={`font-display text-xl mb-4 flex items-center gap-2 leading-tight ${restaurant.featured ? "text-gradient-gold" : "text-primary"}`}>
+                  <span className="text-2xl">📍</span>
+                  <span>Tasty Food {restaurant.name}</span>
+                  {restaurant.featured && <span className="text-[10px] bg-primary text-primary-foreground px-2.5 py-1 rounded-full font-bold">{t("home.top")}</span>}
                 </h3>
                 <div className="space-y-2">
                   {restaurant.platforms.slice(0, 2).map((platform, idx) => (
@@ -264,6 +270,40 @@ const Home = () => {
               {t("home.allOrderOptions")}
               <ArrowRight size={16} />
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Arcade Game Section - New! */}
+      <section className="py-10 md:py-20 bg-gradient-to-b from-card via-background to-card/30" aria-label="Jeu Arcade Tasty Food">
+        <div className="container px-5 md:px-4">
+          <header className="text-center mb-8 md:mb-12 space-y-3">
+            <h2 className="font-display text-[30px] md:text-[42px] text-gradient-gold drop-shadow-lg">
+              🎮 Jouez et Gagnez un Menu Gratuit! 🍔
+            </h2>
+            <p className="text-muted-foreground/90 text-[15px] md:text-[17px] max-w-2xl mx-auto leading-relaxed">
+              Attrapez les bons aliments, évitez les mauvais ! Les 3 meilleurs scores mensuels gagnent un menu complet offert dans n'importe quel restaurant Tasty Food.
+            </p>
+          </header>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 max-w-7xl mx-auto">
+            {/* Game Canvas - Takes 2 columns on desktop */}
+            <div className="lg:col-span-2">
+              <FallingFoodGame />
+            </div>
+
+            {/* Leaderboard - Takes 1 column on desktop */}
+            <div className="lg:col-span-1">
+              <MonthlyLeaderboard />
+            </div>
+          </div>
+
+          {/* Game Info Banner */}
+          <div className="mt-8 p-6 rounded-2xl bg-card border border-gold/20 text-center max-w-2xl mx-auto">
+            <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+              <span className="text-gold font-semibold">Comment ça marche ?</span><br />
+              Jouez autant que vous voulez ! À la fin de chaque mois, nous contactons les 3 meilleurs joueurs pour leur offrir un menu gratuit. Bonne chance ! 🍀
+            </p>
           </div>
         </div>
       </section>

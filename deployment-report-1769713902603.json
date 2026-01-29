@@ -1,0 +1,46 @@
+{
+  "startTime": "2026-01-29T19:11:34.626Z",
+  "steps": [
+    {
+      "timestamp": "8:11:34 PM",
+      "message": "Building Vite project...",
+      "type": "info"
+    },
+    {
+      "timestamp": "8:11:41 PM",
+      "message": "Build warnings: Browserslist: browsers data (caniuse-lite) is 7 months old. Please run:\n  npx update-browserslist-db@latest\n  Why you should do it regularly: https://github.com/browserslist/update-db#readme\n",
+      "type": "warning"
+    },
+    {
+      "timestamp": "8:11:41 PM",
+      "message": "Build completed successfully",
+      "type": "success"
+    },
+    {
+      "timestamp": "8:11:41 PM",
+      "message": "Verifying dist/ folder structure...",
+      "type": "info"
+    },
+    {
+      "timestamp": "8:11:41 PM",
+      "message": "Found 11 files/folders in dist/",
+      "type": "success"
+    },
+    {
+      "timestamp": "8:11:41 PM",
+      "message": "Deploying to FTP server...",
+      "type": "info"
+    },
+    {
+      "timestamp": "8:11:42 PM",
+      "message": "Deployment failed: connect ECONNREFUSED 127.0.0.1:21 (control socket)",
+      "type": "error"
+    }
+  ],
+  "errors": [
+    "connect ECONNREFUSED 127.0.0.1:21 (control socket)"
+  ],
+  "warnings": [
+    "Browserslist: browsers data (caniuse-lite) is 7 months old. Please run:\n  npx update-browserslist-db@latest\n  Why you should do it regularly: https://github.com/browserslist/update-db#readme\n"
+  ]
+}

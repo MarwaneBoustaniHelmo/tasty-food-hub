@@ -8,36 +8,35 @@
  * 
  * Requirements:
  * - Node.js 18+
- * - npm packages: basic-ftp, dotenv, chalk
- * - .env.deploy file with FTP credentials
+ * - npm packages: @samkirkland/ftp-deploy, dotenv
+ * - FTP credentials via environment variables or .env.deploy
  */
 
-import { Client } from 'basic-ftp';
-import { promises as fs } from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { deploy as ftpDeploy } from "@samkirkland/ftp-deploy";
+import dotenv from "dotenv";
 import { exec } from 'child_process';
 import { promisify } from 'util';
-import dotenv from 'dotenv';
-import chalk from 'chalk';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { promises as fs } from 'fs';
 
 const execAsync = promisify(exec);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Load environment variables from .env.deploy
-dotenv.config({ path: path.join(__dirname, '.env.deploy') });
+// Load environment variables from .env.deploy ONLY if FTP_PASSWORD is not already set
+if (!process.env.FTP_PASSWORD) {
+  dotenv.config({ path: path.join(__dirname, '.env.deploy') });
+}
 
-// Configuration
+// Configuration - prioritize environment variables
 const CONFIG = {
-  FTP_HOST: process.env.FTP_HOST || '72.60.93.15',
-  FTP_USER: process.env.FTP_USER || 'u487930812_tastyfood.me',
-  FTP_PASS: process.env.FTP_PASS,
-  FTP_REMOTE_PATH: process.env.FTP_REMOTE_PATH || '/public_html/dist',
+  FTP_HOST: (process.env.FTP_HOST || '72.60.93.15').replace('ftp://', '').replace('ftps://', ''),
+  FTP_USER: process.env.FTP_USER || 'u487930812',
+  FTP_PASS: process.env.FTP_PASSWORD || process.env.FTP_PASS,
+  FTP_REMOTE_PATH: process.env.FTP_REMOTE_PATH || '/public_html',
   DOMAIN: process.env.DOMAIN || 'https://tastyfood.me',
-  LOCAL_DIST: path.join(__dirname, 'dist'),
-  MAX_RETRIES: 3,
-  TIMEOUT: 30000
+  LOCAL_DIST: path.join(__dirname, 'dist')
 };
 
 // Deployment state tracking
@@ -49,13 +48,10 @@ const deploymentLog = {
 };
 
 /**
- * Log deployment step with timestamp
+ * Log deployment step
  */
 function logStep(message, type = 'info') {
-  const timestamp = new Date().toISOString();
-  const logEntry = { timestamp, message, type };
-  deploymentLog.steps.push(logEntry);
-  
+  const timestamp = new Date().toLocaleTimeString();
   const icon = {
     info: '→',
     success: '✓',
@@ -63,14 +59,8 @@ function logStep(message, type = 'info') {
     warning: '⚠'
   }[type];
   
-  const color = {
-    info: chalk.blue,
-    success: chalk.green,
-    error: chalk.red,
-    warning: chalk.yellow
-  }[type];
-  
-  console.log(color(`${icon} [${new Date().toLocaleTimeString()}] ${message}`));
+  deploymentLog.steps.push({ timestamp, message, type });
+  console.log(`${icon} [${timestamp}] ${message}`);
 }
 
 /**
@@ -119,185 +109,10 @@ async function verifyDistFolder() {
       throw new Error(`Missing required files: ${missingFiles.join(', ')}`);
     }
     
-    // Check for nested dist/dist/ error
-    if (files.includes('dist')) {
-      logStep('WARNING: Nested dist/dist/ detected - this will cause issues!', 'warning');
-      deploymentLog.warnings.push('Nested dist folder detected');
-    }
-    
     logStep(`Found ${files.length} files/folders in dist/`, 'success');
     return true;
   } catch (error) {
     logStep(`Dist verification failed: ${error.message}`, 'error');
-    deploymentLog.errors.push(error.message);
-    throw error;
-  }
-}
-
-/**
- * Connect to FTP server with retry logic
- */
-async function connectFTP(client, attempt = 1) {
-  try {
-    logStep(`Connecting to FTP server (attempt ${attempt}/${CONFIG.MAX_RETRIES})...`, 'info');
-    
-    await client.access({
-      host: CONFIG.FTP_HOST,
-      user: CONFIG.FTP_USER,
-      password: CONFIG.FTP_PASS,
-      secure: false,
-      timeout: CONFIG.TIMEOUT
-    });
-    
-    logStep('FTP connection established', 'success');
-    return true;
-  } catch (error) {
-    if (attempt < CONFIG.MAX_RETRIES) {
-      logStep(`Connection failed, retrying in 3s...`, 'warning');
-      await new Promise(resolve => setTimeout(resolve, 3000));
-      return connectFTP(client, attempt + 1);
-    }
-    throw error;
-  }
-}
-
-/**
- * Clear remote directory
- */
-async function clearRemoteDirectory(client) {
-  logStep('Clearing old files from remote directory...', 'info');
-  
-  try {
-    // Try to access remote path
-    try {
-      await client.cd(CONFIG.FTP_REMOTE_PATH);
-    } catch (error) {
-      logStep('Remote dist/ folder does not exist, will be created', 'warning');
-      await client.ensureDir(CONFIG.FTP_REMOTE_PATH);
-      await client.cd(CONFIG.FTP_REMOTE_PATH);
-      logStep('Created remote dist/ folder', 'success');
-      return;
-    }
-    
-    // List and remove files
-    const list = await client.list();
-    let deletedCount = 0;
-    
-    for (const item of list) {
-      try {
-        if (item.isDirectory) {
-          await client.removeDir(item.name);
-        } else {
-          await client.remove(item.name);
-        }
-        deletedCount++;
-      } catch (error) {
-        logStep(`Failed to delete ${item.name}: ${error.message}`, 'warning');
-        deploymentLog.warnings.push(`Failed to delete ${item.name}`);
-      }
-    }
-    
-    logStep(`Cleared ${deletedCount} items from remote directory`, 'success');
-  } catch (error) {
-    logStep(`Error clearing directory: ${error.message}`, 'error');
-    deploymentLog.errors.push(error.message);
-    throw error;
-  }
-}
-
-/**
- * Upload directory recursively
- */
-async function uploadDirectory(client, localPath, remotePath) {
-  const files = await fs.readdir(localPath, { withFileTypes: true });
-  let uploadedCount = 0;
-  
-  for (const file of files) {
-    const localFilePath = path.join(localPath, file.name);
-    const remoteFilePath = remotePath + '/' + file.name;
-    
-    if (file.isDirectory()) {
-      try {
-        await client.ensureDir(remoteFilePath);
-        await client.cd(remoteFilePath);
-        uploadedCount += await uploadDirectory(client, localFilePath, remoteFilePath);
-        await client.cd('..');
-      } catch (error) {
-        logStep(`Failed to upload directory ${file.name}: ${error.message}`, 'warning');
-        deploymentLog.warnings.push(`Failed to upload directory ${file.name}`);
-      }
-    } else {
-      try {
-        await client.uploadFrom(localFilePath, file.name);
-        uploadedCount++;
-        
-        // Log progress for large files
-        const stats = await fs.stat(localFilePath);
-        if (stats.size > 1024 * 1024) { // > 1MB
-          logStep(`Uploaded ${file.name} (${(stats.size / 1024 / 1024).toFixed(2)} MB)`, 'info');
-        }
-      } catch (error) {
-        logStep(`Failed to upload ${file.name}: ${error.message}`, 'warning');
-        deploymentLog.warnings.push(`Failed to upload ${file.name}`);
-      }
-    }
-  }
-  
-  return uploadedCount;
-}
-
-/**
- * Upload all files to remote server
- */
-async function uploadFiles(client) {
-  logStep('Uploading files to remote server...', 'info');
-  
-  try {
-    await client.cd(CONFIG.FTP_REMOTE_PATH);
-    const uploadedCount = await uploadDirectory(client, CONFIG.LOCAL_DIST, '.');
-    logStep(`Successfully uploaded ${uploadedCount} files`, 'success');
-    return uploadedCount;
-  } catch (error) {
-    logStep(`Upload failed: ${error.message}`, 'error');
-    deploymentLog.errors.push(error.message);
-    throw error;
-  }
-}
-
-/**
- * Verify remote structure
- */
-async function verifyRemoteStructure(client) {
-  logStep('Verifying remote file structure...', 'info');
-  
-  try {
-    await client.cd(CONFIG.FTP_REMOTE_PATH);
-    const list = await client.list();
-    
-    const requiredItems = ['index.html', 'assets'];
-    const foundItems = list.map(item => item.name);
-    const missingItems = requiredItems.filter(item => !foundItems.includes(item));
-    
-    if (missingItems.length > 0) {
-      throw new Error(`Missing required items on remote: ${missingItems.join(', ')}`);
-    }
-    
-    // Check assets folder
-    await client.cd('assets');
-    const assetsList = await client.list();
-    const hasJS = assetsList.some(f => f.name.endsWith('.js'));
-    const hasCSS = assetsList.some(f => f.name.endsWith('.css'));
-    
-    if (!hasJS || !hasCSS) {
-      throw new Error('Assets folder missing JS or CSS files');
-    }
-    
-    logStep('Remote structure verified successfully', 'success');
-    logStep(`Assets: ${assetsList.length} files (JS: ${hasJS}, CSS: ${hasCSS})`, 'info');
-    
-    return true;
-  } catch (error) {
-    logStep(`Verification failed: ${error.message}`, 'error');
     deploymentLog.errors.push(error.message);
     throw error;
   }
@@ -310,40 +125,40 @@ function generateReport() {
   const endTime = new Date();
   const duration = ((endTime - deploymentLog.startTime) / 1000).toFixed(2);
   
-  console.log('\n' + chalk.bold('═'.repeat(60)));
-  console.log(chalk.bold.cyan('          DEPLOYMENT REPORT'));
-  console.log(chalk.bold('═'.repeat(60)) + '\n');
+  console.log('\n' + '═'.repeat(60));
+  console.log('          DEPLOYMENT REPORT');
+  console.log('═'.repeat(60) + '\n');
   
-  console.log(chalk.bold('Timeline:'));
+  console.log('Timeline:');
   console.log(`  Start:    ${deploymentLog.startTime.toLocaleString()}`);
   console.log(`  End:      ${endTime.toLocaleString()}`);
   console.log(`  Duration: ${duration}s\n`);
   
-  console.log(chalk.bold('Summary:'));
+  console.log('Summary:');
   console.log(`  Steps:    ${deploymentLog.steps.length}`);
   console.log(`  Errors:   ${deploymentLog.errors.length}`);
   console.log(`  Warnings: ${deploymentLog.warnings.length}\n`);
   
   if (deploymentLog.errors.length > 0) {
-    console.log(chalk.bold.red('Errors:'));
+    console.log('Errors:');
     deploymentLog.errors.forEach(error => {
-      console.log(chalk.red(`  ✗ ${error}`));
+      console.log(`  ✗ ${error}`);
     });
     console.log();
   }
   
   if (deploymentLog.warnings.length > 0) {
-    console.log(chalk.bold.yellow('Warnings:'));
+    console.log('Warnings:');
     deploymentLog.warnings.forEach(warning => {
-      console.log(chalk.yellow(`  ⚠ ${warning}`));
+      console.log(`  ⚠ ${warning}`);
     });
     console.log();
   }
   
-  console.log(chalk.bold('Access your site:'));
-  console.log(chalk.cyan(`  ${CONFIG.DOMAIN}\n`));
+  console.log('Access your site:');
+  console.log(`  ${CONFIG.DOMAIN}\n`);
   
-  console.log(chalk.bold('═'.repeat(60)) + '\n');
+  console.log('═'.repeat(60) + '\n');
   
   // Save report to file
   const reportPath = path.join(__dirname, `deployment-report-${Date.now()}.json`);
@@ -353,21 +168,33 @@ function generateReport() {
 }
 
 /**
- * Main deployment function
+ * Main deployment function using @samkirkland/ftp-deploy
  */
 async function deploy() {
-  console.log(chalk.bold.cyan('\n🚀 Starting deployment to Hostinger...\n'));
+  console.log('\n🚀 Starting deployment to Hostinger...\n');
   
   // Validate credentials
   if (!CONFIG.FTP_PASS) {
-    logStep('FTP password not found in .env.deploy', 'error');
-    console.log(chalk.yellow('\nPlease create .env.deploy file with:'));
-    console.log(chalk.yellow('FTP_PASS=your_ftp_password\n'));
+    logStep('FTP password not found in environment variables', 'error');
+    console.log('\nPlease set FTP_PASSWORD before running deployment:\n');
+    console.log('Linux/Mac/WSL:');
+    console.log('  export FTP_PASSWORD="your_password"');
+    console.log('  npm run deploy:hostinger\n');
+    console.log('Windows PowerShell:');
+    console.log('  $env:FTP_PASSWORD="your_password"');
+    console.log('  npm run deploy:hostinger\n');
+    console.log('Windows CMD:');
+    console.log('  set FTP_PASSWORD=your_password');
+    console.log('  npm run deploy:hostinger\n');
     process.exit(1);
   }
   
-  const client = new Client();
-  client.ftp.verbose = false; // Set to true for debugging
+  // Show connection info (mask password)
+  console.log('Connection Info:');
+  console.log(`  Host: ${CONFIG.FTP_HOST}`);
+  console.log(`  User: ${CONFIG.FTP_USER}`);
+  console.log(`  Pass: ${CONFIG.FTP_PASS ? '***' + CONFIG.FTP_PASS.slice(-4) : 'NOT SET'}`);
+  console.log(`  Path: ${CONFIG.FTP_REMOTE_PATH}\n`);
   
   try {
     // Step 1: Build project
@@ -376,37 +203,40 @@ async function deploy() {
     // Step 2: Verify dist folder
     await verifyDistFolder();
     
-    // Step 3: Connect to FTP
-    await connectFTP(client);
+    // Step 3: Deploy via FTP
+    logStep('Deploying to FTP server...', 'info');
     
-    // Step 4: Clear remote directory
-    await clearRemoteDirectory(client);
+    const ftpConfig = {
+      server: CONFIG.FTP_HOST,      // Changed from 'host' to 'server'
+      username: CONFIG.FTP_USER,    // Changed from 'user' to 'username'
+      password: CONFIG.FTP_PASS,
+      port: 21,
+      "local-dir": CONFIG.LOCAL_DIST + "/",  // Must end with /
+      "server-dir": CONFIG.FTP_REMOTE_PATH + "/",  // Must end with /
+      "dangerous-clean-slate": false,  // Changed from deleteRemote
+    };
     
-    // Step 5: Upload files
-    const uploadedCount = await uploadFiles(client);
-    
-    // Step 6: Verify remote structure
-    await verifyRemoteStructure(client);
+    await ftpDeploy(ftpConfig);
     
     // Success!
-    console.log('\n' + chalk.bold.green('✓ DEPLOYMENT SUCCESSFUL!') + '\n');
-    logStep(`Deployed ${uploadedCount} files to ${CONFIG.DOMAIN}`, 'success');
+    console.log('\n✓ DEPLOYMENT SUCCESSFUL!\n');
+    logStep(`Deployed to ${CONFIG.DOMAIN}`, 'success');
     
   } catch (error) {
-    console.log('\n' + chalk.bold.red('✗ DEPLOYMENT FAILED!') + '\n');
+    console.log('\n✗ DEPLOYMENT FAILED!\n');
     logStep(`Deployment failed: ${error.message}`, 'error');
-    console.log(chalk.red('\nError details:'));
-    console.log(chalk.red(error.stack || error.message));
-    console.log(chalk.yellow('\nSee deploy-manual.md for manual deployment instructions.\n'));
+    console.log('\nError details:');
+    console.log(error.stack || error.message);
+    console.log('\nSee deploy-manual.md for manual deployment instructions.\n');
+    deploymentLog.errors.push(error.message);
     
   } finally {
-    client.close();
     generateReport();
   }
 }
 
 // Run deployment
 deploy().catch(error => {
-  console.error(chalk.red('Fatal error:'), error);
+  console.error('Fatal error:', error);
   process.exit(1);
 });

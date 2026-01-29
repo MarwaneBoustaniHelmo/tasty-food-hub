@@ -15,7 +15,6 @@ const Header = () => {
     { path: "/", labelKey: "nav.home", icon: Home },
     { path: "/restaurants", labelKey: "nav.restaurants", icon: MapPin },
     { path: "/commander", labelKey: "nav.order", icon: ShoppingBag },
-    { path: "/menu", labelKey: "nav.menu", icon: Menu },
     { path: "/concept", labelKey: "nav.concept", icon: Lightbulb },
     { path: "/videos", labelKey: "nav.videos", icon: Video },
     { path: "/contact", labelKey: "nav.contact", icon: Phone },
@@ -25,11 +24,11 @@ const Header = () => {
 
   return (
     <header 
-      className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border safe-area-top"
+      className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-background/90 border-b border-border/50 safe-area-top shadow-lg"
       role="banner"
     >
       {/* Mobile Compact Order Banner */}
-      <div className="md:hidden bg-card/95 backdrop-blur-sm py-2 px-4 flex items-center justify-between gap-2 border-b border-border" role="complementary" aria-label={t("header.orderBanner")}>
+      <div className="md:hidden bg-gradient-to-r from-card/98 to-card/95 backdrop-blur-md py-2 px-4 flex items-center justify-between gap-2 border-b border-border/50 shadow-sm" role="complementary" aria-label={t("header.orderBanner")}>
         <span className="text-xs text-muted-foreground flex-1 truncate">
           {t("header.orderBanner")}
         </span>
@@ -41,8 +40,8 @@ const Header = () => {
       </div>
 
       {/* Desktop Top banner */}
-      <div className="hidden md:block bg-primary/10 py-2 text-center">
-        <p className="text-sm font-medium text-primary">
+      <div className="hidden md:block bg-gradient-to-r from-primary/10 via-primary/15 to-primary/10 py-2.5 text-center shadow-inner">
+        <p className="text-sm font-semibold text-primary tracking-wide">
           {t("header.orderBanner")}
         </p>
       </div>
@@ -50,7 +49,7 @@ const Header = () => {
       <div className="container px-4 flex items-center justify-between h-14 md:h-16">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 group">
-          <span className="font-display text-xl md:text-3xl text-gradient-gold transition-transform duration-300 group-hover:scale-105">
+          <span className="font-display text-2xl md:text-3xl text-gradient-gold transition-all duration-400 ease-out group-hover:scale-110 group-active:scale-105 drop-shadow-lg">
             TASTY FOOD
           </span>
         </Link>
@@ -61,15 +60,17 @@ const Header = () => {
             <Link
               key={link.path}
               to={link.path}
-              className={`font-medium transition-all duration-300 relative py-1 ${
+              className={`font-medium transition-all duration-300 ease-out relative py-1 group ${
                 isActive(link.path)
                   ? "text-primary"
                   : "text-foreground/80 hover:text-primary"
               }`}
             >
               {t(link.labelKey)}
-              {isActive(link.path) && (
-                <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary rounded-full" />
+              {isActive(link.path) ? (
+                <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary rounded-full transition-all duration-300" />
+              ) : (
+                <span className="absolute -bottom-1 left-1/2 right-1/2 h-0.5 bg-primary rounded-full transition-all duration-300 group-hover:left-0 group-hover:right-0 opacity-0 group-hover:opacity-100" />
               )}
             </Link>
           ))}
@@ -99,7 +100,7 @@ const Header = () => {
             </SheetTrigger>
             <SheetContent 
               side="right" 
-              className="w-[85vw] max-w-sm bg-card border-l border-border p-0"
+              className="w-[85vw] max-w-sm bg-gradient-to-br from-card to-background border-l border-primary/20 p-0 shadow-2xl"
             >
               {/* Accessibility: Title and Description for screen readers */}
               <SheetTitle className="sr-only">{t("header.menuTitle")}</SheetTitle>

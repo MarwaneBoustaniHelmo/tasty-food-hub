@@ -77,11 +77,11 @@ const SheetPlatformButton = ({ platform }: { platform: Platform }) => {
       href={platform.href}
       target="_blank"
       rel="noopener noreferrer"
-      className={`mobile-platform-btn ${platform.color}`}
+      className={`mobile-platform-btn ${platform.color} group/link transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]`}
     >
-      <span className="text-xl">{platform.icon}</span>
+      <span className="text-xl transition-transform duration-300 group-hover/link:scale-110">{platform.icon}</span>
       <span className="flex-1 font-semibold">{platform.name}</span>
-      <ExternalLink size={18} className="opacity-70" />
+      <ExternalLink size={18} className="opacity-70 transition-transform duration-300 group-hover/link:translate-x-1" />
     </a>
   );
 };
@@ -99,11 +99,11 @@ const OrderBottomSheet = ({ children }: OrderBottomSheetProps) => {
       <SheetTrigger asChild>
         {children}
       </SheetTrigger>
-      <SheetContent side="bottom" className="h-[85vh] rounded-t-3xl bg-card border-t border-border p-0">
+      <SheetContent side="bottom" className="h-[85vh] rounded-t-3xl bg-card border-t border-border p-0 safe-area-bottom">
         <div className="flex flex-col h-full">
           {/* Handle bar */}
           <div className="flex justify-center pt-3 pb-2">
-            <div className="w-12 h-1.5 rounded-full bg-muted" />
+            <div className="w-12 h-1.5 rounded-full bg-muted transition-colors duration-300 hover:bg-primary/50" />
           </div>
           
           <SheetHeader className="px-6 pb-4 border-b border-border">
@@ -123,36 +123,36 @@ const OrderBottomSheet = ({ children }: OrderBottomSheetProps) => {
           </div>
 
           {/* Scrollable content */}
-          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
+          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 momentum-scroll">
             {orderLocations.map((location) => (
               <div 
                 key={location.name} 
-                className={`rounded-2xl border overflow-hidden transition-all duration-300 ${
+                className={`rounded-2xl border overflow-hidden transition-all duration-300 hover:shadow-lg ${
                   location.featured 
-                    ? "bg-gradient-to-br from-primary/20 to-accent/10 border-primary/40" 
-                    : "bg-secondary/50 border-border"
+                    ? "bg-gradient-to-br from-primary/20 to-accent/10 border-primary/40 hover:border-primary/60" 
+                    : "bg-secondary/50 border-border hover:border-primary/30"
                 }`}
               >
                 {/* Location Header - Clickable */}
                 <button
                   onClick={() => toggleLocation(location.name)}
-                  className="w-full flex items-center justify-between gap-3 p-4 text-left touch-target"
+                  className="w-full flex items-center justify-between gap-3 p-4 text-left touch-target transition-colors duration-200 hover:bg-black/10 active:bg-black/20"
                 >
                   <div className="flex items-center gap-3">
-                    <div className={`p-2 rounded-xl ${location.featured ? "bg-primary/30" : "bg-primary/20"}`}>
-                      <MapPin size={18} className="text-primary" />
+                    <div className={`p-2 rounded-xl transition-all duration-300 ${location.featured ? "bg-primary/30 hover:bg-primary/40" : "bg-primary/20 hover:bg-primary/30"}`}>
+                      <MapPin size={18} className="text-primary transition-transform duration-300 hover:scale-110" />
                     </div>
                     <div>
-                      <h3 className={`font-display text-xl ${location.featured ? "text-gradient-gold" : "text-primary"}`}>
+                      <h3 className={`font-display text-xl transition-colors duration-300 ${location.featured ? "text-gradient-gold" : "text-primary"}`}>
                         {location.name}
                       </h3>
-                      <p className="text-xs text-muted-foreground">{location.address}</p>
+                      <p className="text-xs text-muted-foreground transition-colors duration-300">{location.address}</p>
                     </div>
                   </div>
                   <ChevronDown 
                     size={20} 
-                    className={`text-muted-foreground transition-transform duration-300 ${
-                      expandedLocation === location.name ? "rotate-180" : ""
+                    className={`text-muted-foreground transition-all duration-300 ${
+                      expandedLocation === location.name ? "rotate-180 text-primary" : ""
                     }`}
                   />
                 </button>

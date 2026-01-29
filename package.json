@@ -11,8 +11,8 @@
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
-    "deploy": "node deploy.js",
-    "deploy:ftp": "node deploy-ftp.js",
+    "deploy:hostinger": "node deploy.js",
+    "deploy:old": "node deploy-ftp.js",
     "deploy:manual": "npm run build && echo '✓ Build complete! Now upload dist/ folder via FileZilla. See deploy-manual.md'",
     "refresh:menu": "tsx scripts/refresh-menu.ts",
     "menu:debug": "tsx scripts/refresh-menu.ts"
@@ -90,6 +90,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",
+    "@samkirkland/ftp-deploy": "^1.2.5",
     "@tailwindcss/typography": "^0.5.16",
     "@types/node": "^22.19.7",
     "@types/react": "^18.3.23",

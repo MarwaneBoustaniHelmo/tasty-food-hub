@@ -120,43 +120,43 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-card border-t border-border safe-area-bottom" role="contentinfo">
-      {/* Mobile order reminder */}
-      <div className="md:hidden py-3 px-4 bg-accent/10 border-b border-border text-center">
-        <p className="text-xs text-muted-foreground">
+    <footer className="bg-gradient-to-t from-card to-background border-t border-border/50 safe-area-bottom backdrop-blur-sm" role="contentinfo">
+      {/* Mobile order reminder with gradient */}
+      <div className="md:hidden py-3.5 px-5 bg-gradient-to-r from-accent/10 via-primary/10 to-accent/10 border-b border-border/50 text-center">
+        <p className="text-xs text-muted-foreground/90 font-medium">
           {t("footer.orderReminder")}
         </p>
       </div>
 
-      <div className="container py-8 md:py-12 px-4">
-        {/* Mobile: Simplified single column */}
-        <div className="md:hidden space-y-6">
-          <div className="text-center">
-            <h3 className="font-display text-2xl text-gradient-gold mb-2">TASTY FOOD</h3>
-            <p className="text-xs text-muted-foreground">
+      <div className="container py-10 md:py-14 px-5 md:px-4">
+        {/* Mobile: Enhanced single column */}
+        <div className="md:hidden space-y-7">
+          <div className="text-center space-y-3">
+            <h3 className="font-display text-[28px] text-gradient-gold drop-shadow-lg">TASTY FOOD</h3>
+            <p className="text-sm text-muted-foreground/80 leading-relaxed max-w-xs mx-auto">
               {t("footer.tagline")}
             </p>
           </div>
 
-          {/* Quick links - horizontal on mobile */}
-          <nav className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm" aria-label="Navigation rapide">
-            <Link to="/" className="text-muted-foreground hover:text-primary transition-colors">{t("nav.home")}</Link>
-            <Link to="/restaurants" className="text-muted-foreground hover:text-primary transition-colors">{t("nav.restaurants")}</Link>
-            <Link to="/commander" className="text-muted-foreground hover:text-primary transition-colors">{t("nav.order")}</Link>
-            <Link to="/concept" className="text-muted-foreground hover:text-primary transition-colors">{t("nav.concept")}</Link>
-            <Link to="/videos" className="text-muted-foreground hover:text-primary transition-colors">{t("nav.videos")}</Link>
-            <Link to="/contact" className="text-muted-foreground hover:text-primary transition-colors">{t("nav.contact")}</Link>
+          {/* Quick links - improved mobile grid */}
+          <nav className="grid grid-cols-2 gap-3 text-center max-w-sm mx-auto" aria-label="Navigation rapide">
+            <Link to="/" className="py-2.5 px-3 rounded-xl bg-card/50 border border-border/50 text-sm text-muted-foreground hover:text-primary hover:border-primary/40 hover:bg-primary/5 transition-all duration-300 hover:scale-105">{t("nav.home")}</Link>
+            <Link to="/restaurants" className="py-2.5 px-3 rounded-xl bg-card/50 border border-border/50 text-sm text-muted-foreground hover:text-primary hover:border-primary/40 hover:bg-primary/5 transition-all duration-300 hover:scale-105">{t("nav.restaurants")}</Link>
+            <Link to="/commander" className="py-2.5 px-3 rounded-xl bg-card/50 border border-border/50 text-sm text-muted-foreground hover:text-primary hover:border-primary/40 hover:bg-primary/5 transition-all duration-300 hover:scale-105">{t("nav.order")}</Link>
+            <Link to="/concept" className="py-2.5 px-3 rounded-xl bg-card/50 border border-border/50 text-sm text-muted-foreground hover:text-primary hover:border-primary/40 hover:bg-primary/5 transition-all duration-300 hover:scale-105">{t("nav.concept")}</Link>
+            <Link to="/videos" className="py-2.5 px-3 rounded-xl bg-card/50 border border-border/50 text-sm text-muted-foreground hover:text-primary hover:border-primary/40 hover:bg-primary/5 transition-all duration-300 hover:scale-105">{t("nav.videos")}</Link>
+            <Link to="/contact" className="py-2.5 px-3 rounded-xl bg-card/50 border border-border/50 text-sm text-muted-foreground hover:text-primary hover:border-primary/40 hover:bg-primary/5 transition-all duration-300 hover:scale-105">{t("nav.contact")}</Link>
           </nav>
 
-          {/* Social - 4 icons */}
-          <div className="flex justify-center gap-3">
+          {/* Social - Enhanced 4 icons with premium hover */}
+          <div className="flex justify-center gap-4">
             {socialLinks.map((social) => (
               <a
                 key={social.name}
                 href={social.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`p-3 rounded-full ${social.gradient} touch-target flex items-center justify-center hover:scale-110 transition-transform duration-200`}
+                className={`p-3.5 rounded-full ${social.gradient} shadow-lg hover:shadow-2xl touch-target flex items-center justify-center transition-all duration-400 hover:scale-110 hover:rotate-6 active:scale-95 border border-white/20`}
                 aria-label={t("common.followOn", { platform: social.name })}
               >
                 <span className={social.textColor}>{social.icon}</span>
@@ -164,40 +164,40 @@ const Footer = () => {
             ))}
           </div>
 
-          {/* Snapchat username with copy button */}
-          <div className="flex items-center justify-center gap-2">
-            <p className="text-xs text-muted-foreground">
-              Snapchat: <span className="text-primary font-medium">{SNAP_USERNAME}</span>
+          {/* Snapchat username with enhanced copy button */}
+          <div className="flex items-center justify-center gap-3 p-3 rounded-xl bg-card/50 border border-border/50 backdrop-blur-sm">
+            <p className="text-sm text-muted-foreground/90">
+              Snapchat: <span className="text-primary font-semibold">{SNAP_USERNAME}</span>
             </p>
             <button
               onClick={copySnap}
-              className="flex items-center gap-1 px-2 py-1 text-xs bg-accent/20 rounded-md hover:bg-accent/40 transition-colors text-muted-foreground"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs bg-accent/20 rounded-lg hover:bg-accent/40 transition-all duration-300 text-foreground hover:scale-105 active:scale-95 border border-accent/30 font-medium"
               aria-label={t("footer.copy")}
             >
-              {copied ? <Check size={12} className="text-green-500" /> : <Copy size={12} />}
+              {copied ? <Check size={14} className="text-green-400" /> : <Copy size={14} />}
               {copied ? t("footer.copied") : t("footer.copy")}
             </button>
           </div>
         </div>
 
-        {/* Desktop: Full grid layout */}
-        <div className="hidden md:grid grid-cols-4 gap-8">
+        {/* Desktop: Enhanced grid layout */}
+        <div className="hidden md:grid grid-cols-4 gap-10">
           {/* Brand */}
           <div className="space-y-4">
-            <h3 className="font-display text-2xl text-gradient-gold">TASTY FOOD</h3>
-            <p className="text-muted-foreground text-sm">
+            <h3 className="font-display text-[28px] text-gradient-gold drop-shadow-lg transition-transform duration-300 hover:scale-105 inline-block cursor-pointer">TASTY FOOD</h3>
+            <p className="text-muted-foreground/90 text-[15px] leading-relaxed">
               {t("footer.taglineDesktop")}
             </p>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-sm text-muted-foreground/80 font-medium">
               {t("footer.hours")}
             </p>
           </div>
 
           {/* Quick Links */}
           <div className="space-y-4">
-            <h4 className="font-display text-xl text-primary">{t("footer.navigation")}</h4>
-            <nav className="flex flex-col gap-2" aria-label="Navigation secondaire">
-              <Link to="/" className="text-muted-foreground hover:text-primary transition-colors text-sm">{t("nav.home")}</Link>
+            <h4 className="font-display text-[22px] text-primary">{t("footer.navigation")}</h4>
+            <nav className="flex flex-col gap-2.5" aria-label="Navigation secondaire">
+              <Link to="/" className="text-muted-foreground/90 hover:text-primary transition-all duration-300 text-[15px] hover:translate-x-2 hover:font-semibold">{t("nav.home")}</Link>
               <Link to="/restaurants" className="text-muted-foreground hover:text-primary transition-colors text-sm">{t("nav.restaurants")}</Link>
               <Link to="/commander" className="text-muted-foreground hover:text-primary transition-colors text-sm">{t("nav.order")}</Link>
               <Link to="/concept" className="text-muted-foreground hover:text-primary transition-colors text-sm">{t("nav.concept")}</Link>

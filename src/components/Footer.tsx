@@ -236,15 +236,6 @@ const Footer = () => {
             {/* Quick order links for Seraing */}
             <div className="space-y-2">
               <a
-                href={ORDER_LINKS.seraing.site}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 px-3 py-2 rounded-lg bg-primary/20 hover:bg-primary/30 transition-colors text-sm text-foreground"
-              >
-                <span>🍔</span>
-                <span>Seraing — {t("platforms.officialSite")}</span>
-              </a>
-              <a
                 href={ORDER_LINKS.seraing.uber}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -321,8 +312,17 @@ const Footer = () => {
           <p className="text-xs text-muted-foreground">
             {t("footer.orderOnlyVia")}
           </p>
-          <p className="text-xs text-muted-foreground/50">
-            {t("footer.officialSite")}
+          <p className="text-xs text-muted-foreground">
+            {t("footer.madeBy")}{" "}
+            <a
+              href="https://www.linkedin.com/in/marwane-boustani"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-amber-400 hover:text-amber-300 hover:underline underline-offset-2 transition-colors"
+            >
+              Marwane Boustani
+            </a>
+            .
           </p>
         </div>
       </div>

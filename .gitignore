@@ -15,8 +15,18 @@ dist-ssr
 # Environment variables (SECURITY: Never commit API keys!)
 .env
 .env.*
+.env.local
+.env.production
+.env.staging
 !.env.example
+!.env.example.deploy
 .env.deploy
+
+# FTP deployment state (may contain sensitive info)
+.ftp-deploy-sync-state.json
+
+# Deployment reports (may contain file paths/timestamps)
+deployment-report-*.json
 
 # Editor directories and files
 .vscode/*

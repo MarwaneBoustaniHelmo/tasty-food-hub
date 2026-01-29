@@ -17,7 +17,7 @@ import { restaurantsMenu, croustyLocations, MenuItem } from "@/data/menuData";
 
 const Order = () => {
   // Menu data from database
-  const { categories: dbCategories, loading: menuLoading, error: menuError } = useMenuData();
+  const { categories: dbCategories, loading: menuLoading, fallbackUsed } = useMenuData();
 
   // Geolocation hook
   const {
@@ -195,13 +195,13 @@ const Order = () => {
           </div>
 
           {/* Promotions Banner */}
-          <div className="container px-4">
+          <div className="container px-4 mb-3">
             <div className="max-w-3xl mx-auto">
               <PromotionsBanner restaurantId={selectedRestaurant!} />
             </div>
           </div>
 
-          {/* Category Navigation */}
+          {/* Category Navigation - Tight spacing above */}
           <CategoryNav
             categories={categories}
             activeCategory={activeCategory}
@@ -217,11 +217,6 @@ const Order = () => {
                   {menuLoading ? (
                     <div className="text-center py-12">
                       <p className="text-muted-foreground">Chargement du menu...</p>
-                    </div>
-                  ) : menuError ? (
-                    <div className="text-center py-12">
-                      <p className="text-red-600">Erreur: {menuError}</p>
-                      <p className="text-sm text-muted-foreground mt-2">Menu statique utilisé comme solution de secours.</p>
                     </div>
                   ) : null}
                   {categories.map((category) => (

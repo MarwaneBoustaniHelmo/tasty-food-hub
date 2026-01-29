@@ -60,7 +60,7 @@ export const locations: Location[] = [
     },
     platforms: [
       {
-        name: "Site Officiel",
+        name: "Commander en ligne",
         url: "https://www.tastyfoodseraing-seraing.be",
         type: "website",
       },
@@ -99,7 +99,7 @@ export const locations: Location[] = [
     },
     platforms: [
       {
-        name: "Site Officiel",
+        name: "Commander en ligne",
         url: "https://www.tastyfoodangleur.be",
         type: "website",
       },

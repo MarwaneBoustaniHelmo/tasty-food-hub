@@ -186,7 +186,7 @@ const Contact = () => {
               </p>
               <div className="flex flex-wrap gap-2">
                 <span className="px-3 py-1.5 rounded-full bg-secondary text-primary text-xs font-medium">
-                  Sites officiels
+                  Takeaway
                 </span>
                 <span className="px-3 py-1.5 rounded-full bg-secondary text-primary text-xs font-medium">
                   Uber Eats

@@ -23,7 +23,7 @@ const CategoryNav = ({ categories, activeCategory, onCategoryClick }: CategoryNa
 
   return (
     <nav 
-      className="sticky top-16 md:top-20 z-30 bg-background/95 backdrop-blur-md border-b border-border py-3"
+      className="sticky top-16 md:top-20 z-30 bg-background/95 backdrop-blur-md border-b border-border py-2.5"
       aria-label="Catégories du menu"
     >
       <div 

@@ -131,7 +131,7 @@ export const getPlatformName = (platform: Promotion["platform"]): string => {
     case "takeaway":
       return "Takeaway.com";
     case "website":
-      return "Site officiel";
+      return "Commander en ligne";
     case "all":
       return "Toutes plateformes";
     default:

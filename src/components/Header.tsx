@@ -1,15 +1,35 @@
 import { Link, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Menu, X, Home, MapPin, ShoppingBag, Lightbulb, Video, Phone } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
+import { motion, useScroll, useTransform } from "framer-motion";
 import OrderBottomSheet from "./OrderBottomSheet";
 import LanguageSelector from "./LanguageSelector";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
   const { t } = useTranslation();
+  
+  // Track scroll for header transition
+  const { scrollY } = useScroll();
+  const headerOpacity = useTransform(scrollY, [0, 100], [0.95, 0.98]);
+  const headerShadow = useTransform(
+    scrollY,
+    [0, 100],
+    ['0px 4px 6px rgba(0, 0, 0, 0.1)', '0px 10px 30px rgba(0, 0, 0, 0.3)']
+  );
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const navLinks = [
     { path: "/", labelKey: "nav.home", icon: Home },
@@ -23,8 +43,14 @@ const Header = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <header 
-      className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-background/90 border-b border-border/50 safe-area-top shadow-lg"
+    <motion.header 
+      className={`fixed top-0 left-0 right-0 z-50 border-b border-border/50 safe-area-top transition-all duration-300 ${
+        isScrolled ? 'bg-background/98 backdrop-blur-lg' : 'bg-background/95 backdrop-blur-md'
+      }`}
+      style={{
+        opacity: headerOpacity,
+        boxShadow: headerShadow,
+      }}
       role="banner"
     >
       {/* Mobile Compact Order Banner */}
@@ -46,46 +72,47 @@ const Header = () => {
         </p>
       </div>
 
-      <div className="container px-4 flex items-center justify-between h-14 md:h-16">
-        {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 group">
-          <span className="font-display text-2xl md:text-3xl text-gradient-gold transition-all duration-400 ease-out group-hover:scale-110 group-active:scale-105 drop-shadow-lg">
-            TASTY FOOD
-          </span>
-        </Link>
-
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-6 lg:gap-8" role="navigation" aria-label="Navigation principale">
-          {navLinks.map((link) => (
-            <Link
-              key={link.path}
-              to={link.path}
-              className={`font-medium transition-all duration-300 ease-out relative py-1 group ${
-                isActive(link.path)
-                  ? "text-primary"
-                  : "text-foreground/80 hover:text-primary"
-              }`}
-            >
-              {t(link.labelKey)}
-              {isActive(link.path) ? (
-                <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary rounded-full transition-all duration-300" />
-              ) : (
-                <span className="absolute -bottom-1 left-1/2 right-1/2 h-0.5 bg-primary rounded-full transition-all duration-300 group-hover:left-0 group-hover:right-0 opacity-0 group-hover:opacity-100" />
-              )}
-            </Link>
-          ))}
-        </nav>
-
-        {/* Desktop CTA & Language */}
-        <div className="hidden md:flex items-center gap-3">
-          <LanguageSelector />
-          <Link to="/commander" className="btn-order">
-            {t("nav.order")}
+      <div className="w-full">
+        <div className="container max-w-7xl mx-auto px-4 flex items-center justify-between h-14 md:h-16">
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-2 group shrink-0">
+            <span className="font-display text-2xl md:text-3xl text-gradient-gold transition-all duration-400 ease-out group-hover:scale-110 group-active:scale-105 drop-shadow-lg">
+              TASTY FOOD
+            </span>
           </Link>
-        </div>
 
-        {/* Mobile: Language + Menu */}
-        <div className="flex md:hidden items-center gap-2">
+          {/* Desktop Navigation - Centered flex-grow */}
+          <nav className="hidden md:flex items-center justify-center gap-5 lg:gap-6 flex-1 mx-8" role="navigation" aria-label="Navigation principale">
+            {navLinks.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                className={`font-medium transition-all duration-300 ease-out relative py-1 group whitespace-nowrap ${
+                  isActive(link.path)
+                    ? "text-primary"
+                    : "text-foreground/80 hover:text-primary"
+                }`}
+              >
+                {t(link.labelKey)}
+                {isActive(link.path) ? (
+                  <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary rounded-full transition-all duration-300" />
+                ) : (
+                  <span className="absolute -bottom-1 left-1/2 right-1/2 h-0.5 bg-primary rounded-full transition-all duration-300 group-hover:left-0 group-hover:right-0 opacity-0 group-hover:opacity-100" />
+                )}
+              </Link>
+            ))}
+          </nav>
+
+          {/* Desktop CTA & Language - Right aligned */}
+          <div className="hidden md:flex items-center gap-3 shrink-0">
+            <LanguageSelector />
+            <Link to="/commander" className="btn-order">
+              {t("nav.order")}
+            </Link>
+          </div>
+
+          {/* Mobile: Language + Menu */}
+          <div className="flex md:hidden items-center gap-2">
           <LanguageSelector />
           
           {/* Mobile Menu - Using shadcn Sheet */}
@@ -155,9 +182,10 @@ const Header = () => {
               </div>
             </SheetContent>
           </Sheet>
+          </div>
         </div>
       </div>
-    </header>
+    </motion.header>
   );
 };
 

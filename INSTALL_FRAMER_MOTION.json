@@ -1,0 +1,10 @@
+{
+  "installationNote": "Run the following command to install Framer Motion:",
+  "command": "npm install framer-motion",
+  "version": "^11.0.0",
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "description": "Framer Motion is required for the scroll animation system. All animation components depend on this library."
+}

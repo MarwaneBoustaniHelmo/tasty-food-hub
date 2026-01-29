@@ -23,7 +23,7 @@ const platformConfig = {
     icon: "🍔",
   },
   website: {
-    name: "Site Officiel",
+    name: "Commander en ligne",
     color: "bg-primary",
     icon: "🌐",
   },

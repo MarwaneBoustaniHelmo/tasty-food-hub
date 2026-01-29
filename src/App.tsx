@@ -8,6 +8,8 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import MobileStickyOrder from "@/components/MobileStickyOrder";
 import ScrollToTop from "@/components/ScrollToTop";
+import ScrollProgressBar from "@/components/ScrollProgressBar";
+import BackToTopButton from "@/components/BackToTopButton";
 import SkipToContent from "@/components/SkipToContent";
 import Home from "@/pages/Home";
 
@@ -54,6 +56,9 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        {/* Scroll progress indicator - fixed at top */}
+        <ScrollProgressBar />
+        
         {/* Skip to content link for keyboard accessibility */}
         <SkipToContent />
         <div className="flex flex-col min-h-screen">
@@ -82,6 +87,8 @@ const App = () => (
           <MobileStickyOrder />
           {/* Scroll to top button */}
           <ScrollToTop />
+          {/* Back to top floating button */}
+          <BackToTopButton threshold={400} />
         </div>
       </BrowserRouter>
     </TooltipProvider>

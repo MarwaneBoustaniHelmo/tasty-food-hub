@@ -1,0 +1,184 @@
+# ============================================================================
+# TASTY FOOD - Apache Security Configuration (.htaccess)
+# Deploy to: public_html/.htaccess (Hostinger)
+# ============================================================================
+
+# Enable RewriteEngine
+RewriteEngine On
+
+# ============================================================================
+# 1. HTTPS ENFORCEMENT
+# ============================================================================
+
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+# ============================================================================
+# 2. BLOCK ACCESS TO SENSITIVE FILES
+# ============================================================================
+
+# Block .env files (CRITICAL - prevents API key exposure)
+<FilesMatch "^\.env">
+  Require all denied
+</FilesMatch>
+
+# Block .git directory
+RedirectMatch 404 /\.git
+
+# Block node_modules (should not be deployed but just in case)
+RedirectMatch 404 /node_modules
+
+# Block package files
+<FilesMatch "(package\.json|package-lock\.json|tsconfig\.json|bun\.lockb)$">
+  Require all denied
+</FilesMatch>
+
+# Block deployment files
+<FilesMatch "(deploy.*\.js|\.ftp-deploy-sync-state\.json|deployment-report.*\.json)$">
+  Require all denied
+</FilesMatch>
+
+# Block markdown files (except README if you want it public)
+<FilesMatch "\.(md|MD)$">
+  Require all denied
+</FilesMatch>
+
+# Block SQL files
+<FilesMatch "\.(sql|SQL)$">
+  Require all denied
+</FilesMatch>
+
+# Block server directory (should not be deployed but just in case)
+RedirectMatch 404 /server
+
+# Block source maps in production (optional - comment out if you need them)
+<FilesMatch "\.map$">
+  Require all denied
+</FilesMatch>
+
+# ============================================================================
+# 3. DISABLE DIRECTORY LISTING
+# ============================================================================
+
+Options -Indexes
+
+# ============================================================================
+# 4. SECURITY HEADERS
+# ============================================================================
+
+<IfModule mod_headers.c>
+  # Prevent clickjacking
+  Header always set X-Frame-Options "DENY"
+  
+  # Prevent MIME sniffing
+  Header always set X-Content-Type-Options "nosniff"
+  
+  # XSS Protection (legacy browsers)
+  Header always set X-XSS-Protection "1; mode=block"
+  
+  # Referrer Policy
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  
+  # HSTS (1 year) - Only enable if you're sure HTTPS is working!
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+  
+  # Remove Server header (hide Apache version)
+  Header unset Server
+  Header unset X-Powered-By
+  
+  # Permissions Policy (disable unused features)
+  Header always set Permissions-Policy "geolocation=(self), microphone=(), camera=(), payment=()"
+  
+  # Content Security Policy (adjust as needed for your integrations)
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.clarity.ms https://www.tiktok.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://djvhxspxisxwwcebvsys.supabase.co https://www.google-analytics.com http://localhost:3001 https://api.tastyfood.me; frame-src 'self' https://www.tiktok.com; object-src 'none'; base-uri 'self'; form-action 'self';"
+</IfModule>
+
+# ============================================================================
+# 5. PREVENT PHP EXECUTION (if not needed - shared hosting security)
+# ============================================================================
+
+# Comment this out if you need PHP for other purposes
+<FilesMatch "\.php$">
+  Require all denied
+</FilesMatch>
+
+# ============================================================================
+# 6. CACHE CONTROL (Performance + Security)
+# ============================================================================
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  
+  # Images
+  ExpiresByType image/jpg "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/gif "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType image/avif "access plus 1 year"
+  
+  # CSS and JavaScript
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+  ExpiresByType application/x-javascript "access plus 1 month"
+  
+  # Fonts
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType font/woff "access plus 1 year"
+  ExpiresByType font/ttf "access plus 1 year"
+  ExpiresByType font/otf "access plus 1 year"
+  
+  # HTML (no cache - for SPA routing)
+  ExpiresByType text/html "access plus 0 seconds"
+  
+  # JSON files (menu cache etc.)
+  ExpiresByType application/json "access plus 1 hour"
+</IfModule>
+
+# ============================================================================
+# 7. COMPRESSION (Performance)
+# ============================================================================
+
+<IfModule mod_deflate.c>
+  # Compress HTML, CSS, JavaScript, JSON, XML
+  AddOutputFilterByType DEFLATE text/html
+  AddOutputFilterByType DEFLATE text/css
+  AddOutputFilterByType DEFLATE text/javascript
+  AddOutputFilterByType DEFLATE application/javascript
+  AddOutputFilterByType DEFLATE application/x-javascript
+  AddOutputFilterByType DEFLATE application/json
+  AddOutputFilterByType DEFLATE application/xml
+  AddOutputFilterByType DEFLATE text/xml
+  AddOutputFilterByType DEFLATE text/plain
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# ============================================================================
+# 8. SPA ROUTING (React Router)
+# ============================================================================
+
+# Redirect all routes to index.html (except actual files)
+# This allows React Router to handle all routes client-side
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !^/api/
+RewriteRule ^ /index.html [L]
+
+# ============================================================================
+# 9. PREVENT HOTLINKING (Optional - saves bandwidth)
+# ============================================================================
+
+# Uncomment to prevent other sites from embedding your images
+# RewriteCond %{HTTP_REFERER} !^$
+# RewriteCond %{HTTP_REFERER} !^https?://(www\.)?tastyfood\.me [NC]
+# RewriteCond %{HTTP_REFERER} !^https?://(www\.)?tastyfoodliege\.be [NC]
+# RewriteRule \.(jpg|jpeg|png|gif|webp|avif)$ - [F,L]
+
+# ============================================================================
+# 10. ERROR PAGES (Optional - custom error pages)
+# ============================================================================
+
+# ErrorDocument 404 /index.html
+# ErrorDocument 500 /index.html
+# ErrorDocument 403 /index.html

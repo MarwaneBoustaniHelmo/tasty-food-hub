@@ -25,6 +25,7 @@ export const FallingFoodGame: React.FC = () => {
   const gameLoopRef = useRef<number | null>(null);
   const lastSpawnRef = useRef<number>(0);
   const lastFrameRef = useRef<number>(0);
+  const gameStateRef = useRef<GameState>('idle');
   
   const { t } = useTranslation();
   const { toast } = useToast();
@@ -32,7 +33,7 @@ export const FallingFoodGame: React.FC = () => {
   const [gameState, setGameState] = useState<GameState>('idle');
   const [stats, setStats] = useState<GameStats>({
     score: 0,
-    lives: DEFAULT_CONFIG.startingLives,
+    mistakeCount: 0, // Consecutive bad catches (3 = Game Over)
     level: 1,
     objectsCaught: 0,
     objectsMissed: 0,
@@ -57,10 +58,14 @@ export const FallingFoodGame: React.FC = () => {
   const configRef = useRef({ ...DEFAULT_CONFIG });
   const statsRef = useRef<GameStats>(stats); // Keep ref in sync for game loop access
   
-  // Sync statsRef with stats state
+  // Sync refs with state
   useEffect(() => {
     statsRef.current = stats;
   }, [stats]);
+  
+  useEffect(() => {
+    gameStateRef.current = gameState;
+  }, [gameState]);
   
   // ============================================================================
   // COLLISION DETECTION (AABB)
@@ -111,10 +116,11 @@ export const FallingFoodGame: React.FC = () => {
   }, []);
   
   const startGame = useCallback(() => {
+    console.log('[Game] Starting game...');
     setGameState('playing');
     setStats({
       score: 0,
-      lives: DEFAULT_CONFIG.startingLives,
+      mistakeCount: 0, // Reset consecutive mistakes
       level: 1,
       objectsCaught: 0,
       objectsMissed: 0,
@@ -128,15 +134,15 @@ export const FallingFoodGame: React.FC = () => {
     lastFrameRef.current = Date.now();
     
     toast({
-      title: '🎮 Game Started!',
-      description: 'Catch the good food, avoid the bad!',
+      title: '🎮 ' + t('game.startGame'),
+      description: t('game.rule1'),
     });
-  }, [toast]);
+  }, [toast, t]);
   
   // ============================================================================
   // UPDATE GAME STATE
   // ============================================================================
-  const updateGame = useCallback((deltaTime: number) => {
+  const updateGame = (deltaTime: number) => {
     const player = playerRef.current;
     const input = inputRef.current;
     const config = configRef.current;
@@ -159,7 +165,8 @@ export const FallingFoodGame: React.FC = () => {
     // Update objects
     const newObjects: GameObject[] = [];
     let scoreChange = 0;
-    let livesChange = 0;
+    let mistakeChange = 0;
+    let resetMistakes = false;
     let caught = 0;
     let missed = 0;
     
@@ -168,15 +175,18 @@ export const FallingFoodGame: React.FC = () => {
       
       // Collision detection
       if (checkCollision(obj, player)) {
-        scoreChange += obj.points;
         caught++;
         
         if (obj.type === 'bad') {
-          livesChange -= 1;
-          // Visual feedback for bad catch
-          showFloatingText(obj.x, obj.y, `${obj.points}`, 'red');
+          // Bad object caught: lose points and increment mistake counter
+          scoreChange += obj.points; // Points are negative for bad objects
+          mistakeChange += 1;
+          console.log(`[Game] BAD caught! Points: ${obj.points}, Mistake count increasing`);
         } else {
-          showFloatingText(obj.x, obj.y, `+${obj.points}`, 'green');
+          // Good object caught: gain points and reset mistake counter
+          scoreChange += obj.points;
+          resetMistakes = true;
+          console.log(`[Game] GOOD caught! Points: ${obj.points}, Mistakes reset`);
         }
         
         continue; // Remove caught object
@@ -196,33 +206,39 @@ export const FallingFoodGame: React.FC = () => {
     objectsRef.current = newObjects;
     
     // Update stats
-    setStats((prev) => {
-      const newScore = Math.max(0, prev.score + scoreChange);
-      const newLives = prev.lives + livesChange;
-      const newLevel = Math.floor(newScore / 500) + 1;
-      
-      // Game over if lives depleted
-      if (newLives <= 0) {
-        endGame();
-      }
-      
-      // Update difficulty
-      if (newLevel > prev.level) {
-        configRef.current.initialObjectSpeed += configRef.current.speedIncreaseRate;
-        configRef.current.spawnInterval *= configRef.current.spawnRateIncreaseRate;
-      }
-      
-      return {
-        ...prev,
-        score: newScore,
-        lives: newLives,
-        level: newLevel,
-        objectsCaught: prev.objectsCaught + caught,
-        objectsMissed: prev.objectsMissed + missed,
-        duration: (Date.now() - prev.startTime) / 1000,
-      };
-    });
-  }, [endGame]);
+    if (scoreChange !== 0 || mistakeChange !== 0 || resetMistakes || caught > 0 || missed > 0) {
+      setStats((prev) => {
+        const newScore = Math.max(0, prev.score + scoreChange);
+        const newMistakeCount = resetMistakes ? 0 : Math.min(3, prev.mistakeCount + mistakeChange);
+        const newLevel = Math.floor(newScore / 500) + 1;
+        
+        console.log(`[Game] Score: ${newScore}, Mistakes: ${newMistakeCount}, Level: ${newLevel}`);
+        
+        // Game over if 3 consecutive mistakes
+        if (newMistakeCount >= 3) {
+          console.log('[Game] GAME OVER! 3 consecutive mistakes');
+          setTimeout(() => endGame(), 100);
+        }
+        
+        // Update difficulty
+        if (newLevel > prev.level) {
+          configRef.current.initialObjectSpeed += configRef.current.speedIncreaseRate;
+          configRef.current.spawnInterval *= configRef.current.spawnRateIncreaseRate;
+          console.log(`[Game] LEVEL UP! New level: ${newLevel}`);
+        }
+        
+        return {
+          ...prev,
+          score: newScore,
+          mistakeCount: newMistakeCount,
+          level: newLevel,
+          objectsCaught: prev.objectsCaught + caught,
+          objectsMissed: prev.objectsMissed + missed,
+          duration: (Date.now() - prev.startTime) / 1000,
+        };
+      });
+    }
+  };
   
   // ============================================================================
   // RENDER GAME
@@ -238,9 +254,25 @@ export const FallingFoodGame: React.FC = () => {
     const player = playerRef.current;
     const currentStats = statsRef.current;
     
-    // Clear canvas
+    // Clear canvas with dark background
     ctx.fillStyle = '#1a1a1a';
     ctx.fillRect(0, 0, config.canvasWidth, config.canvasHeight);
+    
+    // Draw grid pattern for visual interest
+    ctx.strokeStyle = '#2a2a2a';
+    ctx.lineWidth = 1;
+    for (let i = 0; i < config.canvasWidth; i += 40) {
+      ctx.beginPath();
+      ctx.moveTo(i, 0);
+      ctx.lineTo(i, config.canvasHeight);
+      ctx.stroke();
+    }
+    for (let j = 0; j < config.canvasHeight; j += 40) {
+      ctx.beginPath();
+      ctx.moveTo(0, j);
+      ctx.lineTo(config.canvasWidth, j);
+      ctx.stroke();
+    }
     
     // Draw objects
     ctx.font = '32px Arial';
@@ -252,6 +284,7 @@ export const FallingFoodGame: React.FC = () => {
     }
     
     // Draw player
+    ctx.font = '36px Arial';
     ctx.fillText(player.emoji, player.x + player.width / 2, player.y + player.height / 2);
     
     // Draw HUD
@@ -259,15 +292,22 @@ export const FallingFoodGame: React.FC = () => {
     ctx.fillStyle = '#fbbf24';
     ctx.textAlign = 'left';
     ctx.fillText(`${t('game.score')}: ${currentStats.score}`, 10, 30);
-    ctx.fillText(`${t('game.lives')}: ${'❤️'.repeat(Math.max(0, currentStats.lives))}`, 10, 60);
+    
+    // Show mistakes with visual indicator (0-2 safe, 3 = Game Over)
+    const mistakeEmojis = '❌'.repeat(currentStats.mistakeCount) + '✓'.repeat(Math.max(0, 3 - currentStats.mistakeCount));
+    ctx.fillText(`${t('game.mistakes')}: ${mistakeEmojis}`, 10, 60);
+    
     ctx.fillText(`${t('game.level')}: ${currentStats.level}`, config.canvasWidth - 120, 30);
   };
   
   // ============================================================================
   // GAME LOOP
   // ============================================================================
-  const gameLoop = useCallback((timestamp: number) => {
-    if (gameState !== 'playing') return;
+  const gameLoop = (timestamp: number) => {
+    // Check if still playing
+    if (gameStateRef.current !== 'playing') {
+      return;
+    }
     
     const deltaTime = timestamp - lastFrameRef.current;
     lastFrameRef.current = timestamp;
@@ -284,7 +324,7 @@ export const FallingFoodGame: React.FC = () => {
     
     // Continue loop
     gameLoopRef.current = requestAnimationFrame(gameLoop);
-  }, [gameState, updateGame]);
+  };
   
   // ============================================================================
   // FLOATING TEXT EFFECT
@@ -383,18 +423,27 @@ export const FallingFoodGame: React.FC = () => {
     inputRef.current.touchX = null;
   };
   
-  // Start game loop
+  // Start game loop when playing
   useEffect(() => {
     if (gameState === 'playing') {
+      console.log('[Game] Starting game loop...');
+      lastFrameRef.current = Date.now();
       gameLoopRef.current = requestAnimationFrame(gameLoop);
     }
     
     return () => {
       if (gameLoopRef.current) {
+        console.log('[Game] Stopping game loop');
         cancelAnimationFrame(gameLoopRef.current);
+        gameLoopRef.current = null;
       }
     };
-  }, [gameState, gameLoop]);
+  }, [gameState]);
+  
+  // Initial canvas render
+  useEffect(() => {
+    renderGame();
+  }, []);
   
   // ============================================================================
   // RENDER UI

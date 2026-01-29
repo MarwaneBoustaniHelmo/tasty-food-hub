@@ -29,7 +29,7 @@ export interface Player {
 
 export interface GameStats {
   score: number;
-  lives: number;
+  mistakeCount: number; // Consecutive bad catches (0-2 safe, 3 = Game Over)
   level: number;
   objectsCaught: number;
   objectsMissed: number;
@@ -74,13 +74,13 @@ export const BAD_OBJECTS = [
 ] as const;
 
 export const DEFAULT_CONFIG: GameConfig = {
-  canvasWidth: 360,  // Reduced for mobile-first (fits 360px phones with padding)
-  canvasHeight: 500, // Reduced height for better mobile viewport fit
+  canvasWidth: 360,  // Mobile-first (fits 360px phones with padding)
+  canvasHeight: 500,
   playerSpeed: 8,
   initialObjectSpeed: 2,
   spawnInterval: 1200, // 1.2 seconds
   maxObjects: 15,
-  startingLives: 3,
+  startingLives: 3, // Not used anymore - using mistakeCount instead
   speedIncreaseRate: 0.3,
   spawnRateIncreaseRate: 0.9, // Multiplier (reduces interval)
 };

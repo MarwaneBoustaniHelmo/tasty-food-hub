@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import { ArrowRight, ExternalLink, Check, MapPin, Clock, Phone } from "lucide-react";
 import heroMain from "@/assets/hero-tastyfood-burgers.jpg";
 import heroBurger from "@/assets/hero-burger.jpg";
@@ -7,20 +10,59 @@ import loadedFries from "@/assets/loaded-fries.jpg";
 import tacos from "@/assets/tacos.jpg";
 import restaurantInterior from "@/assets/restaurant-interior.jpg";
 import OrderBottomSheet from "@/components/OrderBottomSheet";
+import GeolocationBanner from "@/components/order/GeolocationBanner";
 import SEOHead from "@/components/SEOHead";
 import LocalBusinessSchema from "@/components/LocalBusinessSchema";
-import { FallingFoodGame } from "@/components/Game/FallingFoodGame";
+import SnakeGame from "@/components/Game/SnakeGame";
 import { MonthlyLeaderboard } from "@/components/Game/MonthlyLeaderboard";
+import { useGeolocation } from "@/hooks/useGeolocation";
+import { 
+  RevealOnScroll, 
+  StaggerChildren, 
+  StaggerItem,
+  ParallaxSection,
+  FloatingElement 
+} from "@/components/animations";
+import { MOTION_VARIANTS } from "@/lib/animations";
 
 const Home = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  
+  // Geolocation hook
+  const {
+    loading: geoLoading,
+    error: geoError,
+    nearestRestaurant,
+    distances,
+    permissionDenied,
+    requestLocation,
+    clearLocation
+  } = useGeolocation();
+  
+  // State for geolocation banner
+  const [showGeoBanner, setShowGeoBanner] = useState(true);
+
+  // Handle restaurant selection from geolocation
+  const handleSelectRestaurant = useCallback((restaurantId: string) => {
+    // Save to localStorage
+    localStorage.setItem("tasty-preferred-restaurant", restaurantId);
+    // Navigate to order page
+    navigate("/commander");
+  }, [navigate]);
+
+  // Dismiss geolocation banner
+  const handleDismissGeo = useCallback(() => {
+    setShowGeoBanner(false);
+    clearLocation();
+  }, [clearLocation]);
   
   const restaurants = [
     {
       name: "Seraing",
       featured: true,
       platforms: [
-        { label: t("platforms.officialSite"), icon: "🌐", href: "https://www.tastyfoodseraing-seraing.be", color: "bg-primary" },
+
         { label: t("platforms.uberEats"), icon: "🛵", href: "https://www.ubereats.com/be/store/tasty-food-seraing/NpA7eB6mS6mam_TwsTcigg", color: "bg-[#06C167]" },
         { label: t("platforms.deliveroo"), icon: "🚴", href: "https://deliveroo.be/fr/menu/Liege/jemeppe-sur-meuse/tasty-food-seraing", color: "bg-[#00CCBC]" },
       ],
@@ -29,7 +71,7 @@ const Home = () => {
       name: "Angleur",
       featured: false,
       platforms: [
-        { label: t("platforms.officialSite"), icon: "🌐", href: "https://www.tastyfoodangleur.be", color: "bg-primary" },
+
         { label: t("platforms.uberEats"), icon: "🛵", href: "https://www.ubereats.com/be-en/store/tasty-food-angleur/uObTfxymWn2x53kZNuo8NQ", color: "bg-[#06C167]" },
         { label: t("platforms.deliveroo"), icon: "🚴", href: "https://deliveroo.fr/fr/menu/Liege/liege-angleur/tasty-food-angleur", color: "bg-[#00CCBC]" },
       ],
@@ -72,36 +114,44 @@ const Home = () => {
       {/* Hero Section - Cinematic with parallax, mobile optimized */}
       <section className="relative min-h-[50vh] sm:min-h-[55vh] md:min-h-[75vh] flex items-end justify-center overflow-hidden">
         {/* Background Image with parallax effect */}
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 animate-parallax-slow">
-            <img
-              src={heroMain}
-              alt="Assortiment de burgers halal Tasty Food - smash burgers beef, chicken crispy et bacon sur table en bois"
-              className="w-full h-full object-cover scale-105"
-              loading="eager"
-              fetchPriority="high"
-              width={1920}
-              height={1080}
-            />
-          </div>
-          {/* Layered gradient overlay for depth */}
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/65 to-background/20" />
-          <div className="absolute inset-0" style={{ background: 'var(--gradient-hero-overlay)' }} />
-          {/* Ambient gold glow */}
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[120%] h-48 bg-primary/5 blur-3xl" />
-        </div>
+        <ParallaxSection speed={0.5} scale className="absolute inset-0">
+          <img
+            src={heroMain}
+            alt="Assortiment de burgers halal Tasty Food - smash burgers beef, chicken crispy et bacon sur table en bois"
+            className="w-full h-full object-cover object-[center_35%] sm:object-[center_30%] md:object-[center_25%]"
+            loading="eager"
+            fetchPriority="high"
+            width={1920}
+            height={1080}
+          />
+        </ParallaxSection>
+        {/* Layered gradient overlay for depth */}
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/65 to-background/20" />
+        <div className="absolute inset-0" style={{ background: 'var(--gradient-hero-overlay)' }} />
+        {/* Ambient gold glow */}
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[120%] h-48 bg-primary/5 blur-3xl" />
 
         {/* Content with staggered animations */}
         <div className="relative z-10 container px-4 sm:px-5 md:px-4 pb-6 sm:pb-8 md:pb-20 space-y-3 sm:space-y-4 md:space-y-7 text-center">
           {/* Desktop badge - bouncy entrance */}
-          <div className="hidden md:block opacity-0 animate-hero-badge">
+          <motion.div
+            className="hidden md:block"
+            initial={{ opacity: 0, scale: 0.8, y: -20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1, ease: [0.25, 0.1, 0.25, 1] }}
+          >
             <span className="inline-block px-5 py-2.5 rounded-full bg-primary/20 backdrop-blur-md border border-primary/40 text-primary text-sm font-semibold tracking-wide shadow-lg hover:bg-primary/30 hover:border-primary/60 hover:shadow-xl transition-all duration-400">
               {t("home.heroBadge")}
             </span>
-          </div>
+          </motion.div>
           
           {/* Title - Cinematic entrance with delay */}
-          <div className="space-y-2 sm:space-y-3 opacity-0 animate-hero-fade-in" style={{ animationDelay: '0.15s' }}>
+          <motion.div 
+            className="space-y-2 sm:space-y-3"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+          >
             <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-tight tracking-tight">
               <span className="text-gradient-gold inline-block drop-shadow-2xl">{t("home.heroTitle")}</span>
               <br className="md:hidden" />
@@ -109,131 +159,195 @@ const Home = () => {
                 {t("home.heroSubtitle")}
               </span>
             </h1>
-          </div>
-
-          {/* Subtitle - Delayed entrance */}
+          </motion.div>          {/* Subtitle - Delayed entrance */}
           <p className="text-muted-foreground/90 text-sm sm:text-base md:text-lg max-w-lg mx-auto leading-relaxed opacity-0 animate-hero-fade-in px-2" style={{ animationDelay: '0.35s' }}>
             {t("home.heroDescription")}
           </p>
 
-          {/* Mobile Primary CTA - Above the fold with delay */}
-          <div className="md:hidden pt-2 opacity-0 animate-hero-fade-in" style={{ animationDelay: '0.5s' }}>
-            <OrderBottomSheet>
-              <button className="btn-order w-full text-base py-4 touch-target shadow-2xl" aria-label={t("home.orderButton")}>
-                {t("header.orderNow")}
-              </button>
-            </OrderBottomSheet>
+          {/* CTAs - Mobile: Single button, Desktop: Two buttons side-by-side */}
+          <div className="pt-2 md:pt-6 opacity-0 animate-hero-fade-in" style={{ animationDelay: '0.5s' }}>
+            {/* Mobile CTA */}
+            <div className="md:hidden">
+              <OrderBottomSheet>
+                <button className="btn-order w-full text-base py-4 touch-target shadow-2xl" aria-label={t("home.orderButton")}>
+                  {t("header.orderNow")}
+                </button>
+              </OrderBottomSheet>
+            </div>
+            
+            {/* Desktop CTAs - Two buttons */}
+            <div className="hidden md:flex flex-row gap-5 justify-center items-center">
+              <Link to="/commander" className="btn-order text-lg px-10 py-4 shadow-2xl" aria-label={t("home.orderButton")}>
+                {t("home.orderButton")}
+                <ArrowRight size={20} className="transition-transform duration-300 group-hover:translate-x-1" />
+              </Link>
+              <Link to="/restaurants" className="btn-gold text-lg px-8 py-4" aria-label={t("home.viewRestaurants")}>
+                {t("home.viewRestaurants")}
+              </Link>
+            </div>
           </div>
 
-          {/* Desktop CTAs - Delayed entrance */}
-          <div className="hidden md:flex flex-row gap-5 justify-center items-center pt-6 opacity-0 animate-hero-fade-in" style={{ animationDelay: '0.5s' }}>
-            <Link to="/commander" className="btn-order text-lg px-10 py-4 shadow-2xl" aria-label={t("home.orderButton")}>
-              {t("home.orderButton")}
-              <ArrowRight size={20} className="transition-transform duration-300 group-hover:translate-x-1" />
-            </Link>
-            <Link to="/restaurants" className="btn-gold text-lg px-8 py-4" aria-label={t("home.viewRestaurants")}>
-              {t("home.viewRestaurants")}
-            </Link>
-          </div>
+          {/* Geolocation Banner - Single instance below CTAs (all screen sizes) */}
+          {showGeoBanner && (
+            <div className="opacity-0 animate-hero-fade-in pt-4 md:pt-6" style={{ animationDelay: '0.7s' }}>
+              <GeolocationBanner
+                loading={geoLoading}
+                error={geoError}
+                nearestRestaurant={nearestRestaurant}
+                distances={distances}
+                permissionDenied={permissionDenied}
+                onRequestLocation={requestLocation}
+                onSelectRestaurant={handleSelectRestaurant}
+                onDismiss={handleDismissGeo}
+              />
+            </div>
+          )}
         </div>
       </section>
 
       {/* Arcade Game Section - In Hero Area */}
-      <section className="py-8 sm:py-10 md:py-20 bg-gradient-to-b from-card via-background to-card/30" aria-label={t("game.sectionTitle")}>
-        <div className="container px-4 sm:px-5 md:px-4">
-          <header className="text-center mb-6 sm:mb-8 md:mb-12 space-y-2 sm:space-y-3">
-            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl text-gradient-gold drop-shadow-lg">
-              {t("game.sectionTitle")}
-            </h2>
-            <p className="text-muted-foreground/90 text-sm sm:text-base md:text-lg max-w-2xl mx-auto leading-relaxed px-2">
-              {t("game.sectionSubtitle")}
-            </p>
-          </header>
+      <RevealOnScroll direction="up" className="py-8 sm:py-10 md:py-20 bg-gradient-to-b from-card via-background to-card/30">
+        <section aria-label={t("game.sectionTitle")}>
+          <div className="container px-4 sm:px-5 md:px-4">
+            <header className="text-center mb-6 sm:mb-8 md:mb-12 space-y-2 sm:space-y-3">
+              <motion.h2 
+                className="font-display text-3xl sm:text-4xl md:text-5xl text-gradient-gold drop-shadow-lg"
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+              >
+                {t("game.sectionTitle")}
+              </motion.h2>
+              <RevealOnScroll direction="up" delay={0.2}>
+                <p className="text-muted-foreground/90 text-sm sm:text-base md:text-lg max-w-2xl mx-auto leading-relaxed px-2">
+                  {t("game.sectionSubtitle")}
+                </p>
+              </RevealOnScroll>
+            </header>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-7xl mx-auto">
-            {/* Game Canvas - Takes 2 columns on desktop */}
-            <div className="lg:col-span-2">
-              <FallingFoodGame />
-            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-7xl mx-auto">
+              {/* Game Canvas - Takes 2 columns on desktop */}
+              <RevealOnScroll direction="left" delay={0.1} className="lg:col-span-2">
+                <SnakeGame />
+              </RevealOnScroll>
 
-            {/* Leaderboard - Takes 1 column on desktop */}
-            <div className="lg:col-span-1">
-              <MonthlyLeaderboard />
+              {/* Leaderboard - Takes 1 column on desktop */}
+              <RevealOnScroll direction="right" delay={0.3} className="lg:col-span-1">
+                <MonthlyLeaderboard />
+              </RevealOnScroll>
             </div>
-          </div>
 
           {/* Game Info Banner */}
-          <div className="mt-6 sm:mt-8 p-4 sm:p-6 rounded-2xl bg-card border border-gold/20 text-center max-w-2xl mx-auto">
-            <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-              <span className="text-gold font-semibold">{t("game.howItWorks")}</span><br />
-              {t("game.howItWorksText")}
-            </p>
+          <RevealOnScroll direction="up" delay={0.4}>
+            <div className="mt-6 sm:mt-8 p-4 sm:p-6 rounded-2xl bg-card border border-gold/20 text-center max-w-2xl mx-auto">
+              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+                <span className="text-gold font-semibold">{t("game.howItWorks")}</span><br />
+                {t("game.howItWorksText")}
+              </p>
+            </div>
+          </RevealOnScroll>
           </div>
-        </div>
-      </section>
+        </section>
+      </RevealOnScroll>
 
-      {/* Features Section - Mobile optimized with better spacing */}
+      {/* Features Section - Mobile optimized with staggered entrance */}
       <section className="py-6 sm:py-8 md:py-12 bg-gradient-to-b from-card to-background border-y border-border/50" aria-label="Nos engagements qualité">
         <div className="container px-4 sm:px-5 md:px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
-            {features.map((feature, index) => (
-              <article 
-                key={feature.title} 
-                className="text-center p-3 sm:p-4 md:p-5 rounded-xl sm:rounded-2xl bg-card/50 backdrop-blur-sm border border-border/30 transition-all duration-400 hover:transform hover:scale-105 hover:border-primary/30 hover:bg-card/80 group"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <span className="text-3xl sm:text-4xl md:text-5xl mb-2 sm:mb-3 block transition-transform duration-400 group-hover:scale-110" aria-hidden="true">{feature.icon}</span>
-                <h2 className="font-display text-sm sm:text-base md:text-lg text-primary leading-tight mb-1 sm:mb-2 transition-colors duration-300 group-hover:text-gold">{feature.title}</h2>
-                <p className="text-xs sm:text-sm text-muted-foreground/80 leading-snug transition-colors duration-300 group-hover:text-muted-foreground">{feature.description}</p>
-              </article>
+          <StaggerChildren staggerDelay={0.1} className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+            {features.map((feature) => (
+              <StaggerItem key={feature.title}>
+                <motion.article 
+                  className="text-center p-3 sm:p-4 md:p-5 rounded-xl sm:rounded-2xl bg-card/50 backdrop-blur-sm border border-border/30"
+                  whileHover={{ 
+                    scale: 1.05, 
+                    borderColor: 'rgba(251, 191, 36, 0.3)',
+                    backgroundColor: 'rgba(var(--card), 0.8)',
+                    transition: { duration: 0.3 }
+                  }}
+                >
+                  <motion.span 
+                    className="text-3xl sm:text-4xl md:text-5xl mb-2 sm:mb-3 block" 
+                    aria-hidden="true"
+                    whileHover={{ scale: 1.2, rotate: [0, -10, 10, 0] }}
+                    transition={{ duration: 0.4 }}
+                  >
+                    {feature.icon}
+                  </motion.span>
+                  <h2 className="font-display text-sm sm:text-base md:text-lg text-primary leading-tight mb-1 sm:mb-2 transition-colors duration-300 hover:text-gold">
+                    {feature.title}
+                  </h2>
+                  <p className="text-xs sm:text-sm text-muted-foreground/80 leading-snug">
+                    {feature.description}
+                  </p>
+                </motion.article>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerChildren>
         </div>
       </section>
 
       {/* SEO Content Section */}
-      <section className="py-8 sm:py-10 md:py-16 bg-background">
-        <div className="container px-4 sm:px-5 md:px-4">
-          <div className="max-w-3xl mx-auto text-center space-y-4 sm:space-y-5 md:space-y-6">
-            <h2 className="font-display text-[28px] md:text-[40px] lg:text-[44px] text-foreground leading-tight">
-              {t("home.seoTitle").split("Fast Food Halal")[0]}<span className="text-gradient-gold">Fast Food Halal</span>{t("home.seoTitle").split("Fast Food Halal")[1] || ""}
-            </h2>
-            <div className="text-muted-foreground/90 text-[15px] md:text-[17px] leading-relaxed space-y-4">
-              <p>{t("home.seoContent1")}</p>
-              <p>{t("home.seoContent2")}</p>
-              <p>{t("home.seoContent3")}</p>
+      <RevealOnScroll direction="up" className="py-8 sm:py-10 md:py-16 bg-background">
+        <section>
+          <div className="container px-4 sm:px-5 md:px-4">
+            <div className="max-w-3xl mx-auto text-center space-y-4 sm:space-y-5 md:space-y-6">
+              <motion.h2 
+                className="font-display text-[28px] md:text-[40px] lg:text-[44px] text-foreground leading-tight"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.5 }}
+                transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+              >
+                {t("home.seoTitle").split("Fast Food Halal")[0]}<span className="text-gradient-gold">Fast Food Halal</span>{t("home.seoTitle").split("Fast Food Halal")[1] || ""}
+              </motion.h2>
+              <div className="text-muted-foreground/90 text-[15px] md:text-[17px] leading-relaxed space-y-4">
+                <RevealOnScroll direction="up" delay={0.1}><p>{t("home.seoContent1")}</p></RevealOnScroll>
+                <RevealOnScroll direction="up" delay={0.2}><p>{t("home.seoContent2")}</p></RevealOnScroll>
+                <RevealOnScroll direction="up" delay={0.3}><p>{t("home.seoContent3")}</p></RevealOnScroll>
             </div>
           </div>
-        </div>
-      </section>
+          </div>
+        </section>
+      </RevealOnScroll>
 
       {/* Quick Order Section */}
-      <section className="py-8 sm:py-10 md:py-20 bg-gradient-to-b from-background to-card/30" aria-label={t("nav.order")}>
-        <div className="container px-4 sm:px-5 md:px-4">
-          <header className="text-center mb-6 sm:mb-8 md:mb-12 space-y-2 sm:space-y-3">
-            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl text-gradient-gold drop-shadow-lg">
-              {t("home.orderOnline")}
-            </h2>
-            <p className="text-muted-foreground/90 text-sm sm:text-base md:text-lg max-w-lg mx-auto leading-relaxed px-2">
-              {t("home.chooseRestaurant")}
-            </p>
-          </header>
-
-          {/* Mobile: Vertical cards with enhanced spacing */}
-          <div className="space-y-3 sm:space-y-4 md:hidden">
-            {restaurants.map((restaurant) => (
-              <article
-                key={restaurant.name}
-                className={`rounded-xl sm:rounded-2xl border p-4 sm:p-5 shadow-lg transition-all duration-400 hover:shadow-2xl ${
-                  restaurant.featured 
-                    ? "bg-gradient-to-br from-primary/15 via-primary/10 to-accent/10 border-primary/50 ring-2 ring-primary/30" 
-                    : "bg-card/95 backdrop-blur-sm border-border/50"
-                }`}
+      <RevealOnScroll direction="up" className="py-8 sm:py-10 md:py-20 bg-gradient-to-b from-background to-card/30">
+        <section aria-label={t("nav.order")}>
+          <div className="container px-4 sm:px-5 md:px-4">
+            <header className="text-center mb-6 sm:mb-8 md:mb-12 space-y-2 sm:space-y-3">
+              <motion.h2 
+                className="font-display text-3xl sm:text-4xl md:text-5xl text-gradient-gold drop-shadow-lg"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.5 }}
+                transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
               >
+                {t("home.orderOnline")}
+              </motion.h2>
+              <RevealOnScroll direction="up" delay={0.1}>
+                <p className="text-muted-foreground/90 text-sm sm:text-base md:text-lg max-w-lg mx-auto leading-relaxed px-2">
+                  {t("home.chooseRestaurant")}
+                </p>
+              </RevealOnScroll>
+            </header>
+
+            {/* Mobile: Vertical cards with enhanced spacing */}
+            <StaggerChildren staggerDelay={0.15} className="space-y-3 sm:space-y-4 md:hidden">
+              {restaurants.map((restaurant) => (
+                <StaggerItem key={restaurant.name}>
+                  <motion.article
+                    className={`rounded-xl sm:rounded-2xl border p-4 sm:p-5 shadow-lg ${
+                      restaurant.featured 
+                        ? "bg-gradient-to-br from-primary/15 via-primary/10 to-accent/10 border-primary/50 ring-2 ring-primary/30" 
+                        : "bg-card/95 backdrop-blur-sm border-border/50"
+                    }`}
+                    whileHover={{ scale: 1.02, y: -4 }}
+                    transition={{ duration: 0.3 }}
+                  >
                 <h3 className={`font-display text-xl mb-4 flex items-center gap-2 leading-tight ${restaurant.featured ? "text-gradient-gold" : "text-primary"}`}>
                   <span className="text-2xl">📍</span>
                   <span>Tasty Food {restaurant.name}</span>
-                  {restaurant.featured && <span className="text-[10px] bg-primary text-primary-foreground px-2.5 py-1 rounded-full font-bold">{t("home.top")}</span>}
                 </h3>
                 <div className="space-y-2">
                   {restaurant.platforms.slice(0, 2).map((platform, idx) => (
@@ -259,9 +373,10 @@ const Home = () => {
                     </Link>
                   )}
                 </div>
-              </article>
+              </motion.article>
+                </StaggerItem>
             ))}
-          </div>
+            </StaggerChildren>
 
           {/* Desktop: Grid layout */}
           <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
@@ -272,11 +387,6 @@ const Home = () => {
                   restaurant.featured ? "ring-2 ring-primary/50" : ""
                 }`}
               >
-                {restaurant.featured && (
-                  <span className="inline-block px-3 py-1 rounded-full bg-primary text-primary-foreground text-xs font-bold">
-                    {t("home.featured")}
-                  </span>
-                )}
                 <h3 className="font-display text-2xl text-primary">
                   {restaurant.name}
                 </h3>
@@ -307,6 +417,7 @@ const Home = () => {
           </div>
         </div>
       </section>
+      </RevealOnScroll>
 
       {/* Menu Preview - 2 columns mobile */}
       <section className="py-6 sm:py-8 md:py-20 bg-card" aria-label={t("home.specialties")}>
@@ -381,7 +492,7 @@ const Home = () => {
               <Phone className="w-7 h-7 sm:w-8 sm:h-8 text-primary mx-auto mb-2 sm:mb-3" aria-hidden="true" />
               <h3 className="font-display text-base sm:text-lg text-primary mb-1.5 sm:mb-2">{t("home.delivery")}</h3>
               <p className="text-muted-foreground text-xs sm:text-sm">
-                Uber Eats • Deliveroo<br />Takeaway • {t("platforms.officialSite")}
+                Uber Eats • Deliveroo<br />Takeaway
               </p>
             </article>
           </div>

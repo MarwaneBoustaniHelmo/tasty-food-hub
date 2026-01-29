@@ -22,7 +22,8 @@ const Restaurants = () => {
       featured: true,
       geo: { latitude: 50.6167, longitude: 5.5000 },
       platforms: [
-        { name: "Site Officiel", icon: "🌐", href: "https://www.tastyfoodseraing-seraing.be", color: "bg-primary" },
+        { name: "Takeaway.com", icon: "🍔", href: "https://www.takeaway.com/be/menu/tasty-food-seraing", color: "bg-[#FF8000]" },
+        { name: "Commander en ligne", icon: "🌐", href: "https://www.tastyfoodseraing-seraing.be", color: "bg-primary" },
         { name: "Uber Eats – Tasty Food", icon: "🛵", href: "https://www.ubereats.com/be/store/tasty-food-seraing/NpA7eB6mS6mam_TwsTcigg", color: "bg-[#06C167]" },
         { name: "Uber Eats – Crousty by Tasty", icon: "🍗", href: "https://www.ubereats.com/be/store/crousty-by-tasty-seraing/33RMV2JdXTm0Q5b64r7-Hw", color: "bg-[#06C167]" },
         { name: "Deliveroo", icon: "🚴", href: "https://deliveroo.be/fr/menu/Liege/jemeppe-sur-meuse/tasty-food-seraing", color: "bg-[#00CCBC]" },
@@ -44,7 +45,8 @@ const Restaurants = () => {
       featured: false,
       geo: { latitude: 50.6119, longitude: 5.6003 },
       platforms: [
-        { name: "Site Officiel", icon: "🌐", href: "https://www.tastyfoodangleur.be", color: "bg-primary" },
+        { name: "Takeaway.com", icon: "🍔", href: "https://www.takeaway.com/be/menu/tasty-food-angleur", color: "bg-[#FF8000]" },
+        { name: "Commander en ligne", icon: "🌐", href: "https://www.tastyfoodangleur.be", color: "bg-primary" },
         { name: "Uber Eats – Tasty Food", icon: "🛵", href: "https://www.ubereats.com/be-en/store/tasty-food-angleur/uObTfxymWn2x53kZNuo8NQ", color: "bg-[#06C167]" },
         { name: "Uber Eats – Crousty by Tasty", icon: "🍗", href: "https://www.ubereats.com/be-en/store/crousty-by-tasty-angleur/XXAamr3eU2mAD46r4vscdg", color: "bg-[#06C167]" },
         { name: "Deliveroo", icon: "🚴", href: "https://deliveroo.fr/fr/menu/Liege/liege-angleur/tasty-food-angleur", color: "bg-[#00CCBC]" },
@@ -237,7 +239,7 @@ const Restaurants = () => {
               👉 Commandez vos burgers halal exclusivement via nos plateformes partenaires officielles
             </p>
             <div className="flex flex-wrap justify-center gap-2 mb-4">
-              <span className="px-3 py-1.5 rounded-full bg-secondary text-primary text-xs font-medium">Sites officiels</span>
+              <span className="px-3 py-1.5 rounded-full bg-secondary text-primary text-xs font-medium">Takeaway</span>
               <span className="px-3 py-1.5 rounded-full bg-secondary text-primary text-xs font-medium">Uber Eats</span>
               <span className="px-3 py-1.5 rounded-full bg-secondary text-primary text-xs font-medium">Deliveroo</span>
               <span className="px-3 py-1.5 rounded-full bg-secondary text-primary text-xs font-medium">Takeaway</span>

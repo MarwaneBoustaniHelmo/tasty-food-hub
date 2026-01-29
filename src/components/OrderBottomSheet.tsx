@@ -39,7 +39,8 @@ const orderLocations: OrderLocation[] = [
     address: "100 Rue Vaudrée, 4031 Angleur",
     featured: false,
     platforms: [
-      { name: "Site Officiel", icon: "🌐", href: "https://www.tastyfoodangleur.be/", color: "bg-primary" },
+      { name: "Takeaway.com", icon: "🍔", href: "https://www.takeaway.com/be/menu/tasty-food-angleur", color: "bg-[#FF8000]" },
+      { name: "Commander en ligne", icon: "🌐", href: "https://www.tastyfoodangleur.be/", color: "bg-primary" },
       { name: "Uber Eats", icon: "🛵", href: "https://www.ubereats.com/be/store/tasty-food-angleur/uObTfxymWn2x53kZNuo8NQ", color: "bg-[#06C167]" },
       { name: "Deliveroo", icon: "🚴", href: "https://deliveroo.fr/en/menu/Liege/liege-angleur/tasty-food-angleur", color: "bg-[#00CCBC]" },
       { name: "Takeaway.com", icon: "🍔", href: "https://www.takeaway.com/be/menu/tasty-food-angleur", color: "bg-[#FF8000]" },

@@ -74,8 +74,8 @@ export const BAD_OBJECTS = [
 ] as const;
 
 export const DEFAULT_CONFIG: GameConfig = {
-  canvasWidth: 400,
-  canvasHeight: 600,
+  canvasWidth: 360,  // Reduced for mobile-first (fits 360px phones with padding)
+  canvasHeight: 500, // Reduced height for better mobile viewport fit
   playerSpeed: 8,
   initialObjectSpeed: 2,
   spawnInterval: 1200, // 1.2 seconds

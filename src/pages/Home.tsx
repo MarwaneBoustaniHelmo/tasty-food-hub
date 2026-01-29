@@ -70,7 +70,7 @@ const Home = () => {
       <LocalBusinessSchema isOrganization />
 
       {/* Hero Section - Cinematic with parallax, mobile optimized */}
-      <section className="relative min-h-[45vh] md:min-h-[75vh] flex items-end justify-center overflow-hidden pt-20 md:pt-0">
+      <section className="relative min-h-[50vh] sm:min-h-[55vh] md:min-h-[75vh] flex items-end justify-center overflow-hidden pt-16 sm:pt-20 md:pt-0">
         {/* Background Image with parallax effect */}
         <div className="absolute inset-0">
           <div className="absolute inset-0 animate-parallax-slow">
@@ -92,7 +92,7 @@ const Home = () => {
         </div>
 
         {/* Content with staggered animations */}
-        <div className="relative z-10 container px-5 md:px-4 pb-8 md:pb-20 space-y-4 md:space-y-7 text-center">
+        <div className="relative z-10 container px-4 sm:px-5 md:px-4 pb-6 sm:pb-8 md:pb-20 space-y-3 sm:space-y-4 md:space-y-7 text-center">
           {/* Desktop badge - bouncy entrance */}
           <div className="hidden md:block opacity-0 animate-hero-badge">
             <span className="inline-block px-5 py-2.5 rounded-full bg-primary/20 backdrop-blur-md border border-primary/40 text-primary text-sm font-semibold tracking-wide shadow-lg hover:bg-primary/30 hover:border-primary/60 hover:shadow-xl transition-all duration-400">
@@ -101,23 +101,23 @@ const Home = () => {
           </div>
           
           {/* Title - Cinematic entrance with delay */}
-          <div className="space-y-3 opacity-0 animate-hero-fade-in" style={{ animationDelay: '0.15s' }}>
-            <h1 className="font-display text-[38px] md:text-[60px] lg:text-[72px] leading-[1.05] tracking-tight">
+          <div className="space-y-2 sm:space-y-3 opacity-0 animate-hero-fade-in" style={{ animationDelay: '0.15s' }}>
+            <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-tight tracking-tight">
               <span className="text-gradient-gold inline-block drop-shadow-2xl">{t("home.heroTitle")}</span>
               <br className="md:hidden" />
-              <span className="text-foreground/95 text-xl md:text-3xl lg:text-4xl block mt-2 font-body font-medium">
+              <span className="text-foreground/95 text-lg sm:text-xl md:text-3xl lg:text-4xl block mt-1 sm:mt-2 font-body font-medium">
                 {t("home.heroSubtitle")}
               </span>
             </h1>
           </div>
 
           {/* Subtitle - Delayed entrance */}
-          <p className="text-muted-foreground/90 text-[15px] md:text-[17px] max-w-lg mx-auto leading-relaxed opacity-0 animate-hero-fade-in" style={{ animationDelay: '0.35s' }}>
+          <p className="text-muted-foreground/90 text-sm sm:text-base md:text-lg max-w-lg mx-auto leading-relaxed opacity-0 animate-hero-fade-in px-2" style={{ animationDelay: '0.35s' }}>
             {t("home.heroDescription")}
           </p>
 
           {/* Mobile Primary CTA - Above the fold with delay */}
-          <div className="md:hidden pt-1 opacity-0 animate-hero-fade-in" style={{ animationDelay: '0.5s' }}>
+          <div className="md:hidden pt-2 opacity-0 animate-hero-fade-in" style={{ animationDelay: '0.5s' }}>
             <OrderBottomSheet>
               <button className="btn-order w-full text-base py-4 touch-target shadow-2xl" aria-label={t("home.orderButton")}>
                 {t("header.orderNow")}
@@ -138,19 +138,53 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Arcade Game Section - In Hero Area */}
+      <section className="py-8 sm:py-10 md:py-20 bg-gradient-to-b from-card via-background to-card/30" aria-label={t("game.sectionTitle")}>
+        <div className="container px-4 sm:px-5 md:px-4">
+          <header className="text-center mb-6 sm:mb-8 md:mb-12 space-y-2 sm:space-y-3">
+            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl text-gradient-gold drop-shadow-lg">
+              {t("game.sectionTitle")}
+            </h2>
+            <p className="text-muted-foreground/90 text-sm sm:text-base md:text-lg max-w-2xl mx-auto leading-relaxed px-2">
+              {t("game.sectionSubtitle")}
+            </p>
+          </header>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-7xl mx-auto">
+            {/* Game Canvas - Takes 2 columns on desktop */}
+            <div className="lg:col-span-2">
+              <FallingFoodGame />
+            </div>
+
+            {/* Leaderboard - Takes 1 column on desktop */}
+            <div className="lg:col-span-1">
+              <MonthlyLeaderboard />
+            </div>
+          </div>
+
+          {/* Game Info Banner */}
+          <div className="mt-6 sm:mt-8 p-4 sm:p-6 rounded-2xl bg-card border border-gold/20 text-center max-w-2xl mx-auto">
+            <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+              <span className="text-gold font-semibold">{t("game.howItWorks")}</span><br />
+              {t("game.howItWorksText")}
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Features Section - Mobile optimized with better spacing */}
-      <section className="py-8 md:py-12 bg-gradient-to-b from-card to-background border-y border-border/50" aria-label="Nos engagements qualité">
-        <div className="container px-5 md:px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+      <section className="py-6 sm:py-8 md:py-12 bg-gradient-to-b from-card to-background border-y border-border/50" aria-label="Nos engagements qualité">
+        <div className="container px-4 sm:px-5 md:px-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
             {features.map((feature, index) => (
               <article 
                 key={feature.title} 
-                className="text-center p-4 md:p-5 rounded-2xl bg-card/50 backdrop-blur-sm border border-border/30 transition-all duration-400 hover:transform hover:scale-105 hover:border-primary/30 hover:bg-card/80 group"
+                className="text-center p-3 sm:p-4 md:p-5 rounded-xl sm:rounded-2xl bg-card/50 backdrop-blur-sm border border-border/30 transition-all duration-400 hover:transform hover:scale-105 hover:border-primary/30 hover:bg-card/80 group"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
-                <span className="text-3xl md:text-4xl mb-2 md:mb-3 block transition-transform duration-400 group-hover:scale-110" aria-hidden="true">{feature.icon}</span>
-                <h2 className="font-display text-sm md:text-lg text-primary leading-tight mb-1 md:mb-2 transition-colors duration-300 group-hover:text-gold">{feature.title}</h2>
-                <p className="text-xs md:text-sm text-muted-foreground/80 leading-snug transition-colors duration-300 group-hover:text-muted-foreground">{feature.description}</p>
+                <span className="text-3xl sm:text-4xl md:text-5xl mb-2 sm:mb-3 block transition-transform duration-400 group-hover:scale-110" aria-hidden="true">{feature.icon}</span>
+                <h2 className="font-display text-sm sm:text-base md:text-lg text-primary leading-tight mb-1 sm:mb-2 transition-colors duration-300 group-hover:text-gold">{feature.title}</h2>
+                <p className="text-xs sm:text-sm text-muted-foreground/80 leading-snug transition-colors duration-300 group-hover:text-muted-foreground">{feature.description}</p>
               </article>
             ))}
           </div>
@@ -158,9 +192,9 @@ const Home = () => {
       </section>
 
       {/* SEO Content Section */}
-      <section className="py-10 md:py-16 bg-background">
-        <div className="container px-5 md:px-4">
-          <div className="max-w-3xl mx-auto text-center space-y-5 md:space-y-6">
+      <section className="py-8 sm:py-10 md:py-16 bg-background">
+        <div className="container px-4 sm:px-5 md:px-4">
+          <div className="max-w-3xl mx-auto text-center space-y-4 sm:space-y-5 md:space-y-6">
             <h2 className="font-display text-[28px] md:text-[40px] lg:text-[44px] text-foreground leading-tight">
               {t("home.seoTitle").split("Fast Food Halal")[0]}<span className="text-gradient-gold">Fast Food Halal</span>{t("home.seoTitle").split("Fast Food Halal")[1] || ""}
             </h2>
@@ -174,23 +208,23 @@ const Home = () => {
       </section>
 
       {/* Quick Order Section */}
-      <section className="py-10 md:py-20 bg-gradient-to-b from-background to-card/30" aria-label={t("nav.order")}>
-        <div className="container px-5 md:px-4">
-          <header className="text-center mb-8 md:mb-12 space-y-3">
-            <h2 className="font-display text-[30px] md:text-[42px] text-gradient-gold drop-shadow-lg">
+      <section className="py-8 sm:py-10 md:py-20 bg-gradient-to-b from-background to-card/30" aria-label={t("nav.order")}>
+        <div className="container px-4 sm:px-5 md:px-4">
+          <header className="text-center mb-6 sm:mb-8 md:mb-12 space-y-2 sm:space-y-3">
+            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl text-gradient-gold drop-shadow-lg">
               {t("home.orderOnline")}
             </h2>
-            <p className="text-muted-foreground/90 text-[15px] md:text-[17px] max-w-lg mx-auto leading-relaxed">
+            <p className="text-muted-foreground/90 text-sm sm:text-base md:text-lg max-w-lg mx-auto leading-relaxed px-2">
               {t("home.chooseRestaurant")}
             </p>
           </header>
 
           {/* Mobile: Vertical cards with enhanced spacing */}
-          <div className="space-y-4 md:hidden">
+          <div className="space-y-3 sm:space-y-4 md:hidden">
             {restaurants.map((restaurant) => (
               <article
                 key={restaurant.name}
-                className={`rounded-2xl border p-5 shadow-lg transition-all duration-400 hover:shadow-2xl ${
+                className={`rounded-xl sm:rounded-2xl border p-4 sm:p-5 shadow-lg transition-all duration-400 hover:shadow-2xl ${
                   restaurant.featured 
                     ? "bg-gradient-to-br from-primary/15 via-primary/10 to-accent/10 border-primary/50 ring-2 ring-primary/30" 
                     : "bg-card/95 backdrop-blur-sm border-border/50"
@@ -274,59 +308,25 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Arcade Game Section - New! */}
-      <section className="py-10 md:py-20 bg-gradient-to-b from-card via-background to-card/30" aria-label="Jeu Arcade Tasty Food">
-        <div className="container px-5 md:px-4">
-          <header className="text-center mb-8 md:mb-12 space-y-3">
-            <h2 className="font-display text-[30px] md:text-[42px] text-gradient-gold drop-shadow-lg">
-              🎮 Jouez et Gagnez un Menu Gratuit! 🍔
-            </h2>
-            <p className="text-muted-foreground/90 text-[15px] md:text-[17px] max-w-2xl mx-auto leading-relaxed">
-              Attrapez les bons aliments, évitez les mauvais ! Les 3 meilleurs scores mensuels gagnent un menu complet offert dans n'importe quel restaurant Tasty Food.
-            </p>
-          </header>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 max-w-7xl mx-auto">
-            {/* Game Canvas - Takes 2 columns on desktop */}
-            <div className="lg:col-span-2">
-              <FallingFoodGame />
-            </div>
-
-            {/* Leaderboard - Takes 1 column on desktop */}
-            <div className="lg:col-span-1">
-              <MonthlyLeaderboard />
-            </div>
-          </div>
-
-          {/* Game Info Banner */}
-          <div className="mt-8 p-6 rounded-2xl bg-card border border-gold/20 text-center max-w-2xl mx-auto">
-            <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
-              <span className="text-gold font-semibold">Comment ça marche ?</span><br />
-              Jouez autant que vous voulez ! À la fin de chaque mois, nous contactons les 3 meilleurs joueurs pour leur offrir un menu gratuit. Bonne chance ! 🍀
-            </p>
-          </div>
-        </div>
-      </section>
-
       {/* Menu Preview - 2 columns mobile */}
-      <section className="py-8 md:py-20 bg-card" aria-label={t("home.specialties")}>
-        <div className="container px-4">
-          <header className="text-center mb-6 md:mb-12">
-            <h2 className="font-display text-2xl md:text-4xl text-foreground mb-2">
+      <section className="py-6 sm:py-8 md:py-20 bg-card" aria-label={t("home.specialties")}>
+        <div className="container px-4 sm:px-5 md:px-4">
+          <header className="text-center mb-4 sm:mb-6 md:mb-12">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl text-foreground mb-2">
               {t("home.specialties").split(" ")[0]} <span className="text-gradient-gold">{t("home.specialties").split(" ").slice(1).join(" ")}</span>
             </h2>
-            <p className="text-muted-foreground text-sm md:text-base">
+            <p className="text-muted-foreground text-xs sm:text-sm md:text-base px-2">
               {t("home.specialtiesSubtitle")}
             </p>
           </header>
 
-          <div className="grid grid-cols-3 gap-2 md:gap-6">
+          <div className="grid grid-cols-3 gap-2 sm:gap-3 md:gap-6">
             {[
               { img: heroBurger, title: t("home.smashBurgers"), alt: "Smash burger halal Tasty Food Liège" },
               { img: loadedFries, title: t("home.loadedFries"), alt: "Loaded fries halal - Frites garnies Tasty Food" },
               { img: tacos, title: t("home.texMex"), alt: "Tacos halal et spécialités tex-mex Liège" },
             ].map((item) => (
-              <article key={item.title} className="card-restaurant group overflow-hidden">
+              <article key={item.title} className="card-restaurant group overflow-hidden p-0">
                 <div className="relative aspect-square md:aspect-[4/5] overflow-hidden">
                   <img
                     src={item.img}
@@ -337,8 +337,8 @@ const Home = () => {
                     height={500}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-card via-card/30 to-transparent" />
-                  <div className="absolute bottom-2 md:bottom-4 left-2 md:left-4 right-2">
-                    <h3 className="font-display text-xs md:text-xl text-gradient-gold leading-tight">
+                  <div className="absolute bottom-1.5 sm:bottom-2 md:bottom-4 left-1.5 sm:left-2 md:left-4 right-1.5 sm:right-2">
+                    <h3 className="font-display text-[10px] sm:text-xs md:text-xl text-gradient-gold leading-tight">
                       {item.title}
                     </h3>
                   </div>
@@ -350,37 +350,37 @@ const Home = () => {
       </section>
 
       {/* Local Info Section - Important for Local SEO */}
-      <section className="py-8 md:py-16 bg-background" aria-label={t("home.practicalInfo")}>
-        <div className="container px-4">
-          <header className="text-center mb-6 md:mb-10">
-            <h2 className="font-display text-2xl md:text-4xl text-foreground mb-2">
+      <section className="py-6 sm:py-8 md:py-16 bg-background" aria-label={t("home.practicalInfo")}>
+        <div className="container px-4 sm:px-5 md:px-4">
+          <header className="text-center mb-4 sm:mb-6 md:mb-10">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl text-foreground mb-2">
               <span className="text-gradient-gold">{t("home.practicalInfo")}</span>
             </h2>
           </header>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 max-w-4xl mx-auto">
             {/* Hours */}
-            <article className="p-4 md:p-6 rounded-2xl bg-card border border-border text-center">
-              <Clock className="w-8 h-8 text-primary mx-auto mb-3" aria-hidden="true" />
-              <h3 className="font-display text-lg text-primary mb-2">{t("home.hours")}</h3>
-              <p className="text-foreground font-medium">{t("home.hoursValue")}</p>
-              <p className="text-muted-foreground text-sm">{t("home.daysOpen")}</p>
+            <article className="p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl bg-card border border-border text-center">
+              <Clock className="w-7 h-7 sm:w-8 sm:h-8 text-primary mx-auto mb-2 sm:mb-3" aria-hidden="true" />
+              <h3 className="font-display text-base sm:text-lg text-primary mb-1.5 sm:mb-2">{t("home.hours")}</h3>
+              <p className="text-foreground font-medium text-sm sm:text-base">{t("home.hoursValue")}</p>
+              <p className="text-muted-foreground text-xs sm:text-sm">{t("home.daysOpen")}</p>
             </article>
 
             {/* Locations */}
-            <article className="p-4 md:p-6 rounded-2xl bg-card border border-border text-center">
-              <MapPin className="w-8 h-8 text-primary mx-auto mb-3" aria-hidden="true" />
-              <h3 className="font-display text-lg text-primary mb-2">{t("home.addresses")}</h3>
-              <p className="text-muted-foreground text-sm">
+            <article className="p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl bg-card border border-border text-center">
+              <MapPin className="w-7 h-7 sm:w-8 sm:h-8 text-primary mx-auto mb-2 sm:mb-3" aria-hidden="true" />
+              <h3 className="font-display text-base sm:text-lg text-primary mb-1.5 sm:mb-2">{t("home.addresses")}</h3>
+              <p className="text-muted-foreground text-xs sm:text-sm">
                 Seraing • Angleur<br />Saint-Gilles • Wandre
               </p>
             </article>
 
             {/* Delivery */}
-            <article className="p-4 md:p-6 rounded-2xl bg-card border border-border text-center">
-              <Phone className="w-8 h-8 text-primary mx-auto mb-3" aria-hidden="true" />
-              <h3 className="font-display text-lg text-primary mb-2">{t("home.delivery")}</h3>
-              <p className="text-muted-foreground text-sm">
+            <article className="p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl bg-card border border-border text-center">
+              <Phone className="w-7 h-7 sm:w-8 sm:h-8 text-primary mx-auto mb-2 sm:mb-3" aria-hidden="true" />
+              <h3 className="font-display text-base sm:text-lg text-primary mb-1.5 sm:mb-2">{t("home.delivery")}</h3>
+              <p className="text-muted-foreground text-xs sm:text-sm">
                 Uber Eats • Deliveroo<br />Takeaway • {t("platforms.officialSite")}
               </p>
             </article>
@@ -389,7 +389,7 @@ const Home = () => {
       </section>
 
       {/* About Preview - More compact */}
-      <section className="py-8 md:py-20 relative overflow-hidden" aria-label={t("nav.concept")}>
+      <section className="py-6 sm:py-8 md:py-20 relative overflow-hidden" aria-label={t("nav.concept")}>
         <div className="absolute inset-0">
           <img
             src={restaurantInterior}
@@ -402,23 +402,23 @@ const Home = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-background via-background/95 to-background/80" />
         </div>
 
-        <div className="container px-4 relative z-10">
-          <div className="max-w-xl space-y-4">
-            <h2 className="font-display text-2xl md:text-4xl text-foreground">
+        <div className="container px-4 sm:px-5 md:px-4 relative z-10">
+          <div className="max-w-xl space-y-3 sm:space-y-4">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl text-foreground">
               {t("home.experienceTitle").split("TASTY FOOD")[0]}<span className="text-gradient-gold">TASTY FOOD</span>
             </h2>
-            <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+            <p className="text-sm sm:text-base md:text-lg text-muted-foreground leading-relaxed">
               {t("home.experienceText")}
             </p>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1.5 sm:gap-2">
               {[t("home.features.halal.title"), t("home.features.fries.description"), t("home.addresses")].map((tag) => (
-                <span key={tag} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-primary/20 text-primary text-xs md:text-sm">
-                  <Check size={12} aria-hidden="true" />
-                  {tag}
+                <span key={tag} className="inline-flex items-center gap-1 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-primary/20 text-primary text-xs sm:text-sm">
+                  <Check size={12} className="flex-shrink-0" aria-hidden="true" />
+                  <span className="truncate">{tag}</span>
                 </span>
               ))}
             </div>
-            <Link to="/concept" className="btn-gold inline-flex touch-target text-sm" aria-label={t("home.discoverConcept")}>
+            <Link to="/concept" className="btn-gold inline-flex touch-target text-sm sm:text-base" aria-label={t("home.discoverConcept")}>
               {t("home.discoverConcept")}
               <ArrowRight size={16} />
             </Link>
@@ -427,17 +427,17 @@ const Home = () => {
       </section>
 
       {/* Social Section - Compact */}
-      <section className="py-8 md:py-16 bg-card" aria-label={t("footer.followUs")}>
-        <div className="container px-4 text-center">
-          <h2 className="font-display text-xl md:text-3xl text-primary mb-4 md:mb-6">
+      <section className="py-6 sm:py-8 md:py-16 bg-card" aria-label={t("footer.followUs")}>
+        <div className="container px-4 sm:px-5 md:px-4 text-center">
+          <h2 className="font-display text-xl sm:text-2xl md:text-3xl text-primary mb-3 sm:mb-4 md:mb-6">
             {t("footer.followUs").toUpperCase()}
           </h2>
-          <div className="grid grid-cols-4 gap-2 md:gap-3 max-w-lg mx-auto">
+          <div className="grid grid-cols-4 gap-2 sm:gap-3 max-w-lg mx-auto">
             <a
               href="https://www.instagram.com/tastyfoodliege"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center p-3 md:p-4 rounded-xl bg-gradient-to-br from-[#F58529] via-[#DD2A7B] to-[#8134AF] text-white text-lg md:text-xl hover:scale-105 transition-transform touch-target"
+              className="flex items-center justify-center p-3 sm:p-4 rounded-xl bg-gradient-to-br from-[#F58529] via-[#DD2A7B] to-[#8134AF] text-white text-xl sm:text-2xl hover:scale-105 transition-transform touch-target"
               aria-label={t("common.followOn", { platform: "Instagram" })}
             >
               📸
@@ -446,7 +446,7 @@ const Home = () => {
               href="https://www.tiktok.com/@tastyfoodliege"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center p-3 md:p-4 rounded-xl bg-black border border-[#00F2EA] text-white text-lg md:text-xl hover:scale-105 transition-transform touch-target"
+              className="flex items-center justify-center p-3 sm:p-4 rounded-xl bg-black border border-[#00F2EA] text-white text-xl sm:text-2xl hover:scale-105 transition-transform touch-target"
               aria-label={t("common.followOn", { platform: "TikTok" })}
             >
               🎵

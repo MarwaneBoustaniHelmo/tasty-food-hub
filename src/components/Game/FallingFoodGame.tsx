@@ -4,6 +4,7 @@
  */
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { submitScore } from '@/lib/gameScores';
@@ -25,6 +26,7 @@ export const FallingFoodGame: React.FC = () => {
   const lastSpawnRef = useRef<number>(0);
   const lastFrameRef = useRef<number>(0);
   
+  const { t } = useTranslation();
   const { toast } = useToast();
   
   const [gameState, setGameState] = useState<GameState>('idle');
@@ -215,10 +217,10 @@ export const FallingFoodGame: React.FC = () => {
     ctx.font = 'bold 20px Inter, sans-serif';
     ctx.fillStyle = '#fbbf24';
     ctx.textAlign = 'left';
-    ctx.fillText(`Score: ${stats.score}`, 10, 30);
-    ctx.fillText(`Lives: ${'❤️'.repeat(Math.max(0, stats.lives))}`, 10, 60);
-    ctx.fillText(`Level: ${stats.level}`, config.canvasWidth - 120, 30);
-  }, [stats]);
+    ctx.fillText(`${t('game.score')}: ${stats.score}`, 10, 30);
+    ctx.fillText(`${t('game.lives')}: ${'❤️'.repeat(Math.max(0, stats.lives))}`, 10, 60);
+    ctx.fillText(`${t('game.level')}: ${stats.level}`, config.canvasWidth - 120, 30);
+  }, [stats, t]);
   
   // ============================================================================
   // GAME LOOP
@@ -297,22 +299,22 @@ export const FallingFoodGame: React.FC = () => {
       
       if (result) {
         toast({
-          title: '🏆 Score Saved!',
-          description: `Your score of ${stats.score} has been recorded.`,
+          title: t('game.scoreSaved'),
+          description: t('game.scoreDescription', { score: stats.score }),
         });
         setNickname('');
       } else {
         toast({
-          title: '❌ Error',
-          description: 'Failed to save score. Please try again.',
+          title: t('game.saveError'),
+          description: t('game.saveErrorDescription'),
           variant: 'destructive',
         });
       }
     } catch (error) {
       console.error('Save score error:', error);
       toast({
-        title: '❌ Error',
-        description: 'Failed to save score.',
+        title: t('game.saveError'),
+        description: t('game.saveErrorDescription'),
         variant: 'destructive',
       });
     } finally {
@@ -388,26 +390,26 @@ export const FallingFoodGame: React.FC = () => {
   // RENDER UI
   // ============================================================================
   return (
-    <div className="flex flex-col items-center gap-6 py-8">
+    <div className="flex flex-col items-center gap-4 sm:gap-6 py-4 sm:py-8">
       {/* Game Title */}
-      <div className="text-center">
-        <h2 className="text-4xl font-bebas-neue text-gold mb-2">
-          🍔 Catch the Tasty Food! 🍟
+      <div className="text-center px-4">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bebas-neue text-gold mb-2">
+          🍔 {t('game.title')} 🍟
         </h2>
-        <p className="text-gray-300">
-          Use {' '}
-          <kbd className="px-2 py-1 bg-gray-800 rounded text-sm">←→</kbd> or {' '}
-          <kbd className="px-2 py-1 bg-gray-800 rounded text-sm">A D</kbd> to move. Touch to drag on mobile!
+        <p className="text-sm sm:text-base text-gray-300">
+          {t('game.instructions')}{' '}
+          <kbd className="px-2 py-1 bg-gray-800 rounded text-xs sm:text-sm">←→</kbd> {t('game.instructionsOr')}{' '}
+          <kbd className="px-2 py-1 bg-gray-800 rounded text-xs sm:text-sm">A D</kbd> {t('game.instructionsMove')}
         </p>
       </div>
       
       {/* Game Canvas */}
-      <div className="relative">
+      <div className="relative w-full max-w-md px-4 sm:px-0">
         <canvas
           ref={canvasRef}
           width={DEFAULT_CONFIG.canvasWidth}
           height={DEFAULT_CONFIG.canvasHeight}
-          className="border-4 border-gold rounded-lg shadow-2xl bg-gray-900"
+          className="w-full max-w-[400px] h-auto border-4 border-gold rounded-lg shadow-2xl bg-gray-900"
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
           onPointerLeave={handlePointerUp}
@@ -417,9 +419,9 @@ export const FallingFoodGame: React.FC = () => {
         {gameState === 'idle' && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/70 rounded-lg">
             <div className="text-center space-y-4">
-              <p className="text-2xl font-bold text-white mb-4">Ready to Play?</p>
+              <p className="text-2xl font-bold text-white mb-4">{t('game.readyToPlay')}</p>
               <Button onClick={startGame} size="lg" className="bg-red-cta hover:bg-red-cta/90">
-                Start Game
+                {t('game.startGame')}
               </Button>
             </div>
           </div>
@@ -428,18 +430,18 @@ export const FallingFoodGame: React.FC = () => {
         {gameState === 'gameover' && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/90 rounded-lg">
             <div className="text-center space-y-4 p-6">
-              <h3 className="text-3xl font-bebas-neue text-gold">Game Over!</h3>
+              <h3 className="text-3xl font-bebas-neue text-gold">{t('game.gameOver')}</h3>
               <div className="text-white space-y-2">
-                <p className="text-xl">Final Score: <span className="text-gold font-bold">{stats.score}</span></p>
-                <p>Level Reached: {stats.level}</p>
-                <p>Items Caught: {stats.objectsCaught}</p>
-                <p>Duration: {stats.duration.toFixed(1)}s</p>
+                <p className="text-xl">{t('game.finalScore')}: <span className="text-gold font-bold">{stats.score}</span></p>
+                <p>{t('game.levelReached')}: {stats.level}</p>
+                <p>{t('game.itemsCaught')}: {stats.objectsCaught}</p>
+                <p>{t('game.duration')}: {stats.duration.toFixed(1)}{t('game.seconds')}</p>
               </div>
               
               {/* Save Score */}
               <div className="space-y-3 pt-4">
                 <Input
-                  placeholder="Your nickname (optional)"
+                  placeholder={t('game.nicknamePlaceholder')}
                   value={nickname}
                   onChange={(e) => setNickname(e.target.value)}
                   maxLength={20}
@@ -451,16 +453,16 @@ export const FallingFoodGame: React.FC = () => {
                     disabled={isSaving || stats.score === 0}
                     className="flex-1 bg-gold text-black hover:bg-gold/90"
                   >
-                    {isSaving ? 'Saving...' : '💾 Save Score'}
+                    {isSaving ? t('game.saving') : t('game.saveScore')}
                   </Button>
                   <Button onClick={startGame} variant="outline" className="flex-1">
-                    🔄 Play Again
+                    {t('game.playAgain')}
                   </Button>
                 </div>
               </div>
               
               <p className="text-sm text-gray-400 pt-2">
-                🏆 Top 3 monthly scores win a free menu!
+                {t('game.prizeNotice')}
               </p>
             </div>
           </div>
@@ -469,14 +471,14 @@ export const FallingFoodGame: React.FC = () => {
       
       {/* Mobile Touch Controls (when playing) */}
       {gameState === 'playing' && (
-        <div className="flex gap-4 lg:hidden">
+        <div className="flex gap-3 lg:hidden w-full max-w-md px-4">
           <Button
             size="lg"
             variant="outline"
             onPointerDown={() => { inputRef.current.left = true; }}
             onPointerUp={() => { inputRef.current.left = false; }}
             onPointerLeave={() => { inputRef.current.left = false; }}
-            className="w-24 h-16 text-2xl"
+            className="flex-1 h-14 sm:h-16 text-2xl sm:text-3xl touch-target"
           >
             ←
           </Button>
@@ -486,7 +488,7 @@ export const FallingFoodGame: React.FC = () => {
             onPointerDown={() => { inputRef.current.right = true; }}
             onPointerUp={() => { inputRef.current.right = false; }}
             onPointerLeave={() => { inputRef.current.right = false; }}
-            className="w-24 h-16 text-2xl"
+            className="flex-1 h-14 sm:h-16 text-2xl sm:text-3xl touch-target"
           >
             →
           </Button>
@@ -494,13 +496,13 @@ export const FallingFoodGame: React.FC = () => {
       )}
       
       {/* How to Play */}
-      <div className="bg-gray-900 rounded-lg p-4 max-w-md text-sm text-gray-300">
-        <h4 className="font-bold text-gold mb-2">📖 How to Play:</h4>
-        <ul className="space-y-1 list-disc list-inside">
-          <li>Catch 🍔🍟🥤 good food for points</li>
-          <li>Avoid 🔥🗑️ bad objects (lose lives)</li>
-          <li>Difficulty increases every 500 points</li>
-          <li>Top 3 monthly scores win prizes!</li>
+      <div className="bg-gray-900 rounded-lg p-4 sm:p-5 w-full max-w-md mx-4 text-sm sm:text-base text-gray-300">
+        <h4 className="font-bold text-gold mb-3">{t('game.howToPlay')}</h4>
+        <ul className="space-y-2 list-disc list-inside leading-relaxed">
+          <li>{t('game.rule1')}</li>
+          <li>{t('game.rule2')}</li>
+          <li>{t('game.rule3')}</li>
+          <li>{t('game.rule4')}</li>
         </ul>
       </div>
     </div>

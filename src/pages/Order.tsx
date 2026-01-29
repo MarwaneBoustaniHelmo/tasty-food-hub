@@ -118,7 +118,7 @@ const Order = () => {
   }, [clearLocation]);
 
   return (
-    <main className="pt-20 md:pt-24 pb-32 md:pb-20 min-h-screen">
+    <main className="pb-32 md:pb-20 min-h-screen">
       {/* SEO */}
       <SEOHead
         title="Commander Halal à Liège – Livraison Uber Eats, Deliveroo, Takeaway"

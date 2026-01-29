@@ -106,7 +106,7 @@ const Reservation = () => {
   const today = new Date().toISOString().split('T')[0];
 
   return (
-    <main className="pt-24 md:pt-28 pb-10 md:pb-20 min-h-screen">
+    <main className="pb-10 md:pb-20 min-h-screen">
       <div className="container px-4 max-w-3xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8 md:mb-12">

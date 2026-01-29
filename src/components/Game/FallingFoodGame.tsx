@@ -55,6 +55,12 @@ export const FallingFoodGame: React.FC = () => {
   const objectsRef = useRef<GameObject[]>([]);
   const inputRef = useRef<InputState>({ left: false, right: false, touchX: null });
   const configRef = useRef({ ...DEFAULT_CONFIG });
+  const statsRef = useRef<GameStats>(stats); // Keep ref in sync for game loop access
+  
+  // Sync statsRef with stats state
+  useEffect(() => {
+    statsRef.current = stats;
+  }, [stats]);
   
   // ============================================================================
   // COLLISION DETECTION (AABB)
@@ -71,7 +77,7 @@ export const FallingFoodGame: React.FC = () => {
   // ============================================================================
   // SPAWN OBJECTS
   // ============================================================================
-  const spawnObject = useCallback(() => {
+  const spawnObject = () => {
     if (objectsRef.current.length >= configRef.current.maxObjects) return;
     
     const isGood = Math.random() < 0.7; // 70% good, 30% bad
@@ -84,14 +90,48 @@ export const FallingFoodGame: React.FC = () => {
       y: -50,
       width: 40,
       height: 40,
-      speed: configRef.current.initialObjectSpeed + (stats.level - 1) * configRef.current.speedIncreaseRate,
+      speed: configRef.current.initialObjectSpeed + (statsRef.current.level - 1) * configRef.current.speedIncreaseRate,
       type: isGood ? 'good' : 'bad',
       emoji: template.emoji,
       points: template.points,
     };
     
     objectsRef.current.push(obj);
-  }, [stats.level]);
+  };
+  
+  // ============================================================================
+  // GAME CONTROL
+  // ============================================================================
+  const endGame = useCallback(() => {
+    setGameState('gameover');
+    if (gameLoopRef.current) {
+      cancelAnimationFrame(gameLoopRef.current);
+      gameLoopRef.current = null;
+    }
+  }, []);
+  
+  const startGame = useCallback(() => {
+    setGameState('playing');
+    setStats({
+      score: 0,
+      lives: DEFAULT_CONFIG.startingLives,
+      level: 1,
+      objectsCaught: 0,
+      objectsMissed: 0,
+      startTime: Date.now(),
+      duration: 0,
+    });
+    objectsRef.current = [];
+    playerRef.current.x = DEFAULT_CONFIG.canvasWidth / 2 - 30;
+    configRef.current = { ...DEFAULT_CONFIG };
+    lastSpawnRef.current = Date.now();
+    lastFrameRef.current = Date.now();
+    
+    toast({
+      title: '🎮 Game Started!',
+      description: 'Catch the good food, avoid the bad!',
+    });
+  }, [toast]);
   
   // ============================================================================
   // UPDATE GAME STATE
@@ -182,12 +222,12 @@ export const FallingFoodGame: React.FC = () => {
         duration: (Date.now() - prev.startTime) / 1000,
       };
     });
-  }, []);
+  }, [endGame]);
   
   // ============================================================================
   // RENDER GAME
   // ============================================================================
-  const renderGame = useCallback(() => {
+  const renderGame = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     
@@ -196,6 +236,7 @@ export const FallingFoodGame: React.FC = () => {
     
     const config = configRef.current;
     const player = playerRef.current;
+    const currentStats = statsRef.current;
     
     // Clear canvas
     ctx.fillStyle = '#1a1a1a';
@@ -217,10 +258,10 @@ export const FallingFoodGame: React.FC = () => {
     ctx.font = 'bold 20px Inter, sans-serif';
     ctx.fillStyle = '#fbbf24';
     ctx.textAlign = 'left';
-    ctx.fillText(`${t('game.score')}: ${stats.score}`, 10, 30);
-    ctx.fillText(`${t('game.lives')}: ${'❤️'.repeat(Math.max(0, stats.lives))}`, 10, 60);
-    ctx.fillText(`${t('game.level')}: ${stats.level}`, config.canvasWidth - 120, 30);
-  }, [stats, t]);
+    ctx.fillText(`${t('game.score')}: ${currentStats.score}`, 10, 30);
+    ctx.fillText(`${t('game.lives')}: ${'❤️'.repeat(Math.max(0, currentStats.lives))}`, 10, 60);
+    ctx.fillText(`${t('game.level')}: ${currentStats.level}`, config.canvasWidth - 120, 30);
+  };
   
   // ============================================================================
   // GAME LOOP
@@ -243,7 +284,7 @@ export const FallingFoodGame: React.FC = () => {
     
     // Continue loop
     gameLoopRef.current = requestAnimationFrame(gameLoop);
-  }, [gameState, spawnObject, updateGame, renderGame]);
+  }, [gameState, updateGame]);
   
   // ============================================================================
   // FLOATING TEXT EFFECT
@@ -254,39 +295,8 @@ export const FallingFoodGame: React.FC = () => {
   };
   
   // ============================================================================
-  // GAME CONTROL
+  // SAVE SCORE HANDLER
   // ============================================================================
-  const startGame = () => {
-    setGameState('playing');
-    setStats({
-      score: 0,
-      lives: DEFAULT_CONFIG.startingLives,
-      level: 1,
-      objectsCaught: 0,
-      objectsMissed: 0,
-      startTime: Date.now(),
-      duration: 0,
-    });
-    objectsRef.current = [];
-    playerRef.current.x = DEFAULT_CONFIG.canvasWidth / 2 - 30;
-    configRef.current = { ...DEFAULT_CONFIG };
-    lastSpawnRef.current = Date.now();
-    lastFrameRef.current = Date.now();
-    
-    toast({
-      title: '🎮 Game Started!',
-      description: 'Catch the good food, avoid the bad!',
-    });
-  };
-  
-  const endGame = () => {
-    setGameState('gameover');
-    if (gameLoopRef.current) {
-      cancelAnimationFrame(gameLoopRef.current);
-      gameLoopRef.current = null;
-    }
-  };
-  
   const handleSaveScore = async () => {
     if (stats.score === 0) return;
     

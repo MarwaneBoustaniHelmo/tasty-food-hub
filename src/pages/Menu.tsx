@@ -109,7 +109,7 @@ const Menu = () => {
   };
 
   return (
-    <main className="pt-20 md:pt-24 pb-20 min-h-screen">
+    <main className="pb-20 min-h-screen">
       <SEOHead
         title="Comparateur de Prix – Menu Tasty Food sur Uber Eats, Deliveroo & Takeaway"
         description="Comparez les prix des plats Tasty Food sur toutes les plateformes de livraison. Trouvez la meilleure offre pour vos burgers halal préférés à Liège."

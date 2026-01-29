@@ -70,7 +70,7 @@ const Home = () => {
       <LocalBusinessSchema isOrganization />
 
       {/* Hero Section - Cinematic with parallax, mobile optimized */}
-      <section className="relative min-h-[50vh] sm:min-h-[55vh] md:min-h-[75vh] flex items-end justify-center overflow-hidden pt-16 sm:pt-20 md:pt-0">
+      <section className="relative min-h-[50vh] sm:min-h-[55vh] md:min-h-[75vh] flex items-end justify-center overflow-hidden">
         {/* Background Image with parallax effect */}
         <div className="absolute inset-0">
           <div className="absolute inset-0 animate-parallax-slow">

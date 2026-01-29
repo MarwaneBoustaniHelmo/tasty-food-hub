@@ -6,45 +6,54 @@
 
 @layer base {
   :root {
-    --background: 0 0% 5%;
-    --foreground: 45 10% 95%;
+    /* Base background with subtle warmth */
+    --background: 0 0% 3%;
+    --foreground: 45 10% 96%;
 
-    --card: 0 0% 8%;
-    --card-foreground: 45 10% 95%;
+    /* Elevated surfaces with layered depth */
+    --card: 0 0% 7%;
+    --card-foreground: 45 10% 96%;
+    --surface: 0 0% 7%;
+    --surface-elevated: 0 0% 9%;
+    --surface-overlay: 0 0% 11%;
 
     --popover: 0 0% 8%;
-    --popover-foreground: 45 10% 95%;
+    --popover-foreground: 45 10% 96%;
 
-    --primary: 45 90% 50%;
+    /* Premium gold palette */
+    --primary: 45 95% 55%;
     --primary-foreground: 0 0% 5%;
 
+    /* Muted backgrounds */
     --secondary: 0 0% 12%;
-    --secondary-foreground: 45 10% 95%;
+    --secondary-foreground: 45 10% 96%;
 
     --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 65%;
+    --muted-foreground: 0 0% 60%;
 
-    --accent: 0 80% 55%;
+    /* Vibrant red CTA */
+    --accent: 0 85% 58%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 0 0% 20%;
+    /* Refined borders */
+    --border: 0 0% 18%;
     --input: 0 0% 15%;
-    --ring: 45 90% 50%;
+    --ring: 45 95% 55%;
 
     --radius: 0.875rem;
 
     /* Safari iOS viewport height fix */
     --vh: 1vh;
 
-    /* Custom Tasty Food tokens */
-    --gold: 45 90% 50%;
-    --gold-dark: 43 85% 40%;
-    --gold-light: 47 95% 65%;
-    --red-cta: 0 80% 55%;
-    --red-cta-hover: 0 85% 45%;
+    /* Enhanced Tasty Food Brand Tokens */
+    --gold: 45 95% 55%;
+    --gold-dark: 43 90% 45%;
+    --gold-light: 47 98% 68%;
+    --red-cta: 0 85% 58%;
+    --red-cta-hover: 0 90% 52%;
     
     /* Platform colors */
     --uber-eats: 142 76% 36%;
@@ -52,18 +61,33 @@
     --takeaway: 30 100% 50%;
     --crousty: 28 87% 67%;
     
-    /* Gradients - Enhanced atmospheric depth */
-    --gradient-gold: linear-gradient(135deg, hsl(45 90% 50%), hsl(35 85% 45%));
-    --gradient-dark: linear-gradient(180deg, hsl(0 0% 8%) 0%, hsl(0 0% 3%) 100%);
-    --gradient-hero: linear-gradient(180deg, hsl(0 0% 5% / 0.1) 0%, hsl(0 0% 5% / 0.7) 60%, hsl(0 0% 5%) 100%);
-    --gradient-hero-overlay: radial-gradient(ellipse at center, transparent 0%, hsl(0 0% 5% / 0.3) 100%);
+    /* Premium Gradients - Multi-layered atmospheric depth */
+    --gradient-gold: linear-gradient(135deg, hsl(45 95% 55% / 1) 0%, hsl(38 90% 52% / 1) 50%, hsl(35 88% 48% / 1) 100%);
+    --gradient-gold-radial: radial-gradient(ellipse at top, hsl(45 95% 55% / 0.15), transparent 60%);
+    --gradient-dark: linear-gradient(180deg, hsl(0 0% 7%) 0%, hsl(0 0% 3%) 100%);
+    --gradient-hero: linear-gradient(180deg, hsl(0 0% 3% / 0) 0%, hsl(0 0% 3% / 0.6) 50%, hsl(0 0% 3% / 0.95) 100%);
+    --gradient-hero-overlay: radial-gradient(ellipse 80% 60% at 50% 60%, transparent 0%, hsl(0 0% 3% / 0.4) 100%);
+    --gradient-surface: linear-gradient(to bottom, hsl(0 0% 9%), hsl(0 0% 7%));
+    --gradient-border: linear-gradient(90deg, transparent, hsl(45 95% 55% / 0.3), transparent);
     
-    /* Shadows - Layered elevation system */
-    --shadow-gold: 0 4px 30px hsl(45 90% 50% / 0.2), 0 0 60px hsl(45 90% 50% / 0.1);
-    --shadow-card: 0 2px 8px hsl(0 0% 0% / 0.3), 0 8px 24px hsl(0 0% 0% / 0.4);
-    --shadow-card-hover: 0 8px 32px hsl(0 0% 0% / 0.5), 0 16px 64px hsl(0 0% 0% / 0.3), 0 0 0 1px hsl(45 90% 50% / 0.1);
-    --shadow-cta: 0 6px 20px hsl(0 80% 55% / 0.4), 0 12px 40px hsl(0 80% 55% / 0.2);
-    --shadow-cta-hover: 0 8px 30px hsl(0 80% 55% / 0.5), 0 16px 60px hsl(0 80% 55% / 0.3);
+    /* Sophisticated Shadow System - Layered elevation */
+    --shadow-xs: 0 1px 2px 0 hsl(0 0% 0% / 0.15);
+    --shadow-sm: 0 2px 4px -1px hsl(0 0% 0% / 0.2), 0 1px 2px -1px hsl(0 0% 0% / 0.15);
+    --shadow-md: 0 4px 8px -2px hsl(0 0% 0% / 0.25), 0 2px 4px -2px hsl(0 0% 0% / 0.2);
+    --shadow-lg: 0 8px 16px -4px hsl(0 0% 0% / 0.3), 0 4px 8px -4px hsl(0 0% 0% / 0.25);
+    --shadow-xl: 0 16px 32px -8px hsl(0 0% 0% / 0.35), 0 8px 16px -8px hsl(0 0% 0% / 0.3);
+    --shadow-2xl: 0 24px 48px -12px hsl(0 0% 0% / 0.4), 0 12px 24px -12px hsl(0 0% 0% / 0.35);
+    
+    --shadow-gold: 0 4px 30px hsl(45 95% 55% / 0.25), 0 0 60px hsl(45 95% 55% / 0.12), 0 1px 2px hsl(0 0% 0% / 0.3);
+    --shadow-gold-intense: 0 8px 40px hsl(45 95% 55% / 0.35), 0 0 80px hsl(45 95% 55% / 0.18), 0 1px 3px hsl(0 0% 0% / 0.4);
+    
+    --shadow-card: 0 2px 8px hsl(0 0% 0% / 0.25), 0 8px 24px hsl(0 0% 0% / 0.35), 0 16px 48px hsl(0 0% 0% / 0.15);
+    --shadow-card-hover: 0 8px 32px hsl(0 0% 0% / 0.4), 0 16px 64px hsl(0 0% 0% / 0.25), 0 0 0 1px hsl(45 95% 55% / 0.15), 0 0 40px hsl(45 95% 55% / 0.08);
+    
+    --shadow-cta: 0 6px 20px hsl(0 85% 58% / 0.4), 0 12px 40px hsl(0 85% 58% / 0.25), 0 1px 3px hsl(0 0% 0% / 0.3);
+    --shadow-cta-hover: 0 8px 30px hsl(0 85% 58% / 0.5), 0 16px 60px hsl(0 85% 58% / 0.35), 0 0 60px hsl(0 85% 58% / 0.15);
+    
+    --shadow-inner-glow: inset 0 1px 2px 0 hsl(255 255 255 / 0.05), inset 0 0 0 1px hsl(255 255 255 / 0.03);
   }
 
   .dark {
@@ -330,6 +354,106 @@
     content: '';
     @apply absolute bottom-0 left-0 w-full h-1 rounded-full;
     background: var(--gradient-gold);
+  }
+
+  /* Premium Card - Elevated Surface */
+  .card-premium {
+    @apply rounded-2xl p-6 border;
+    background: var(--gradient-surface);
+    border-color: hsl(var(--border));
+    box-shadow: var(--shadow-card);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+  }
+
+  .card-premium:hover {
+    border-color: hsl(var(--gold) / 0.4);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  /* Feature Card with Icon */
+  .card-feature {
+    @apply rounded-2xl p-5 md:p-6 border backdrop-blur-sm;
+    background: linear-gradient(135deg, hsl(var(--card)) 0%, hsl(var(--background)) 100%);
+    border-color: hsl(var(--border));
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .card-feature:hover {
+    border-color: hsl(var(--gold) / 0.3);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    background: linear-gradient(135deg, hsl(var(--surface-elevated)) 0%, hsl(var(--card)) 100%);
+  }
+
+  /* Glass morphism card */
+  .card-glass {
+    @apply rounded-2xl p-6 backdrop-blur-xl;
+    background: hsl(var(--card) / 0.6);
+    border: 1px solid hsl(var(--border) / 0.5);
+    box-shadow: var(--shadow-inner-glow), var(--shadow-md);
+  }
+
+  /* Section with ambient glow */
+  .section-ambient {
+    @apply relative;
+  }
+
+  .section-ambient::before {
+    content: '';
+    @apply absolute -top-48 left-1/2 -translate-x-1/2 w-full max-w-2xl h-96 rounded-full pointer-events-none;
+    background: radial-gradient(ellipse, hsl(var(--gold) / 0.08) 0%, transparent 60%);
+    filter: blur(60px);
+  }
+
+  /* Smooth image reveal */
+  .img-reveal {
+    @apply opacity-0 transition-opacity duration-700;
+  }
+
+  .img-reveal.loaded {
+    @apply opacity-100;
+  }
+
+  /* Badge with glow effect */
+  .badge-glow {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold;
+    background: hsl(var(--primary) / 0.15);
+    border: 1px solid hsl(var(--primary) / 0.3);
+    color: hsl(var(--primary));
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.2);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .badge-glow:hover {
+    background: hsl(var(--primary) / 0.25);
+    border-color: hsl(var(--primary) / 0.5);
+    box-shadow: 0 0 30px hsl(var(--primary) / 0.3);
+    transform: scale(1.05);
+  }
+
+  /* Interactive hover lift */
+  .hover-lift {
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @media (min-width: 768px) {
+    .hover-lift:hover {
+      transform: translateY(-4px);
+    }
+  }
+
+  /* Interactive hover glow */
+  .hover-glow {
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @media (min-width: 768px) {
+    .hover-glow:hover {
+      filter: brightness(1.1) drop-shadow(0 0 20px hsl(var(--gold) / 0.3));
+    }
   }
 
   /* Mobile order reminder banner */

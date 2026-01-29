@@ -58,7 +58,7 @@ const App = () => (
         <SkipToContent />
         <div className="flex flex-col min-h-screen">
           <Header />
-          <main id="main-content" className="flex-1 pb-20 md:pb-0" role="main">
+          <main id="main-content" className="flex-1 pt-[88px] md:pt-[106px] pb-20 md:pb-0" role="main">
             <Suspense fallback={<PageLoader />}>
               <Routes>
                 <Route path="/" element={<Home />} />

@@ -74,7 +74,7 @@ const Contact = () => {
   ];
 
   return (
-    <main className="pt-24 md:pt-28 pb-10 md:pb-20 min-h-screen">
+    <main className="pb-10 md:pb-20 min-h-screen">
       {/* SEO Meta Tags */}
       <SEOHead
         title="Contact – Restaurants Halal Liège, Adresses & Horaires"

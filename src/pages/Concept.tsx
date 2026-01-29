@@ -25,7 +25,7 @@ const Concept = () => {
   ];
 
   return (
-    <main className="pt-24 md:pt-28 pb-10 md:pb-20">
+    <main className="pb-10 md:pb-20">
       {/* SEO Meta Tags */}
       <SEOHead
         title="Notre Concept – Restaurant Halal & Smash Burgers"

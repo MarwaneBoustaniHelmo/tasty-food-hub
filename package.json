@@ -9,7 +9,7 @@
     "dev:all": "concurrently \"npm run dev\" \"npm run dev:api\"",
     "prebuild": "rm -rf dist && mkdir -p dist",
     "build": "vite build",
-    "postbuild": "find dist -type f \\( -name '.env*' -o -name '*.env' -o -name '*.env.*' \\) -delete 2>/dev/null || true && rm -rf dist/server 2>/dev/null || true",
+    "postbuild": "find dist -name '.env*' -delete 2>/dev/null; find dist -name '*.env' -delete 2>/dev/null; find dist -name '*.env.*' -delete 2>/dev/null; rm -rf dist/server 2>/dev/null; exit 0",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",

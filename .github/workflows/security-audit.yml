@@ -136,10 +136,13 @@ jobs:
           echo "📦 Checking dist/ for sensitive files..."
           
           # Ensure no .env files in dist
-          if find dist -name ".env*" -type f; then
+          ENV_FILES=$(find dist -name ".env*" -type f 2>/dev/null)
+          if [ -n "$ENV_FILES" ]; then
             echo "❌ ERROR: .env files found in build output!"
+            echo "$ENV_FILES"
             exit 1
           fi
+          echo "✅ No .env files found in dist/"
           
           # Ensure no source maps with API keys (optional check)
           if grep -r "AIzaSy" dist/ 2>/dev/null; then

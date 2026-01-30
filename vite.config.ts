@@ -23,6 +23,8 @@ export default defineConfig(({ mode }) => ({
     sourcemap: false, // Disable source maps in production for security
     target: 'es2015', // Support modern browsers for smaller bundles
     minify: 'terser', // Use terser for better compression
+    // Explicitly exclude sensitive files from build output
+    copyPublicDir: true,
     terserOptions: {
       compress: {
         drop_console: true, // Remove console.log in production
@@ -31,6 +33,11 @@ export default defineConfig(({ mode }) => ({
       },
     },
     rollupOptions: {
+      onwarn(warning, warn) {
+        // Suppress warnings about .env files
+        if (warning.code === 'UNRESOLVED_IMPORT' && warning.message.includes('.env')) return;
+        warn(warning);
+      },
       output: {
         // Manual chunk splitting for better caching
         manualChunks: {

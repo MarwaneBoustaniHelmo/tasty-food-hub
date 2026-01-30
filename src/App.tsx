@@ -11,6 +11,7 @@ import ScrollToTop from "@/components/ScrollToTop";
 import ScrollProgressBar from "@/components/ScrollProgressBar";
 import BackToTopButton from "@/components/BackToTopButton";
 import SkipToContent from "@/components/SkipToContent";
+import { ChatWidget } from "@/components/ChatWidget";
 import Home from "@/pages/Home";
 
 // Lazy load non-critical pages for better initial load performance
@@ -89,6 +90,8 @@ const App = () => (
           <ScrollToTop />
           {/* Back to top floating button */}
           <BackToTopButton threshold={400} />
+          {/* Chatbot widget */}
+          <ChatWidget />
         </div>
       </BrowserRouter>
     </TooltipProvider>

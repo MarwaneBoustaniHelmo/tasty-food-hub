@@ -12,6 +12,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { getAggregatedMenu, refreshMenuCache } from '../src/services/menuAggregator.js';
+import chatRoutes from './routes/chat.js';
 
 dotenv.config();
 
@@ -480,7 +481,12 @@ app.use((req: Request, _res: Response, next: NextFunction) => {
 });
 
 // ============================================================================
-// ROUTES - CHAT & SSE
+// CHAT ROUTES - Crousty by Tasty Chatbot
+// ============================================================================
+app.use('/api', chatRoutes);
+
+// ============================================================================
+// ROUTES - CHAT & SSE (Legacy streaming routes below)
 // ============================================================================
 
 /**

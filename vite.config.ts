@@ -2,6 +2,8 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
+import fs from "fs";
+import { glob } from "glob";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -12,6 +14,20 @@ export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
     mode === "development" && componentTagger(),
+    // Security: Prevent .env files from being copied to dist
+    {
+      name: 'exclude-env-files',
+      async writeBundle() {
+        const pattern = path.join(process.cwd(), 'dist/**/.env*');
+        const files = await glob(pattern, { dot: true });
+        files.forEach(file => {
+          if (fs.existsSync(file)) {
+            fs.unlinkSync(file);
+            console.log(`🔒 Removed sensitive file: ${file}`);
+          }
+        });
+      }
+    }
   ].filter(Boolean),
   resolve: {
     alias: {

@@ -123,12 +123,14 @@ jobs:
       - name: Remove sensitive files from build
         run: |
           echo "🧹 Cleaning sensitive files from dist/..."
-          # Remove any .env files that might have been copied
-          find dist -type f -name ".env*" -delete 2>/dev/null || true
+          # Remove any .env files at any level (root and subdirectories)
+          find dist -type f \( -name ".env*" -o -name "*.env" -o -name "*.env.*" \) -delete 2>/dev/null || true
           # Remove any backup files
           find dist -type f -name "*~" -delete 2>/dev/null || true
           # Remove any .git directories
           find dist -type d -name ".git" -exec rm -rf {} + 2>/dev/null || true
+          # Remove server directory if it exists (shouldn't be in frontend build)
+          rm -rf dist/server 2>/dev/null || true
           echo "✅ Cleanup complete"
 
       - name: Check build artifacts

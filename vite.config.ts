@@ -18,14 +18,23 @@ export default defineConfig(({ mode }) => ({
     {
       name: 'exclude-env-files',
       async writeBundle() {
-        const pattern = path.join(process.cwd(), 'dist/**/.env*');
-        const files = await glob(pattern, { dot: true });
-        files.forEach(file => {
-          if (fs.existsSync(file)) {
-            fs.unlinkSync(file);
-            console.log(`🔒 Removed sensitive file: ${file}`);
-          }
-        });
+        const distPath = path.join(process.cwd(), 'dist');
+        // Search for .env files at all levels in dist
+        const patterns = [
+          path.join(distPath, '.env*'),       // Root level
+          path.join(distPath, '**/.env*'),    // All subdirectories
+          path.join(distPath, '**/server/.env*'), // Server subdirectory
+        ];
+        
+        for (const pattern of patterns) {
+          const files = await glob(pattern, { dot: true, absolute: true });
+          files.forEach(file => {
+            if (fs.existsSync(file)) {
+              fs.unlinkSync(file);
+              console.log(`🔒 Security: Removed sensitive file: ${path.relative(process.cwd(), file)}`);
+            }
+          });
+        }
       }
     }
   ].filter(Boolean),
